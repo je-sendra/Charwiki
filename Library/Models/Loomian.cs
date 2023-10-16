@@ -68,7 +68,7 @@ public class Loomian
     /// </summary>
     [Required]
     public required int RangedAttack { get; set; }
-    
+
     /// <summary>
     /// The base ranged defense of the Loomian.
     /// </summary>
@@ -99,4 +99,6 @@ public class Loomian
     [Required, MaxLength(3)]
     public required IEnumerable<LoomianAbility> Abilities { get; set; }
     #endregion
+
+    public IEnumerable<Set>? Sets { get; set; }
 }
