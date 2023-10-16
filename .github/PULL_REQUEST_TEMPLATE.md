@@ -1,4 +1,4 @@
-<!-- Thank you for contributing to Repo-Template.
+<!-- Thank you for contributing to Charwiki.
 Please complete the following template to submit your pull request. -->
 
 ## Description
