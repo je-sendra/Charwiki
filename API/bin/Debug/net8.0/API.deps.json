@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "API/1.0.0": {
         "dependencies": {
+          "Library": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "8.0.0-rc.2.23480.2",
           "Swashbuckle.AspNetCore": "6.4.0"
         },
@@ -72,6 +73,11 @@
             "fileVersion": "6.4.0.0"
           }
         }
+      },
+      "Library/1.0.0": {
+        "runtime": {
+          "Library.dll": {}
+        }
       }
     }
   },
@@ -129,6 +135,11 @@
       "sha512": "sha512-1Hh3atb3pi8c+v7n4/3N80Jj8RvLOXgWxzix6w3OZhB7zBGRwsy7FWr4e3hwgPweSBpwfElqj4V4nkjYabH9nQ==",
       "path": "swashbuckle.aspnetcore.swaggerui/6.4.0",
       "hashPath": "swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+    },
+    "Library/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
