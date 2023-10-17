@@ -17,7 +17,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Loomian>().HasMany<LoomianAbility>().WithMany();
-        modelBuilder.Entity<Set>().HasMany<Move>().WithMany();
+        modelBuilder.Entity<Loomian>().HasMany(e => e.Abilities).WithMany();
+        modelBuilder.Entity<Set>().HasMany(e => e.Moveset).WithMany();
     }
 }

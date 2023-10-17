@@ -111,7 +111,7 @@ public class Set : IApiModel
     /// The moveset the Loomian will have in the set.
     /// </summary>
     [Required, MaxLength(4)]
-    public required List<Move> Moveset { get; set; }
+    public required IEnumerable<Move> Moveset { get; set; }
 
     /// <summary>
     /// The primary personality the Loomian will use in the set.

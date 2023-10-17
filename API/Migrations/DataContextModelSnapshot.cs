@@ -24,13 +24,13 @@ namespace VewTech.Charwiki.API.Migrations
 
             modelBuilder.Entity("LoomianLoomianAbility", b =>
                 {
-                    b.Property<Guid>("LoomianAbilityId")
+                    b.Property<Guid>("AbilitiesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("LoomianId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("LoomianAbilityId", "LoomianId");
+                    b.HasKey("AbilitiesId", "LoomianId");
 
                     b.HasIndex("LoomianId");
 
@@ -39,13 +39,13 @@ namespace VewTech.Charwiki.API.Migrations
 
             modelBuilder.Entity("MoveSet", b =>
                 {
-                    b.Property<Guid>("MoveId")
+                    b.Property<Guid>("MovesetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SetId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("MoveId", "SetId");
+                    b.HasKey("MovesetId", "SetId");
 
                     b.HasIndex("SetId");
 
@@ -124,16 +124,11 @@ namespace VewTech.Charwiki.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("LoomianId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LoomianId");
 
                     b.ToTable("LoomianAbilities");
                 });
@@ -148,15 +143,10 @@ namespace VewTech.Charwiki.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SetId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SetId");
 
                     b.ToTable("Moves");
                 });
@@ -247,7 +237,7 @@ namespace VewTech.Charwiki.API.Migrations
                 {
                     b.HasOne("VewTech.Charwiki.Library.Models.LoomianAbility", null)
                         .WithMany()
-                        .HasForeignKey("LoomianAbilityId")
+                        .HasForeignKey("AbilitiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -262,7 +252,7 @@ namespace VewTech.Charwiki.API.Migrations
                 {
                     b.HasOne("VewTech.Charwiki.Library.Models.Move", null)
                         .WithMany()
-                        .HasForeignKey("MoveId")
+                        .HasForeignKey("MovesetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -271,20 +261,6 @@ namespace VewTech.Charwiki.API.Migrations
                         .HasForeignKey("SetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("VewTech.Charwiki.Library.Models.LoomianAbility", b =>
-                {
-                    b.HasOne("VewTech.Charwiki.Library.Models.Loomian", null)
-                        .WithMany("Abilities")
-                        .HasForeignKey("LoomianId");
-                });
-
-            modelBuilder.Entity("VewTech.Charwiki.Library.Models.Move", b =>
-                {
-                    b.HasOne("VewTech.Charwiki.Library.Models.Set", null)
-                        .WithMany("Moveset")
-                        .HasForeignKey("SetId");
                 });
 
             modelBuilder.Entity("VewTech.Charwiki.Library.Models.Set", b =>
@@ -306,14 +282,7 @@ namespace VewTech.Charwiki.API.Migrations
 
             modelBuilder.Entity("VewTech.Charwiki.Library.Models.Loomian", b =>
                 {
-                    b.Navigation("Abilities");
-
                     b.Navigation("Sets");
-                });
-
-            modelBuilder.Entity("VewTech.Charwiki.Library.Models.Set", b =>
-                {
-                    b.Navigation("Moveset");
                 });
 #pragma warning restore 612, 618
         }
