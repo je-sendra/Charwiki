@@ -12,6 +12,4 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     public DbSet<LoomianAbility> LoomianAbilities { get; set; }
 
     public DbSet<Move> Moves { get; set; }
-
-    public DbSet<Set> Sets { get; set; }
 }
