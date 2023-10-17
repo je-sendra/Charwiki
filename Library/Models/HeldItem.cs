@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using VewTech.Charwiki.Library.Helpers;
+using VewTech.Charwiki.Library.Interfaces;
+
 
 namespace VewTech.Charwiki.Library.Models;
 
 /// <summary>
 /// An item a Loomian can hold.
 /// </summary>
-public class HeldItem
+public class HeldItem : IApiModel
 {
-    /// <summary>
-    /// The unique identifier
-    /// </summary>
+    /// <inheritdoc/>
     [Required]
     public required Guid Id { get; set; }
 
@@ -18,4 +19,6 @@ public class HeldItem
     /// </summary>
     [Required]
     public required string Name { get; set; }
+
+    public static ApiHelper<HeldItem> ApiHelper { get; } = new("/heldItems");
 }

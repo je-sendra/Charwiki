@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using VewTech.Charwiki.Library.Enums;
+using VewTech.Charwiki.Library.Helpers;
+using VewTech.Charwiki.Library.Interfaces;
 
 namespace VewTech.Charwiki.Library.Models;
 
 /// <summary>
 /// A set a Loomian can use.
 /// </summary>
-public class Set
+public class Set : IApiModel
 {
     #region Basic Data
-    /// <summary>
-    /// The unique identifier.
-    /// </summary>
+    /// <inheritdoc />
     [Required]
     public required Guid Id { get; set; }
 
@@ -128,11 +128,16 @@ public class Set
     /// The primary personality the Loomian will use in the set.
     /// </summary>
     public Personality Personality3 { get; set; }
-    
+
     /// <summary>
     /// The ability the Loomian will have.
     /// </summary>
     [Required]
     public required LoomianAbility Ability { get; set; }
     #endregion
+
+    [Required]
+    public required Guid LoomianId { get; set; }
+
+    public static ApiHelper<Set> ApiHelper { get; } = new("/sets");
 }

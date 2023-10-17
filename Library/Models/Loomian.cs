@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using VewTech.Charwiki.Library.Enums;
+using VewTech.Charwiki.Library.Helpers;
+using VewTech.Charwiki.Library.Interfaces;
 
 namespace VewTech.Charwiki.Library.Models;
 
 /// <summary>
 /// The main class of the app. Represents the creatures called Loomian.
 /// </summary>
-public class Loomian
+public class Loomian : IApiModel
 {
     #region Basic Data
-    /// <summary>
-    /// The unique identifier.
-    /// </summary>
+    /// <inheritdoc/>
     [Required]
     public required Guid Id { get; set; }
 
@@ -95,10 +95,10 @@ public class Loomian
     public LoomianType Type2 { get; set; }
     #endregion
 
-    #region Abilities
     [Required, MaxLength(3)]
     public required IEnumerable<LoomianAbility> Abilities { get; set; }
-    #endregion
 
     public List<Set> Sets { get; set; } = [];
+
+    public static ApiHelper<Loomian> ApiHelper { get; } = new("/loomians");
 }

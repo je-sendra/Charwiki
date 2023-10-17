@@ -5,8 +5,8 @@ using VewTech.Charwiki.Library.Models;
 namespace VewTech.Charwiki.API.Controllers;
 
 /// <summary>
-/// The controller for interacting with the LoomianAbility model.
+/// The controller for interacting with the Set model.
 /// </summary>
 /// <param name="dataContext">A DataContext for the controller to use.</param>
 [Route("[controller]")]
-public class LoomianAbilitiesController(DataContext dataContext) : ApiController<LoomianAbility>(dataContext, dataContext.LoomianAbilities);
+public class SetsController(DataContext dataContext) : ApiController<Set>(dataContext, dataContext.Sets);
