@@ -100,5 +100,5 @@ public class Loomian
     public required IEnumerable<LoomianAbility> Abilities { get; set; }
     #endregion
 
-    public IEnumerable<Set>? Sets { get; set; }
+    public List<Set>? Sets { get; set; }
 }

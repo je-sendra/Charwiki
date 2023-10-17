@@ -3,9 +3,15 @@ using VewTech.Charwiki.Library.Models;
 
 namespace VewTech.Charwiki.API;
 
-public class DataContext : DbContext
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
     public DbSet<HeldItem> HeldItems { get; set; }
+
+    public DbSet<Loomian> Loomians { get; set; }
+
+    public DbSet<LoomianAbility> LoomianAbilities { get; set; }
+
+    public DbSet<Move> Moves { get; set; }
+
+    public DbSet<Set> Sets { get; set; }
 }

@@ -36,74 +36,74 @@ public class Set
     /// <summary>
     /// The health TPs the Loomian has in the set.
     /// </summary>
-    public int HealthTP {get;set;}
+    public int HealthTP { get; set; }
 
     /// <summary>
     /// The energy TPs the Loomian has in the set.
     /// </summary>
-    public int EnergyTP {get;set;}
+    public int EnergyTP { get; set; }
 
     /// <summary>
     /// The meelee attack TPs the Loomian has in the set.
     /// </summary>
-    public int MeeleeAttackTP {get;set;}
+    public int MeeleeAttackTP { get; set; }
 
     /// <summary>
     /// The meelee defense TPs the Loomian has in the set.
     /// </summary>
-    public int MeeleeDefenseTP {get;set;}
+    public int MeeleeDefenseTP { get; set; }
 
     /// <summary>
     /// The ranged attack TPs the Loomian has in the set.
     /// </summary>
-    public int RangedAttackTP {get;set;}
+    public int RangedAttackTP { get; set; }
 
     /// <summary>
     /// The ranged defense TPs the Loomian has in the set.
     /// </summary>
-    public int RangedDefenseTP {get;set;}
+    public int RangedDefenseTP { get; set; }
 
     /// <summary>
     /// The speed TPs the Loomian has in the set.
     /// </summary>
-    public int SpeedTP {get;set;}
+    public int SpeedTP { get; set; }
     #endregion
-    
+
     #region UPs
     /// <summary>
     /// The health UPs the Loomian has in the set.
     /// </summary>
-    public int HealthUP {get;set;}
+    public int HealthUP { get; set; }
 
     /// <summary>
     /// The energy UPs the Loomian has in the set.
     /// </summary>
-    public int EnergyUP {get;set;}
+    public int EnergyUP { get; set; }
 
     /// <summary>
     /// The meelee attack UPs the Loomian has in the set.
     /// </summary>
-    public int MeeleeAttackUP {get;set;}
+    public int MeeleeAttackUP { get; set; }
 
     /// <summary>
     /// The meelee defense UPs the Loomian has in the set.
     /// </summary>
-    public int MeeleeDefenseUP {get;set;}
+    public int MeeleeDefenseUP { get; set; }
 
     /// <summary>
     /// The ranged attack UPs the Loomian has in the set.
     /// </summary>
-    public int RangedAttackUP {get;set;}
+    public int RangedAttackUP { get; set; }
 
     /// <summary>
     /// The ranged defense UPs the Loomian has in the set.
     /// </summary>
-    public int RangedDefenseUP {get;set;}
+    public int RangedDefenseUP { get; set; }
 
     /// <summary>
     /// The speed UPs the Loomian has in the set.
     /// </summary>
-    public int SpeedUP {get;set;}
+    public int SpeedUP { get; set; }
     #endregion
 
     #region Set Data
@@ -111,19 +111,24 @@ public class Set
     /// The moveset the Loomian will have in the set.
     /// </summary>
     [Required, MaxLength(4)]
-    public required IEnumerable<Move> Moveset { get; set; }
+    public required List<Move> Moveset { get; set; }
 
     /// <summary>
-    /// The personalities the Loomian will use in the set.
+    /// The primary personality the Loomian will use in the set.
     /// </summary>
-    [Required, MaxLength(3)]
-    public required IEnumerable<Personality> Personalities { get; set; }
+    [Required]
+    public required Personality Personality1 { get; set; }
 
     /// <summary>
-    /// The item the Loomian will hold.
+    /// The primary personality the Loomian will use in the set.
     /// </summary>
-    public HeldItem? HeldItem { get; set; }
+    public Personality Personality2 { get; set; }
 
+    /// <summary>
+    /// The primary personality the Loomian will use in the set.
+    /// </summary>
+    public Personality Personality3 { get; set; }
+    
     /// <summary>
     /// The ability the Loomian will have.
     /// </summary>
