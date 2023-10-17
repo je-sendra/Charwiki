@@ -31,7 +31,7 @@ public class LoomianAbilitiesController(DataContext dataContext) : Controller
     {
         dataContext.Add(loomianAbility);
         dataContext.SaveChanges();
-        return loomianAbility;
+        return Created("", loomianAbility);
     }
 
     /// <summary>
