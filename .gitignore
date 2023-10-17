@@ -4,3 +4,5 @@
 /API/bin
 /Tests/obj
 /Tests/bin
+/API/API.csproj.user
+/.vs

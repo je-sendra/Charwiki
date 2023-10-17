@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VewTech.Charwiki.Library.Models;
 
 namespace VewTech.Charwiki.API.Controllers;
@@ -6,9 +7,15 @@ namespace VewTech.Charwiki.API.Controllers;
 /// <summary>
 /// The controller for interacting with the HeldItem model.
 /// </summary>
+/// <param name="dataContext">A DataContext for the controller to use.</param>
 [Route("[controller]")]
-public class HeldItemController : Controller
+public class HeldItemController(DataContext dataContext) : Controller
 {
+    /// <summary>
+    /// The local DataContext object, passed in the constructor.
+    /// </summary>
+    private DataContext _context { get; set; } = dataContext;
+
     /// <summary>
     /// Gets all the HeldItems
     /// </summary>
@@ -16,7 +23,7 @@ public class HeldItemController : Controller
     [HttpGet]
     public ActionResult<IEnumerable<HeldItem>> Get()
     {
-        throw new NotImplementedException();
+        return _context.HeldItems;
     }
 
     /// <summary>
@@ -27,7 +34,23 @@ public class HeldItemController : Controller
     [HttpPost]
     public ActionResult<HeldItem> Post([FromBody] HeldItem heldItem)
     {
-        throw new NotImplementedException();
+        _context.HeldItems.Add(heldItem);
+        _context.SaveChanges();
+        return heldItem;
+    }
+
+    /// <summary>
+    /// Updates a HeldItem by its id. The id cannot be updated.
+    /// </summary>
+    /// <param name="id">The id of the HeldItem to update.</param>
+    /// <param name="heldItem">The HeldItem with the updated properties.</param>
+    /// <returns>The updated HeldItem.</returns>
+    [HttpPut]
+    public ActionResult<HeldItem> Put([FromBody] HeldItem heldItem)
+    {
+        _context.HeldItems.Update(heldItem);
+        _context.SaveChanges();
+        return heldItem;
     }
 
     /// <summary>
@@ -36,20 +59,10 @@ public class HeldItemController : Controller
     /// <param name="id">The id to search.</param>
     /// <returns>The HeldItem with the specified Id.</returns>
     [HttpGet("{id}")]
-    public ActionResult<HeldItem> GetById(Guid id)
+    public ActionResult<HeldItem?> GetById(Guid id)
     {
-        throw new NotImplementedException();
+        var heldItem = _context.HeldItems.Where(currentHeldItem => currentHeldItem.Id == id).FirstOrDefault();
+        return heldItem;
     }
 
-    /// <summary>
-    /// Updates a HeldItem by its id.
-    /// </summary>
-    /// <param name="id">The id of the HeldItem to update.</param>
-    /// <param name="heldItem">The HeldItem with the updated properties.</param>
-    /// <returns>The updated HeldItem.</returns>
-    [HttpPut("{id}")]
-    public ActionResult<HeldItem> Put(Guid id, [FromBody] HeldItem heldItem)
-    {
-        throw new NotImplementedException();
-    }
 }

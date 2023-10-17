@@ -16,7 +16,6 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <ProjectReference Include="../API/API.csproj" />
     <ProjectReference Include="../Library/Library.csproj" />
   </ItemGroup>
 
