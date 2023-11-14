@@ -19,7 +19,7 @@ Swagger sheet for API endpoint available at (not hosted yet)
 
 ## Usage
 
-1. Access the web app.														
+1. Access the web app.
 2. You can start searching sets right away, but you won't be able to save your faves or submit sets.
 3. Log in or create a new account to be able to save your faves and submit sets.
 4. To submit a set, go to the Loomipedia page of the Loomian you want to submit a set for and click on the "Submit Set" button.
@@ -31,6 +31,7 @@ All contributions are welcome. Please, open an issue or make a pull request if y
 ## Tech Stack
 
 This is the tech stack used by the app:
+
 - C#
 - ASP.NET
 - Blazor
@@ -39,7 +40,7 @@ This is the tech stack used by the app:
 
 This project follows the official Microsoft code conventions for C#. See:
 
-https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+<https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions>
 
 ## License
 
