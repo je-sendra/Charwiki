@@ -101,4 +101,16 @@ public class LoomianSet : IDatabaseSaveable
     /// </summary>
     public required GameVersionInfo GameVersionInfo { get; set; }
     #endregion
+
+    #region Metadata
+    /// <summary>
+    /// The timestamp of the creation of the set.
+    /// </summary>
+    public DateTime CreationTimestamp { get; set; } = DateTime.Now;
+
+    /// <summary>
+    /// The user who created the set.
+    /// </summary>
+    public required User Creator { get; set; }
+    #endregion
 }
