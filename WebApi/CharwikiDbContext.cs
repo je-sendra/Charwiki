@@ -18,6 +18,17 @@ public class CharwikiDbContext : DbContext
     }
 
     /// <summary>
+    /// The method to configure the database context.
+    /// </summary>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Ensure that the username is unique
+        modelBuilder.Entity<User>()
+            .HasIndex(e => e.Username)
+            .IsUnique();
+    }
+
+    /// <summary>
     /// The database table containing all game version information.
     /// </summary>
     public DbSet<GameVersionInfo> GameVersionInfos { get; set; }
@@ -46,6 +57,11 @@ public class CharwikiDbContext : DbContext
     /// The database table containing all Loomian sets.
     /// </summary>
     public DbSet<LoomianSet> LoomianSets { get; set; }
+
+    /// <summary>
+    /// The database table containing all users.
+    /// </summary>
+    public DbSet<User> Users { get; set; }
 
     /// <summary>
     /// The database table containing all value to stat assignments.

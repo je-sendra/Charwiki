@@ -8,5 +8,12 @@
   "AllowedHosts": "*",
   "ConnectionStrings": {
     "CharwikiDbContext": "Host=localhost;Port=5432;Database=charwiki;Username=postgres;Password=secretPassword"
+  },
+  "BCryptWorkFactor": 14,
+  "JwtSettings": {
+    "Secret": "YourSuperSecretKey12345",
+    "Issuer": "YourAppIssuer",
+    "Audience": "YourAppAudience",
+    "ExpiryMinutes": 60
   }
 }
