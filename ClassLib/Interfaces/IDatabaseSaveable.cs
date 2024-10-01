@@ -8,5 +8,5 @@ public interface IDatabaseSaveable
     /// <summary>
     /// The unique identifier of the object.
     /// </summary>
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
 }

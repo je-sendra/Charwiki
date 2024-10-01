@@ -8,7 +8,7 @@ namespace Charwiki.ClassLib.Models;
 public class LoomianAbility : IDatabaseSaveable
 {
     /// <inheritdoc/>
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The name of the ability.
