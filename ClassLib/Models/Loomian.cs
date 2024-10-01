@@ -9,7 +9,7 @@ namespace Charwiki.ClassLib.Models;
 public class Loomian : IDatabaseSaveable
 {
     /// <inheritdoc/>
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The common name of the Loomian.

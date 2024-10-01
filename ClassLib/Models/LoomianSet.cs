@@ -1,3 +1,4 @@
+using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Interfaces;
 
 namespace Charwiki.ClassLib.Models;
@@ -8,7 +9,7 @@ namespace Charwiki.ClassLib.Models;
 public class LoomianSet : IDatabaseSaveable
 {
     /// <inheritdoc/>
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The Loomian of the set.
@@ -92,5 +93,12 @@ public class LoomianSet : IDatabaseSaveable
     /// Other options for the set.
     /// </summary>
     public string? OtherOptions { get; set; }
+    #endregion
+
+    #region Game Info
+    /// <summary>
+    /// The game version the set is for.
+    /// </summary>
+    public required GameVersionInfo GameVersionInfo { get; set; }
     #endregion
 }

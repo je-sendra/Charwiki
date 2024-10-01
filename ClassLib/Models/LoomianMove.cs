@@ -9,7 +9,7 @@ namespace Charwiki.ClassLib.Models;
 public class LoomianMove : IDatabaseSaveable
 {
     /// <inheritdoc/>
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The name of the move.

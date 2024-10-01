@@ -10,7 +10,7 @@ public class LoomianItem : IDatabaseSaveable
     /// <summary>
     /// The unique identifier of the item.
     /// </summary>
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The common name of the item.
