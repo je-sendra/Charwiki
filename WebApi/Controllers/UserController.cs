@@ -25,7 +25,7 @@ public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration 
     /// <param name="userRegisterDto"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public IActionResult Register([FromBody] UserLoginDto userRegisterDto)
+    public IActionResult Register([FromBody] UserRegisterDto userRegisterDto)
     {
         if (!ModelState.IsValid)
         {
