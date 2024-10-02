@@ -16,7 +16,7 @@ namespace Charwiki.WebApi.Controllers;
 /// </summary>
 /// <param name="charwikiDbContext"></param>
 /// <param name="configuration"></param>
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration configuration) : ControllerBase
 {
     /// <summary>
@@ -31,6 +31,9 @@ public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration 
         {
             return BadRequest(ModelState);
         }
+
+        // Make the username lowercase
+        userRegisterDto.Username = userRegisterDto.Username.ToLower();
 
         // Check if the user already exists
         var existingUser = charwikiDbContext.Users.FirstOrDefault(e => e.Username == userRegisterDto.Username);
@@ -68,6 +71,10 @@ public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration 
             return BadRequest(ModelState);
         }
 
+        // Make the username lowercase
+        userLoginDto.Username = userLoginDto.Username.ToLower();
+
+        // Find the user
         var user = charwikiDbContext.Users.FirstOrDefault(e => e.Username == userLoginDto.Username);
 
         // If the user does not exist, return unauthorized
