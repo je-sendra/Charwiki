@@ -27,7 +27,7 @@ public class LoomiansController(CharwikiDbContext charwikiDbContext) : Controlle
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public IActionResult GetLoomian(Guid id)
+    public IActionResult GetById(Guid id)
     {
         if(!ModelState.IsValid)
         {
