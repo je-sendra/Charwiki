@@ -79,9 +79,6 @@ public class LoomiansController(CharwikiDbContext charwikiDbContext) : Controlle
             return BadRequest(ModelState);
         }
 
-        // Generate a new Guid for the Loomian
-        loomian.Id = Guid.NewGuid();
-
         // Save the Loomian to the database
         charwikiDbContext.Loomians.Add(loomian);
         charwikiDbContext.SaveChanges();
