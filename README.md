@@ -2,6 +2,8 @@
 
 Loomian Legacy PvP companion.
 
+Please star the project if you like it! ⭐
+
 ## Features 🚀
 
 Charwiki is a companion app for the Roblox game Loomian Legacy. It is designed to help players in the competitive scene by providing tools to help them build their teams and analyze their opponents.
