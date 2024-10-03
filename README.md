@@ -10,7 +10,7 @@ Charwiki is a companion app for the Roblox game Loomian Legacy. It is designed t
 
 The Sets Loomipedia is a list of sets for each Loomian. It will contain the most common sets for each Loomian, as well as some niche sets that can be used in specific situations.
 
-Charwiki's Sets Loomipedia not only provides the traditional set information (moves, items, EVs, etc.), but also provides a brief description of the set and some tips on how to use it effectively, as well as useful metadata such as the version of the game the set was created for.
+Charwiki's Sets Loomipedia not only provides the traditional set information (moves, items, TPs, etc.), but also provides a brief description of the set and some tips on how to use it effectively, as well as useful metadata such as the version of the game the set was created for.
 
 You will also be able to create your own sets and share them with the community!
 
