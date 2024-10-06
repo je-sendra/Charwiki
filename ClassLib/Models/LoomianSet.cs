@@ -112,5 +112,10 @@ public class LoomianSet : IDatabaseSaveable
     /// The user who created the set.
     /// </summary>
     public required User Creator { get; set; }
+
+    /// <summary>
+    /// Whether the set has been approved by a moderator.
+    /// </summary>
+    public bool Approved { get; set; } = false;
     #endregion
 }
