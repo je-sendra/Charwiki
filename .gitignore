@@ -3,3 +3,6 @@ ClassLib/bin
 WebApi/obj
 WebApi/bin
 WebApi/appsettings.json
+WebUi/obj
+WebUi/bin
+WebUi/appsettings.json
