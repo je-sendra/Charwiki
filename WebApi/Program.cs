@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text;
+using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -58,6 +59,9 @@ public static class Program
                 ValidateLifetime = true
             };
         });
+
+        // Register services
+        builder.Services.AddScoped<IAuthService, AuthService>();
 
         // Add Authorization
         builder.Services.AddAuthorization();

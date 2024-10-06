@@ -5,9 +5,8 @@ using System.Text;
 using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
-using Microsoft.AspNetCore.Authorization;
+using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -16,8 +15,9 @@ namespace Charwiki.WebApi.Controllers;
 /// </summary>
 /// <param name="charwikiDbContext"></param>
 /// <param name="configuration"></param>
+/// <param name="authService"></param>
 [Route("[controller]")]
-public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration configuration) : ControllerBase
+public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration configuration, IAuthService authService) : ControllerBase
 {
     /// <summary>
     /// Endpoint to register a new user.
@@ -90,43 +90,9 @@ public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration 
         }
 
         // Generate JWT token for the user
-        var token = GenerateJwtToken(user);
+        var token = authService.GenerateJwtToken(user);
 
         // Return OK
         return Ok(token);
-    }
-
-    private string GenerateJwtToken(User user)
-    {
-        var jwtSettings = configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["Secret"] ?? throw new NoNullAllowedException("Secret not found in configuration");
-        var issuer = jwtSettings["Issuer"];
-        var audience = jwtSettings["Audience"];
-        var expiryMinutesString = jwtSettings["ExpiryMinutes"] ?? throw new NoNullAllowedException("ExpiryMinutes not found in configuration");
-        var expiryMinutes = int.Parse(expiryMinutesString);
-
-        // Disable warning because the secret key is not hardcoded
-        #pragma warning disable S6781
-        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
-        #pragma warning restore S6781
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
-        };
-
-        var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
