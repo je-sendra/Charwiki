@@ -146,7 +146,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The timestamp of the creation of the set.
     /// </summary>
-    public DateTime CreationTimestamp { get; set; } = DateTime.Now;
+    public DateTime CreationTimestamp { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// The unique identifier of the user who created the set.
