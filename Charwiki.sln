@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLib", "ClassLib\ClassL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{422E0151-B9AD-4979-A994-6B300E2C807F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUi", "WebUi\WebUi.csproj", "{D130176F-051E-4EA2-BA2C-87D7DEC862FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{422E0151-B9AD-4979-A994-6B300E2C807F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{422E0151-B9AD-4979-A994-6B300E2C807F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{422E0151-B9AD-4979-A994-6B300E2C807F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D130176F-051E-4EA2-BA2C-87D7DEC862FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D130176F-051E-4EA2-BA2C-87D7DEC862FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D130176F-051E-4EA2-BA2C-87D7DEC862FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D130176F-051E-4EA2-BA2C-87D7DEC862FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
