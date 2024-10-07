@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Charwiki.ClassLib.Configuration;
@@ -18,8 +19,7 @@ public class GameVersionInfosService(HttpClient httpClient, IOptions<ApiSettings
     {
         var response = await httpClient.GetAsync($"{options.Value.BaseUrl}/gameversioninfos");
         response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var gameVersionInfos = JsonSerializer.Deserialize<IEnumerable<GameVersionInfo>>(content);
+        var gameVersionInfos = await response.Content.ReadFromJsonAsync<IEnumerable<GameVersionInfo>>();
         if (gameVersionInfos is null)
         {
             throw new InvalidOperationException("Failed to deserialize the game version infos.");
@@ -32,8 +32,7 @@ public class GameVersionInfosService(HttpClient httpClient, IOptions<ApiSettings
     {
         var response = await httpClient.GetAsync($"{options.Value.BaseUrl}/gameversioninfos/{id}");
         response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var gameVersionInfo = JsonSerializer.Deserialize<GameVersionInfo>(content);
+        var gameVersionInfo = await response.Content.ReadFromJsonAsync<GameVersionInfo>();
         if (gameVersionInfo is null)
         {
             throw new InvalidOperationException("Failed to deserialize the game version info.");
@@ -44,12 +43,9 @@ public class GameVersionInfosService(HttpClient httpClient, IOptions<ApiSettings
     /// <inheritdoc/>
     public async Task<GameVersionInfo> CreateGameVersionInfoAsync(GameVersionInfo gameVersionInfo)
     {
-        var json = JsonSerializer.Serialize(gameVersionInfo);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await httpClient.PostAsync($"{options.Value.BaseUrl}/gameversioninfos", content);
+        var response = await httpClient.PostAsJsonAsync($"{options.Value.BaseUrl}/gameversioninfos", gameVersionInfo);
         response.EnsureSuccessStatusCode();
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var createdGameVersionInfo = JsonSerializer.Deserialize<GameVersionInfo>(responseContent);
+        var createdGameVersionInfo = await response.Content.ReadFromJsonAsync<GameVersionInfo>();
         if (createdGameVersionInfo is null)
         {
             throw new InvalidOperationException("Failed to deserialize the created game version info.");

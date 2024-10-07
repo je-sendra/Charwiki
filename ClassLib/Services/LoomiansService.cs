@@ -19,8 +19,7 @@ public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> option
     {
         var response = await httpClient.GetAsync($"{options.Value.BaseUrl}/loomians");
         response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var loomians = JsonSerializer.Deserialize<IEnumerable<Loomian>>(content);
+        var loomians = await response.Content.ReadFromJsonAsync<IEnumerable<Loomian>>();
         if (loomians is null)
         {
             throw new InvalidOperationException("Failed to deserialize the loomians.");
@@ -33,8 +32,7 @@ public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> option
     {
         var response = await httpClient.GetAsync($"{options.Value.BaseUrl}/loomians/{id}");
         response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var loomian = JsonSerializer.Deserialize<Loomian>(content);
+        var loomian = await response.Content.ReadFromJsonAsync<Loomian>();
         if (loomian is null)
         {
             throw new InvalidOperationException("Failed to deserialize the loomian.");
@@ -47,8 +45,7 @@ public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> option
     {
         var response = await httpClient.GetAsync($"{options.Value.BaseUrl}/loomians/{name}");
         response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var loomian = JsonSerializer.Deserialize<Loomian>(content);
+        var loomian = await response.Content.ReadFromJsonAsync<Loomian>();
         if (loomian is null)
         {
             throw new InvalidOperationException("Failed to deserialize the loomian.");
@@ -61,8 +58,7 @@ public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> option
     {
         var response = await httpClient.PostAsJsonAsync($"{options.Value.BaseUrl}/loomians", loomian);
         response.EnsureSuccessStatusCode();
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var createdLoomian = JsonSerializer.Deserialize<Loomian>(responseContent);
+        var createdLoomian = await response.Content.ReadFromJsonAsync<Loomian>();
         if (createdLoomian is null)
         {
             throw new InvalidOperationException("Failed to deserialize the created loomian.");
