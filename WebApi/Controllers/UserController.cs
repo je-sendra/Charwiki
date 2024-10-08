@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using Charwiki.ClassLib.Dto;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -42,13 +43,20 @@ public class UserController(IAuthService authService) : ControllerBase
             return BadRequest(ModelState);
         }
 
-        // Ensure the login is valid
-        var loggedInUser = await authService.EnsureValidLoginAsync(userLoginDto);
+        try
+        {
+            // Ensure the login is valid
+            var loggedInUser = await authService.EnsureValidLoginAsync(userLoginDto);
 
-        // Generate JWT token for the user
-        var token = authService.GenerateJwtToken(loggedInUser);
+            // Generate JWT token for the user
+            var token = authService.GenerateJwtToken(loggedInUser);
 
-        // Return OK with the token
-        return Ok(token);
+            // Return OK with the token
+            return Ok(token);
+        }
+        catch (AuthenticationException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 }
