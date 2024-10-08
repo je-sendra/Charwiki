@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Controllers.Templates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,79 +10,15 @@ namespace Charwiki.WebApi.Controllers;
 /// </summary>
 /// <param name="charwikiDbContext"></param>
 [Route("[controller]")]
-public class LoomianItemsController(CharwikiDbContext charwikiDbContext) : ControllerBase
+public class LoomianItemsController(CharwikiDbContext charwikiDbContext) : CrudControllerTemplate<LoomianItem>(charwikiDbContext, charwikiDbContext.LoomianItems)
 {
-    /// <summary>
-    /// Endpoint to get all Loomian items.
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet]
-    public IActionResult GetAllLoomianItems()
-    {
-        return Ok(charwikiDbContext.LoomianItems);
-    }
-
-    /// <summary>
-    /// Endpoint to get a specific Loomian item.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    [HttpGet("{id}")]
-    public IActionResult GetById(Guid id)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var loomianItem = charwikiDbContext.LoomianItems.FirstOrDefault(e => e.Id == id);
-        if (loomianItem == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(loomianItem);
-    }
-
-    /// <summary>
-    /// Endpoint to get a Loomian item by its name. This is a case-sensitive search.
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    [HttpGet("name/{name}")]
-    public IActionResult GetLoomianItemIdByName(string name)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var loomianItem = charwikiDbContext.LoomianItems.FirstOrDefault(e => e.Name == name);
-        if (loomianItem == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(loomianItem);
-    }
-
-    /// <summary>
-    /// Endpoint to create a new Loomian item.
-    /// </summary>
-    /// <param name="loomianItem"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     [HttpPost]
     [Authorize(Roles="Admin")]
-    public IActionResult CreateLoomianItem([FromBody] LoomianItem loomianItem)
+    #pragma warning disable S6967
+    public override async Task<IActionResult> CreateNewAsync(LoomianItem model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        charwikiDbContext.LoomianItems.Add(loomianItem);
-        charwikiDbContext.SaveChanges();
-
-        return Created($"/loomianitems/{loomianItem.Id}", loomianItem);
+        return await base.CreateNewAsync(model);
     }
+    #pragma warning restore S6967
 }
