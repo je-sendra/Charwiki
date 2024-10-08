@@ -5,8 +5,10 @@ using System.Text;
 using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Configuration;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -14,10 +16,10 @@ namespace Charwiki.WebApi.Controllers;
 /// Controller for user-related endpoints.
 /// </summary>
 /// <param name="charwikiDbContext"></param>
-/// <param name="configuration"></param>
+/// <param name="securitySettings"></param>
 /// <param name="authService"></param>
 [Route("[controller]")]
-public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration configuration, IAuthService authService) : ControllerBase
+public class UserController(CharwikiDbContext charwikiDbContext, IOptions<SecuritySettings> securitySettings, IAuthService authService) : ControllerBase
 {
     /// <summary>
     /// Endpoint to register a new user.
@@ -43,7 +45,7 @@ public class UserController(CharwikiDbContext charwikiDbContext, IConfiguration 
         }
 
         // Create the user
-        var bcryptWorkFactor = configuration.GetValue<int>("BcryptWorkFactor");
+        var bcryptWorkFactor = securitySettings.Value.BCryptWorkFactor;
         var user = new User
         {
             Username = userRegisterDto.Username,
