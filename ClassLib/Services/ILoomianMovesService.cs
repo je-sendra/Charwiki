@@ -4,9 +4,9 @@ using Charwiki.ClassLib.Services.Templates;
 namespace Charwiki.ClassLib.Services;
 
 /// <summary>
-/// Service for Loomian-related operations.
+/// Represents a service for Loomian move-related operations.
 /// </summary>
-public interface ILoomiansService : ICrudControllerServiceTemplate<Loomian>
+public interface ILoomianMovesService : ICrudControllerServiceTemplate<LoomianMove>
 {
     
 }

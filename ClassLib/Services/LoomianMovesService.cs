@@ -6,10 +6,10 @@ using Microsoft.Extensions.Options;
 namespace Charwiki.ClassLib.Services;
 
 /// <summary>
-/// Service for game version info-related operations against an API.
+/// Service for Loomian move-related operations against an API.
 /// </summary>
 /// <param name="httpClient"></param>
 /// <param name="apiSettings"></param>
-public class GameVersionInfosService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : CrudControllerServiceTemplate<GameVersionInfo>(httpClient, apiSettings, "gameVersionInfos"), IGameVersionInfosService
+public class LoomianMovesService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : CrudControllerServiceTemplate<LoomianMove>(httpClient, apiSettings, "loomianMoves"), ILoomianMovesService
 {
 }
