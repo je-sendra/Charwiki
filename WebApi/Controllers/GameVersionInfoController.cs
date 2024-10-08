@@ -18,9 +18,9 @@ public class GameVersionInfosController(CharwikiDbContext charwikiDbContext) : C
     [HttpPost]
     [Authorize(Roles = "Admin")]
     #pragma warning disable S6967
-    public override async Task<IActionResult> CreateNew([FromBody] GameVersionInfo gameVersionInfo)
+    public override async Task<IActionResult> CreateNewAsync([FromBody] GameVersionInfo gameVersionInfo)
     {
-        return await base.CreateNew(gameVersionInfo);
+        return await base.CreateNewAsync(gameVersionInfo);
     }
     #pragma warning restore S6967
 }
