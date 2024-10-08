@@ -49,6 +49,14 @@ public static class Program
 
         var app = builder.Build();
 
+        // Apply database migrations on startup
+        if (builder.Configuration.GetValue<bool>("MigrateDatabaseOnStartup"))
+        {
+            using var scope = app.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<CharwikiDbContext>();
+            dbContext.Database.Migrate(); // This applies any pending migrations
+        }
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
