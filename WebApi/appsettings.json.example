@@ -17,5 +17,6 @@
       "Audience": "YourAppAudience",
       "ExpiryMinutes": 60
     }
-  }
+  },
+  "MigrateDatabaseOnStartup": true
 }
