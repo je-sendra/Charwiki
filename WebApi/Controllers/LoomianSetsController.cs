@@ -53,14 +53,14 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// <returns></returns>
     [HttpPost]
     [Authorize(Roles="Admin")]
-    public IActionResult CreateLoomianSet([FromBody] LoomianSetDto loomianSetDto)
+    public async Task<IActionResult> CreateLoomianSet([FromBody] LoomianSetDto loomianSetDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var user = authService.GetUserFromClaims(User);
+        var user = await authService.GetUserFromClaimsAsync(User);
         
         var loomianSet = new LoomianSet
         {
@@ -85,7 +85,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         };
 
         charwikiDbContext.LoomianSets.Add(loomianSet);
-        charwikiDbContext.SaveChanges();
+        await charwikiDbContext.SaveChangesAsync();
 
         return Created($"/loomianSets/{loomianSet.Id}", loomianSet);
     }
