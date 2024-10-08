@@ -51,9 +51,9 @@ public class LoomiansController : CrudControllerTemplate<Loomian>, IGetByNameCon
     [HttpPost]
     [Authorize(Roles="Admin")]
     #pragma warning disable S6967
-    public override Task<IActionResult> CreateNew([FromBody] Loomian loomian)
+    public override async Task<IActionResult> CreateNewAsync([FromBody] Loomian loomian)
     {
-        return base.CreateNew(loomian);
+        return await base.CreateNewAsync(loomian);
     }
     #pragma warning restore S6967
 }
