@@ -1,46 +1,27 @@
 using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Controllers.Templates;
+using Charwiki.WebApi.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Charwiki.WebApi.Controllers;
 
 /// <summary>
 /// Controller for Loomian-related endpoints.
 /// </summary>
-/// <param name="charwikiDbContext"></param>
 [Route("[controller]")]
-public class LoomiansController(CharwikiDbContext charwikiDbContext) : ControllerBase
+public class LoomiansController : CrudControllerTemplate<Loomian>, IGetByNameController
 {
-    /// <summary>
-    /// Endpoint to get all Loomians.
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet]
-    public IActionResult GetAllLoomians()
-    {
-        return Ok(charwikiDbContext.Loomians);
-    }
+    private readonly CharwikiDbContext _charwikiDbContext;
 
     /// <summary>
-    /// Endpoint to get a specific Loomian.
+    /// Constructor for the LoomiansController.
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    [HttpGet("{id}")]
-    public IActionResult GetById(Guid id)
+    /// <param name="charwikiDbContext"></param>
+    public LoomiansController(CharwikiDbContext charwikiDbContext) : base(charwikiDbContext, charwikiDbContext.Loomians)
     {
-        if(!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var loomian = charwikiDbContext.Loomians.FirstOrDefault(e => e.Id == id);
-        if (loomian == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(loomian);
+        _charwikiDbContext = charwikiDbContext;
     }
 
     /// <summary>
@@ -49,14 +30,14 @@ public class LoomiansController(CharwikiDbContext charwikiDbContext) : Controlle
     /// <param name="name"></param>
     /// <returns></returns>
     [HttpGet("name/{name}")]
-    public IActionResult GetLoomianIdByName(string name)
+    public async Task <IActionResult> GetByName(string name)
     {
         if(!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var loomian = charwikiDbContext.Loomians.FirstOrDefault(e => e.Name == name);
+        var loomian = await _charwikiDbContext.Loomians.FirstOrDefaultAsync(e => e.Name == name);
         if (loomian == null)
         {
             return NotFound();
@@ -65,24 +46,14 @@ public class LoomiansController(CharwikiDbContext charwikiDbContext) : Controlle
         return Ok(loomian);
     }
 
-    /// <summary>
-    /// Endpoint to create a new Loomian. The Guid is generated automatically.
-    /// </summary>
-    /// <param name="loomian"></param>
-    /// <returns></returns>
+    
+    /// <inheritdoc />
     [HttpPost]
     [Authorize(Roles="Admin")]
-    public IActionResult CreateLoomian([FromBody] Loomian loomian)
+    #pragma warning disable S6967
+    public override Task<IActionResult> CreateNew([FromBody] Loomian loomian)
     {
-        if(!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        // Save the Loomian to the database
-        charwikiDbContext.Loomians.Add(loomian);
-        charwikiDbContext.SaveChanges();
-
-        return Created($"/loomians/{loomian.Id}", loomian);
+        return base.CreateNew(loomian);
     }
+    #pragma warning restore S6967
 }
