@@ -14,7 +14,7 @@ public abstract class CrudControllerTemplate<T>(CharwikiDbContext dbContext, DbS
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public virtual async Task<IActionResult> GetAll()
+    public virtual async Task<IActionResult> GetAllAsync()
     {
         var items = await dbSet.ToListAsync();
         return Ok(items);
@@ -26,7 +26,7 @@ public abstract class CrudControllerTemplate<T>(CharwikiDbContext dbContext, DbS
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public virtual async Task<IActionResult> GetById(Guid id)
+    public virtual async Task<IActionResult> GetByIdAsync(Guid id)
     {
         if (!ModelState.IsValid)
         {
@@ -42,7 +42,7 @@ public abstract class CrudControllerTemplate<T>(CharwikiDbContext dbContext, DbS
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public virtual async Task<IActionResult> CreateNew(T model)
+    public virtual async Task<IActionResult> CreateNewAsync(T model)
     {
         if (!ModelState.IsValid)
         {
