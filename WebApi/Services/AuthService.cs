@@ -3,6 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Charwiki.WebApi.Services;
@@ -10,25 +12,20 @@ namespace Charwiki.WebApi.Services;
 /// <summary>
 /// Service for authentication-related operations.
 /// </summary>
-/// <param name="configuration"></param>
+/// <param name="securitySettings"></param>
 /// <param name="charwikiDbContext"></param>
-public class AuthService(IConfiguration configuration, CharwikiDbContext charwikiDbContext) : IAuthService
+public class AuthService(IOptions<SecuritySettings> securitySettings, CharwikiDbContext charwikiDbContext) : IAuthService
 {
     /// <inheritdoc/>
     public string GenerateJwtToken(User user)
     {
 
-        var jwtSettings = configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["Secret"] ?? throw new NoNullAllowedException("Secret not found in configuration");
-        var issuer = jwtSettings["Issuer"];
-        var audience = jwtSettings["Audience"];
-        var expiryMinutesString = jwtSettings["ExpiryMinutes"] ?? throw new NoNullAllowedException("ExpiryMinutes not found in configuration");
-        var expiryMinutes = int.Parse(expiryMinutesString);
+        var secret = securitySettings.Value.JwtSettings.Secret;
+        var issuer = securitySettings.Value.JwtSettings.Issuer;
+        var audience = securitySettings.Value.JwtSettings.Audience;
+        var expiryMinutes = securitySettings.Value.JwtSettings.ExpiryMinutes;
 
-        // Disable warning because the secret key is not hardcoded
-#pragma warning disable S6781
-        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
-#pragma warning restore S6781
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

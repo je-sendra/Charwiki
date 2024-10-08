@@ -1,5 +1,5 @@
-using System.Data;
 using System.Text;
+using Charwiki.WebApi.Configuration;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -30,37 +30,14 @@ public static class Program
             options.UseNpgsql(builder.Configuration.GetConnectionString("CharwikiDbContext"));
         });
 
-        // Configure JWT Settings
-        var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["Secret"]  ?? throw new NoNullAllowedException("Secret not found in configuration");
-        var issuer = jwtSettings["Issuer"];
-        var audience = jwtSettings["Audience"];
-        var key = Encoding.ASCII.GetBytes(secretKey);
+        // Configure security settings
+        builder.Services.Configure<SecuritySettings>(builder.Configuration.GetSection("SecuritySettings"));
 
-        // Configure Authentication
-        builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = issuer,
+        // Add JWT Authentication
+        var securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
+        builder.Services.AddJwtAuth(securitySettings);
 
-                ValidateAudience = true,
-                ValidAudience = audience,
-
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-
-                ValidateLifetime = true
-            };
-        });
-
-        // Register services
+        // Register custom services
         builder.Services.AddScoped<IAuthService, AuthService>();
 
         // Add Authorization
@@ -85,11 +62,42 @@ public static class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseAuthorization();
-
-
         app.MapControllers();
 
         app.Run();
+    }
+
+    /// <summary>
+    /// Adds JWT Authentication to the service collection.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="securitySettings"></param>
+    private static void AddJwtAuth(this IServiceCollection services, SecuritySettings securitySettings)
+    {
+        var secret = securitySettings.JwtSettings.Secret;
+        var secretKey = Encoding.ASCII.GetBytes(secret);
+
+        // Configure Authentication
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = securitySettings.JwtSettings.Issuer,
+
+                ValidateAudience = true,
+                ValidAudience = securitySettings.JwtSettings.Audience,
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+
+                ValidateLifetime = true
+            };
+        });
     }
 }
