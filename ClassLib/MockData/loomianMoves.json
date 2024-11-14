@@ -1,0 +1,478 @@
+[
+  {
+    "Id": "304fbf71-b5b5-41ea-a00d-bd6700228531",
+    "Name": "Move 0",
+    "Type": 15
+  },
+  {
+    "Id": "ee0bdae8-5f04-4026-8cef-72d11f136f70",
+    "Name": "Move 1",
+    "Type": 14
+  },
+  { "Id": "720a614d-7d0c-4d3f-992e-f790e1458eaa", "Name": "Move 2", "Type": 7 },
+  { "Id": "2c13a32d-603b-45bf-9f69-87c4792f5f25", "Name": "Move 3", "Type": 5 },
+  { "Id": "38dc904b-b573-4093-ac35-325b53291f21", "Name": "Move 4", "Type": 5 },
+  { "Id": "b41ac755-5f8a-4ec3-a3bc-7341f0700311", "Name": "Move 5", "Type": 9 },
+  {
+    "Id": "e6eb32eb-cdcf-471b-a3b5-2fa3d4fd3199",
+    "Name": "Move 6",
+    "Type": 13
+  },
+  { "Id": "41c589e8-7fc2-4a3e-a7c5-7cd2cdd7c17b", "Name": "Move 7", "Type": 2 },
+  {
+    "Id": "ad6c75b0-838a-4b02-85b5-54262030d87c",
+    "Name": "Move 8",
+    "Type": 13
+  },
+  { "Id": "1d5fd68e-5662-477d-a3da-1e71cd2dd7d5", "Name": "Move 9", "Type": 4 },
+  {
+    "Id": "37026dae-1295-421c-9a08-96c6ea450c5e",
+    "Name": "Move 10",
+    "Type": 14
+  },
+  {
+    "Id": "5b995619-a9b0-4e3e-9293-f6558a88e219",
+    "Name": "Move 11",
+    "Type": 8
+  },
+  {
+    "Id": "f51c13a1-934b-4676-b62b-44b128f3f95b",
+    "Name": "Move 12",
+    "Type": 10
+  },
+  {
+    "Id": "866e6630-f878-41f1-a212-1a00d608bea7",
+    "Name": "Move 13",
+    "Type": 1
+  },
+  {
+    "Id": "6008a0c6-7797-4387-8839-c4b8dff455e8",
+    "Name": "Move 14",
+    "Type": 16
+  },
+  {
+    "Id": "39300e7b-11a6-4c84-b7d2-0ce4b3ca4bbd",
+    "Name": "Move 15",
+    "Type": 7
+  },
+  {
+    "Id": "dafa1274-a7b9-4d76-8862-f7ec76aa8436",
+    "Name": "Move 16",
+    "Type": 6
+  },
+  {
+    "Id": "9363f00c-a02d-40d7-b246-bb814ac593e9",
+    "Name": "Move 17",
+    "Type": 2
+  },
+  {
+    "Id": "fafd8d43-0bd6-47be-85a5-ed06c94c4b47",
+    "Name": "Move 18",
+    "Type": 7
+  },
+  {
+    "Id": "3184dc60-d297-4d6c-9363-43ff29abd437",
+    "Name": "Move 19",
+    "Type": 1
+  },
+  {
+    "Id": "12874cd6-7274-416b-9a75-af9aaedca891",
+    "Name": "Move 20",
+    "Type": 1
+  },
+  {
+    "Id": "c7f2f22b-951f-4a64-8795-53ec042f9d50",
+    "Name": "Move 21",
+    "Type": 8
+  },
+  {
+    "Id": "d11a526b-ab0a-4372-9a4e-a8b78e36e215",
+    "Name": "Move 22",
+    "Type": 4
+  },
+  {
+    "Id": "0d34a5a3-3b1c-4c07-a3d9-7afab659c548",
+    "Name": "Move 23",
+    "Type": 11
+  },
+  {
+    "Id": "3c3ce6d9-2547-49cc-b1e6-b8c464070036",
+    "Name": "Move 24",
+    "Type": 10
+  },
+  {
+    "Id": "8330cddd-b7cd-4a8e-bfa2-61bd73dca405",
+    "Name": "Move 25",
+    "Type": 7
+  },
+  {
+    "Id": "be5d2de1-d8d9-4332-9c61-b903c215c779",
+    "Name": "Move 26",
+    "Type": 10
+  },
+  {
+    "Id": "379182bb-24d3-4d11-8557-c4db7c7455ff",
+    "Name": "Move 27",
+    "Type": 0
+  },
+  {
+    "Id": "25c33875-a5f2-46a6-a603-9c1db6f9d1a4",
+    "Name": "Move 28",
+    "Type": 9
+  },
+  {
+    "Id": "d19c07e1-63cf-42aa-951e-b215741c7a41",
+    "Name": "Move 29",
+    "Type": 2
+  },
+  {
+    "Id": "cec28508-7e1b-4f80-903c-5934633dcaf9",
+    "Name": "Move 30",
+    "Type": 12
+  },
+  {
+    "Id": "18c617b3-f17e-4e1b-bf7f-eeea394cbc3b",
+    "Name": "Move 31",
+    "Type": 10
+  },
+  {
+    "Id": "9c57abce-cca9-44a7-bd82-827402ce5c1d",
+    "Name": "Move 32",
+    "Type": 4
+  },
+  {
+    "Id": "2601b155-df7c-4bba-8296-5da446174b18",
+    "Name": "Move 33",
+    "Type": 3
+  },
+  {
+    "Id": "84dfb673-1953-4ed6-b607-156e18379a14",
+    "Name": "Move 34",
+    "Type": 13
+  },
+  {
+    "Id": "3a23d967-051b-4410-bb7a-d485d26403ac",
+    "Name": "Move 35",
+    "Type": 3
+  },
+  {
+    "Id": "8a1af5e8-32bd-4eac-ab9e-af2d48a9a2f2",
+    "Name": "Move 36",
+    "Type": 11
+  },
+  {
+    "Id": "ad73c229-69c4-4427-a9f0-4c61ea1c850e",
+    "Name": "Move 37",
+    "Type": 11
+  },
+  {
+    "Id": "a4496e4d-6da6-46f9-9abe-caaf55215660",
+    "Name": "Move 38",
+    "Type": 13
+  },
+  {
+    "Id": "c9393030-4a77-4fd6-a50c-6552d0aca156",
+    "Name": "Move 39",
+    "Type": 4
+  },
+  {
+    "Id": "9be94938-c3bd-4f86-a5ae-f30161b69ee7",
+    "Name": "Move 40",
+    "Type": 6
+  },
+  {
+    "Id": "de9812b2-41ae-4cb7-812b-df1fbee28d66",
+    "Name": "Move 41",
+    "Type": 14
+  },
+  {
+    "Id": "563cbf0e-0911-4261-a9a1-5edd0cd3d843",
+    "Name": "Move 42",
+    "Type": 11
+  },
+  {
+    "Id": "f150432c-01d0-48cd-91e1-d45c39bd2713",
+    "Name": "Move 43",
+    "Type": 12
+  },
+  {
+    "Id": "5939b2ea-5185-4a9d-9442-ff6a7191bfdd",
+    "Name": "Move 44",
+    "Type": 1
+  },
+  {
+    "Id": "3bfd0663-d873-43cc-86e2-29b519f9e3c0",
+    "Name": "Move 45",
+    "Type": 10
+  },
+  {
+    "Id": "972f97c7-5a69-466c-a53e-61ff5c2b1ee1",
+    "Name": "Move 46",
+    "Type": 14
+  },
+  {
+    "Id": "25cec627-c0bd-4cb2-93b8-1bb8675ea65e",
+    "Name": "Move 47",
+    "Type": 11
+  },
+  {
+    "Id": "79f16b15-34f0-4aab-a11d-bbaf68228d2c",
+    "Name": "Move 48",
+    "Type": 0
+  },
+  {
+    "Id": "d27a554e-510b-4555-b6c4-dd1a92808ea6",
+    "Name": "Move 49",
+    "Type": 15
+  },
+  {
+    "Id": "a63bcb59-fcff-4ad5-be92-f10759705556",
+    "Name": "Move 50",
+    "Type": 15
+  },
+  {
+    "Id": "10183418-4797-4266-a951-fab242ce5baa",
+    "Name": "Move 51",
+    "Type": 1
+  },
+  {
+    "Id": "355d44ff-406e-4f55-9404-8b185c728baf",
+    "Name": "Move 52",
+    "Type": 7
+  },
+  {
+    "Id": "3cb9f655-b0b0-40c4-b046-9717462b174e",
+    "Name": "Move 53",
+    "Type": 7
+  },
+  {
+    "Id": "9b0fc099-e6b4-4df3-b709-665dc1d62fce",
+    "Name": "Move 54",
+    "Type": 0
+  },
+  {
+    "Id": "a01df29e-9433-494d-aa78-765e50397bfe",
+    "Name": "Move 55",
+    "Type": 0
+  },
+  {
+    "Id": "d2d1b4c7-e9d0-41cb-842e-29139d742a3d",
+    "Name": "Move 56",
+    "Type": 8
+  },
+  {
+    "Id": "d88455ca-c0bb-4e7f-a28c-2bde03760ba5",
+    "Name": "Move 57",
+    "Type": 5
+  },
+  {
+    "Id": "cb41dc68-007e-4e67-9f1d-aebdf8d9cd7e",
+    "Name": "Move 58",
+    "Type": 7
+  },
+  {
+    "Id": "329f256f-3286-4f87-8044-e58e5eb377b0",
+    "Name": "Move 59",
+    "Type": 11
+  },
+  {
+    "Id": "df2ad32d-049e-4d10-9ac8-16fab20b9c7c",
+    "Name": "Move 60",
+    "Type": 5
+  },
+  {
+    "Id": "88ab1984-d77e-4a7c-8aa3-88433745d983",
+    "Name": "Move 61",
+    "Type": 4
+  },
+  {
+    "Id": "cc63707e-1a35-41a3-9445-7ae85d6e276e",
+    "Name": "Move 62",
+    "Type": 12
+  },
+  {
+    "Id": "711456de-4026-4599-8003-309edd7985ef",
+    "Name": "Move 63",
+    "Type": 4
+  },
+  {
+    "Id": "0e38a233-007e-4f90-8c0b-06722e6415e9",
+    "Name": "Move 64",
+    "Type": 2
+  },
+  {
+    "Id": "f8d99500-f151-4966-8db6-6d6696613f01",
+    "Name": "Move 65",
+    "Type": 3
+  },
+  {
+    "Id": "8f18cf8e-af34-4284-8ec5-78e7e0fa97c3",
+    "Name": "Move 66",
+    "Type": 15
+  },
+  {
+    "Id": "0b6d20e7-d76c-47a8-be80-d38933a0a3ea",
+    "Name": "Move 67",
+    "Type": 10
+  },
+  {
+    "Id": "aaa47f58-105c-4321-a9e7-b18cd60a3657",
+    "Name": "Move 68",
+    "Type": 5
+  },
+  {
+    "Id": "11d119b1-dfed-4f46-a232-ef7025a7fe30",
+    "Name": "Move 69",
+    "Type": 10
+  },
+  {
+    "Id": "975e075e-c765-4ae8-9eef-055c4f5b835f",
+    "Name": "Move 70",
+    "Type": 1
+  },
+  {
+    "Id": "d1e6b3c8-d46d-4508-ae1d-a1f69ae16b70",
+    "Name": "Move 71",
+    "Type": 7
+  },
+  {
+    "Id": "667c92bf-60f7-4001-8cf8-f53970ed8220",
+    "Name": "Move 72",
+    "Type": 1
+  },
+  {
+    "Id": "3de45881-c576-4916-83ef-4cd5dbc1f50d",
+    "Name": "Move 73",
+    "Type": 12
+  },
+  {
+    "Id": "4dd69620-093d-4601-af2a-7c4224f7f79b",
+    "Name": "Move 74",
+    "Type": 5
+  },
+  {
+    "Id": "eb27d33b-0620-472b-b164-4e577623d57a",
+    "Name": "Move 75",
+    "Type": 6
+  },
+  {
+    "Id": "b710cc64-ab38-4749-8cc1-2753bdedca6a",
+    "Name": "Move 76",
+    "Type": 2
+  },
+  {
+    "Id": "de0f82bf-3875-41d1-9d28-b02f6113f017",
+    "Name": "Move 77",
+    "Type": 9
+  },
+  {
+    "Id": "1b82e28e-aa55-4c63-9f3d-d2e9aff814fc",
+    "Name": "Move 78",
+    "Type": 15
+  },
+  {
+    "Id": "506a7869-69ce-454f-9907-6a8700fc9c78",
+    "Name": "Move 79",
+    "Type": 5
+  },
+  {
+    "Id": "c548d243-606e-4434-8400-7ff6559a677f",
+    "Name": "Move 80",
+    "Type": 9
+  },
+  {
+    "Id": "a133d7c2-391d-40ba-8321-32c71de55781",
+    "Name": "Move 81",
+    "Type": 15
+  },
+  {
+    "Id": "fa450d48-98ea-4d71-bd01-14b7262e7d78",
+    "Name": "Move 82",
+    "Type": 12
+  },
+  {
+    "Id": "18abb70e-f30d-40a6-b620-9f5536e6f822",
+    "Name": "Move 83",
+    "Type": 5
+  },
+  {
+    "Id": "7b008c36-f575-4f1b-ab96-81c6321481c3",
+    "Name": "Move 84",
+    "Type": 0
+  },
+  {
+    "Id": "32caa3da-515d-4a9f-a81c-85eec10eba70",
+    "Name": "Move 85",
+    "Type": 3
+  },
+  {
+    "Id": "d18bbf38-a829-4956-a60b-deaf4f1a1b43",
+    "Name": "Move 86",
+    "Type": 13
+  },
+  {
+    "Id": "d289fbda-058c-48eb-9d19-e7903e526590",
+    "Name": "Move 87",
+    "Type": 7
+  },
+  {
+    "Id": "d22c5fd0-6c92-4586-afa4-5331b21bdcfe",
+    "Name": "Move 88",
+    "Type": 16
+  },
+  {
+    "Id": "cf4dbc46-c3c4-43d3-94ce-830106cdb9fb",
+    "Name": "Move 89",
+    "Type": 11
+  },
+  {
+    "Id": "8936cd60-d76c-4117-9e37-047f483c111e",
+    "Name": "Move 90",
+    "Type": 8
+  },
+  {
+    "Id": "9b98e945-b4b0-40fe-a647-bcc11c5a3aec",
+    "Name": "Move 91",
+    "Type": 9
+  },
+  {
+    "Id": "07807ab1-fbb5-4ffb-a54b-33accfbdecbf",
+    "Name": "Move 92",
+    "Type": 9
+  },
+  {
+    "Id": "44d89714-83c4-43e8-b3b0-b4722b9a1307",
+    "Name": "Move 93",
+    "Type": 6
+  },
+  {
+    "Id": "6ad9b925-6863-46f6-ac7a-4931786a93d4",
+    "Name": "Move 94",
+    "Type": 0
+  },
+  {
+    "Id": "850405e9-1ef1-4d6a-b977-8492ebf411fb",
+    "Name": "Move 95",
+    "Type": 7
+  },
+  {
+    "Id": "ab1bd987-93d5-44ef-af9e-40ff41036563",
+    "Name": "Move 96",
+    "Type": 2
+  },
+  {
+    "Id": "2a2dc65c-d584-46f3-8933-f948701af79a",
+    "Name": "Move 97",
+    "Type": 6
+  },
+  {
+    "Id": "7acaec95-253e-4523-9bfb-f7e64e312f03",
+    "Name": "Move 98",
+    "Type": 4
+  },
+  {
+    "Id": "2378b6ba-0236-40ab-a00b-24ed8b0d50ba",
+    "Name": "Move 99",
+    "Type": 7
+  }
+]
