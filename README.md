@@ -36,6 +36,10 @@ It will also have an AI tool that will help you analyze your team's weaknesses a
 
 The app is currently in development and is not yet available for public use.
 
+However, a VERY ROUGH AND UNSTABLE development version of the app can be accessed at:
+
+<https://charwiki.onrender.com/>
+
 ## Contributions 🤝
 
 If you want to contribute to the project, you can fork the repository and submit a pull request. Make sure to follow the code conventions and the project's guidelines. Please also make sure to test your code before submitting a pull request.
