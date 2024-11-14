@@ -1,0 +1,602 @@
+[
+  {
+    "Id": "b9708687-7302-4e16-85b8-e5d45c6f51c1",
+    "Name": "Loomian 0",
+    "Type1": 2,
+    "Type2": null
+  },
+  {
+    "Id": "2e3ff618-d95e-49b1-a482-37cf7fb7cf4b",
+    "Name": "Loomian 1",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "55dc1ca6-e631-4ee8-9571-89560b543dd4",
+    "Name": "Loomian 2",
+    "Type1": 2,
+    "Type2": null
+  },
+  {
+    "Id": "bf06f56d-20f7-4bbc-95a8-3d6f1e35c474",
+    "Name": "Loomian 3",
+    "Type1": 8,
+    "Type2": null
+  },
+  {
+    "Id": "f1aec1a0-fba5-403d-8be7-e1014fb73696",
+    "Name": "Loomian 4",
+    "Type1": 9,
+    "Type2": 9
+  },
+  {
+    "Id": "45e60a6e-32d3-4d5c-9685-02674d43ba44",
+    "Name": "Loomian 5",
+    "Type1": 13,
+    "Type2": 12
+  },
+  {
+    "Id": "4ee2be74-1ac3-4acb-a629-2d8b95ce6649",
+    "Name": "Loomian 6",
+    "Type1": 1,
+    "Type2": null
+  },
+  {
+    "Id": "4d0d26ba-7dc7-4d32-a481-39d8a39bc6c7",
+    "Name": "Loomian 7",
+    "Type1": 3,
+    "Type2": 4
+  },
+  {
+    "Id": "7b07baf6-5af0-4ed9-834f-deb2f69722ed",
+    "Name": "Loomian 8",
+    "Type1": 13,
+    "Type2": null
+  },
+  {
+    "Id": "8fc5c198-fc61-425d-b93b-56852c33974c",
+    "Name": "Loomian 9",
+    "Type1": 14,
+    "Type2": 0
+  },
+  {
+    "Id": "1292493d-4f62-4848-b346-cb16e6261c12",
+    "Name": "Loomian 10",
+    "Type1": 4,
+    "Type2": null
+  },
+  {
+    "Id": "5517208d-6b5d-43e8-a347-20cd1c62be76",
+    "Name": "Loomian 11",
+    "Type1": 13,
+    "Type2": null
+  },
+  {
+    "Id": "411b40d9-192d-4fb2-a074-3e75b85bad63",
+    "Name": "Loomian 12",
+    "Type1": 8,
+    "Type2": 8
+  },
+  {
+    "Id": "fd00600e-24ec-43b8-9b61-4a0b5ebdb1b7",
+    "Name": "Loomian 13",
+    "Type1": 9,
+    "Type2": null
+  },
+  {
+    "Id": "3c8bdda7-2b24-4219-b87a-308525193f96",
+    "Name": "Loomian 14",
+    "Type1": 13,
+    "Type2": null
+  },
+  {
+    "Id": "dd1a6b31-a730-4a13-9e7e-60976d849141",
+    "Name": "Loomian 15",
+    "Type1": 14,
+    "Type2": 12
+  },
+  {
+    "Id": "df22ec19-0e80-438a-bfc5-ef0aee31a199",
+    "Name": "Loomian 16",
+    "Type1": 2,
+    "Type2": 4
+  },
+  {
+    "Id": "0c588c44-8cc0-4190-8521-8c0d0ccc1fbe",
+    "Name": "Loomian 17",
+    "Type1": 13,
+    "Type2": 8
+  },
+  {
+    "Id": "70e22a34-ae4a-4d42-bb25-76db50cd21a7",
+    "Name": "Loomian 18",
+    "Type1": 15,
+    "Type2": null
+  },
+  {
+    "Id": "e1014e35-4251-44d9-859e-ae2d9a12974a",
+    "Name": "Loomian 19",
+    "Type1": 1,
+    "Type2": null
+  },
+  {
+    "Id": "65af0000-d80c-49b8-9694-c535dcc867c0",
+    "Name": "Loomian 20",
+    "Type1": 8,
+    "Type2": 3
+  },
+  {
+    "Id": "915a514d-6804-436f-8ccc-ca18dd87994f",
+    "Name": "Loomian 21",
+    "Type1": 5,
+    "Type2": null
+  },
+  {
+    "Id": "f831949e-d755-4e17-86bc-5f043ef6823e",
+    "Name": "Loomian 22",
+    "Type1": 6,
+    "Type2": null
+  },
+  {
+    "Id": "a730dbe5-b3dc-433a-9a22-9954365b1d24",
+    "Name": "Loomian 23",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "6d1b9909-c9b8-4e8b-a353-bceeeefb48a1",
+    "Name": "Loomian 24",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "8cbb3ad2-50d8-483c-acd5-d306fe748de1",
+    "Name": "Loomian 25",
+    "Type1": 9,
+    "Type2": null
+  },
+  {
+    "Id": "9922199b-aacb-44b5-bcf0-a523b3c092c8",
+    "Name": "Loomian 26",
+    "Type1": 15,
+    "Type2": 3
+  },
+  {
+    "Id": "07cc8520-c25b-4372-a92c-821e8a404e8b",
+    "Name": "Loomian 27",
+    "Type1": 1,
+    "Type2": null
+  },
+  {
+    "Id": "ddb291ca-a9f9-475d-ab72-072b5af33d7e",
+    "Name": "Loomian 28",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "a3862fce-586b-4853-b65c-16a31f3ae86a",
+    "Name": "Loomian 29",
+    "Type1": 14,
+    "Type2": 1
+  },
+  {
+    "Id": "cad33d8d-0e43-49e0-a46d-40ba8a13be44",
+    "Name": "Loomian 30",
+    "Type1": 4,
+    "Type2": null
+  },
+  {
+    "Id": "bf6bc428-c9c8-4d6e-9700-3e18059cc196",
+    "Name": "Loomian 31",
+    "Type1": 3,
+    "Type2": null
+  },
+  {
+    "Id": "9dcfb498-5686-4c35-a53e-46490350d0d8",
+    "Name": "Loomian 32",
+    "Type1": 4,
+    "Type2": 6
+  },
+  {
+    "Id": "6cb79647-91ac-4f62-b147-cdf3ab3814c2",
+    "Name": "Loomian 33",
+    "Type1": 7,
+    "Type2": 15
+  },
+  {
+    "Id": "da313b97-815e-46cb-9ef7-eceda729726e",
+    "Name": "Loomian 34",
+    "Type1": 0,
+    "Type2": 1
+  },
+  {
+    "Id": "48abd3df-cda4-4204-b3f0-9ddf19575499",
+    "Name": "Loomian 35",
+    "Type1": 12,
+    "Type2": 10
+  },
+  {
+    "Id": "aaf62cb5-2ec0-486e-b31f-61d3ce01ce32",
+    "Name": "Loomian 36",
+    "Type1": 8,
+    "Type2": 12
+  },
+  {
+    "Id": "4854ca53-32a0-4316-969b-028d59f286f5",
+    "Name": "Loomian 37",
+    "Type1": 3,
+    "Type2": null
+  },
+  {
+    "Id": "0e20a688-6c90-4ad3-ac2b-1e9bf6177857",
+    "Name": "Loomian 38",
+    "Type1": 3,
+    "Type2": null
+  },
+  {
+    "Id": "c854dcda-86da-4dd3-ad74-de6cb478c090",
+    "Name": "Loomian 39",
+    "Type1": 13,
+    "Type2": null
+  },
+  {
+    "Id": "34bca5b1-f901-4d2e-940f-e160b0a6a80a",
+    "Name": "Loomian 40",
+    "Type1": 10,
+    "Type2": 9
+  },
+  {
+    "Id": "9f6bd0c4-09a1-4820-b9a8-0966bdc861ac",
+    "Name": "Loomian 41",
+    "Type1": 4,
+    "Type2": 13
+  },
+  {
+    "Id": "bb2144e9-9f6c-4128-b79a-ae30f767e637",
+    "Name": "Loomian 42",
+    "Type1": 8,
+    "Type2": null
+  },
+  {
+    "Id": "53f8c610-5a67-41c6-ad8e-977c28f03614",
+    "Name": "Loomian 43",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "e4b553e7-b9d9-47c1-8ff1-0c6849ffa2e5",
+    "Name": "Loomian 44",
+    "Type1": 16,
+    "Type2": 6
+  },
+  {
+    "Id": "499c4409-f334-4295-bbc1-e21843641b72",
+    "Name": "Loomian 45",
+    "Type1": 5,
+    "Type2": 1
+  },
+  {
+    "Id": "787236ef-4acd-4ec3-bf9c-e55fb32235ea",
+    "Name": "Loomian 46",
+    "Type1": 12,
+    "Type2": 5
+  },
+  {
+    "Id": "0c500e5f-9fe8-4012-a7df-730181726b72",
+    "Name": "Loomian 47",
+    "Type1": 12,
+    "Type2": 11
+  },
+  {
+    "Id": "a13d8487-e425-4f5b-a71c-7ac422733877",
+    "Name": "Loomian 48",
+    "Type1": 16,
+    "Type2": null
+  },
+  {
+    "Id": "62c4c2a7-1bb2-4cc7-bf3a-7b5ac07cc445",
+    "Name": "Loomian 49",
+    "Type1": 15,
+    "Type2": null
+  },
+  {
+    "Id": "9932dce8-f75e-4a54-9912-1f9535d20bde",
+    "Name": "Loomian 50",
+    "Type1": 3,
+    "Type2": 0
+  },
+  {
+    "Id": "7aed47d7-e44f-44b1-a537-85870107e31b",
+    "Name": "Loomian 51",
+    "Type1": 5,
+    "Type2": 5
+  },
+  {
+    "Id": "63c2ca0d-548c-4549-b307-cd17c7904fe8",
+    "Name": "Loomian 52",
+    "Type1": 8,
+    "Type2": null
+  },
+  {
+    "Id": "de7054e3-0e6a-40f9-9b08-d2a3e4db71d1",
+    "Name": "Loomian 53",
+    "Type1": 0,
+    "Type2": 9
+  },
+  {
+    "Id": "f909d07f-0687-435e-8c0e-96d1cdafe6b3",
+    "Name": "Loomian 54",
+    "Type1": 14,
+    "Type2": 11
+  },
+  {
+    "Id": "4488553e-9e5f-4257-90f0-a5261902d40a",
+    "Name": "Loomian 55",
+    "Type1": 15,
+    "Type2": null
+  },
+  {
+    "Id": "bcd5aad4-6097-4f22-a5cf-d5f6212a8557",
+    "Name": "Loomian 56",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "0bebd314-d184-4cab-85c2-1d8062485eb6",
+    "Name": "Loomian 57",
+    "Type1": 9,
+    "Type2": 1
+  },
+  {
+    "Id": "0005ccd0-c30c-4c14-abb2-15a37af0c66e",
+    "Name": "Loomian 58",
+    "Type1": 6,
+    "Type2": null
+  },
+  {
+    "Id": "19161cde-8082-4002-9b76-1bc19b3a0a90",
+    "Name": "Loomian 59",
+    "Type1": 13,
+    "Type2": null
+  },
+  {
+    "Id": "4dcf7f07-eee7-4947-bdd7-f0d4ed1c3fcc",
+    "Name": "Loomian 60",
+    "Type1": 5,
+    "Type2": null
+  },
+  {
+    "Id": "f0b6c60e-d09a-4df8-a3ab-c28dabd8e226",
+    "Name": "Loomian 61",
+    "Type1": 16,
+    "Type2": 14
+  },
+  {
+    "Id": "d7ce87f0-be19-40d6-b3b3-ec3f20e09977",
+    "Name": "Loomian 62",
+    "Type1": 10,
+    "Type2": 7
+  },
+  {
+    "Id": "edb5df1c-d865-4d4d-9372-73d5f41657d6",
+    "Name": "Loomian 63",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "3e912755-9526-4bfa-856e-ea1aa27a8c43",
+    "Name": "Loomian 64",
+    "Type1": 15,
+    "Type2": 16
+  },
+  {
+    "Id": "89e8fc3f-d138-49bf-8752-aadf88388944",
+    "Name": "Loomian 65",
+    "Type1": 9,
+    "Type2": 4
+  },
+  {
+    "Id": "0021fddc-ebe0-45b0-b85b-81f6be8db163",
+    "Name": "Loomian 66",
+    "Type1": 12,
+    "Type2": null
+  },
+  {
+    "Id": "bd833574-a7b1-4e7d-9577-44a6f3f8a134",
+    "Name": "Loomian 67",
+    "Type1": 9,
+    "Type2": 10
+  },
+  {
+    "Id": "4e0e217f-191e-4dec-baba-6cfd49dd4d60",
+    "Name": "Loomian 68",
+    "Type1": 4,
+    "Type2": 16
+  },
+  {
+    "Id": "f3e94182-98f5-4c51-bebe-22451d347cba",
+    "Name": "Loomian 69",
+    "Type1": 7,
+    "Type2": 1
+  },
+  {
+    "Id": "455ecd38-a442-45d1-b827-532ae331a971",
+    "Name": "Loomian 70",
+    "Type1": 0,
+    "Type2": 1
+  },
+  {
+    "Id": "a988c447-4cc0-453a-8c76-2416357f83e2",
+    "Name": "Loomian 71",
+    "Type1": 12,
+    "Type2": null
+  },
+  {
+    "Id": "ca849385-5edb-486c-b9cf-b43274373e60",
+    "Name": "Loomian 72",
+    "Type1": 1,
+    "Type2": null
+  },
+  {
+    "Id": "5bd73022-f7ee-4aa6-ae8c-32e0c6ce6e94",
+    "Name": "Loomian 73",
+    "Type1": 7,
+    "Type2": null
+  },
+  {
+    "Id": "0a9a6d3c-e79e-4f1d-a85d-b0f21c435927",
+    "Name": "Loomian 74",
+    "Type1": 4,
+    "Type2": null
+  },
+  {
+    "Id": "64fd58c1-52f9-4732-8578-45604f67d4ca",
+    "Name": "Loomian 75",
+    "Type1": 11,
+    "Type2": 3
+  },
+  {
+    "Id": "9c7900f8-66bf-4620-a302-530ef4f5894b",
+    "Name": "Loomian 76",
+    "Type1": 5,
+    "Type2": null
+  },
+  {
+    "Id": "5a8124fc-1559-4f09-8a97-29fd392611fb",
+    "Name": "Loomian 77",
+    "Type1": 0,
+    "Type2": null
+  },
+  {
+    "Id": "662f8ba1-a3ce-4ddc-ac1c-a3428a5fc9d6",
+    "Name": "Loomian 78",
+    "Type1": 3,
+    "Type2": 5
+  },
+  {
+    "Id": "0482525e-1670-490b-ad77-0cecd3786a57",
+    "Name": "Loomian 79",
+    "Type1": 6,
+    "Type2": null
+  },
+  {
+    "Id": "0aecdfee-df33-4cd0-96af-c02a630fe89a",
+    "Name": "Loomian 80",
+    "Type1": 10,
+    "Type2": 14
+  },
+  {
+    "Id": "ccf54b24-4474-48e9-94e1-bf5e3239daa4",
+    "Name": "Loomian 81",
+    "Type1": 1,
+    "Type2": 10
+  },
+  {
+    "Id": "9fea926d-1f1e-4db3-9fe8-661e538fc287",
+    "Name": "Loomian 82",
+    "Type1": 6,
+    "Type2": null
+  },
+  {
+    "Id": "da0c5c66-074f-4402-9466-6abde8085636",
+    "Name": "Loomian 83",
+    "Type1": 2,
+    "Type2": 1
+  },
+  {
+    "Id": "040f831b-b4df-423e-b8ba-aeffb01a3365",
+    "Name": "Loomian 84",
+    "Type1": 8,
+    "Type2": null
+  },
+  {
+    "Id": "59d061b1-686a-4101-be4d-283a80c167b5",
+    "Name": "Loomian 85",
+    "Type1": 13,
+    "Type2": 6
+  },
+  {
+    "Id": "382f39d1-b088-4ece-8148-91a3ae41c091",
+    "Name": "Loomian 86",
+    "Type1": 15,
+    "Type2": null
+  },
+  {
+    "Id": "efe8aaf5-083a-4e56-a45a-69d1af3007fd",
+    "Name": "Loomian 87",
+    "Type1": 12,
+    "Type2": 15
+  },
+  {
+    "Id": "c2d178c0-7f01-44e2-bf28-65b56781ad75",
+    "Name": "Loomian 88",
+    "Type1": 9,
+    "Type2": 3
+  },
+  {
+    "Id": "71e16fe2-9fa3-41be-8173-85b3149a53b4",
+    "Name": "Loomian 89",
+    "Type1": 11,
+    "Type2": 2
+  },
+  {
+    "Id": "9c129777-2cea-4550-a5c2-65074fb3f1e6",
+    "Name": "Loomian 90",
+    "Type1": 1,
+    "Type2": null
+  },
+  {
+    "Id": "ac704ae3-1b68-4218-a35d-371bf0369935",
+    "Name": "Loomian 91",
+    "Type1": 12,
+    "Type2": 12
+  },
+  {
+    "Id": "e28a62ac-02fa-4f78-b330-6ab62d6fbc91",
+    "Name": "Loomian 92",
+    "Type1": 1,
+    "Type2": 0
+  },
+  {
+    "Id": "bd2632d6-383c-44e3-9b1f-00d74150cdc4",
+    "Name": "Loomian 93",
+    "Type1": 6,
+    "Type2": 13
+  },
+  {
+    "Id": "0cc00eb2-8507-421f-9708-21e075546fd8",
+    "Name": "Loomian 94",
+    "Type1": 14,
+    "Type2": 7
+  },
+  {
+    "Id": "fe8480f7-3da1-4958-b535-c37ecefb21ad",
+    "Name": "Loomian 95",
+    "Type1": 14,
+    "Type2": 16
+  },
+  {
+    "Id": "2935eccc-01ad-4585-a3a8-b4be1ac40b86",
+    "Name": "Loomian 96",
+    "Type1": 0,
+    "Type2": null
+  },
+  {
+    "Id": "d4f50e11-5cd1-48d4-a1de-a4d6800b0f52",
+    "Name": "Loomian 97",
+    "Type1": 8,
+    "Type2": null
+  },
+  {
+    "Id": "80f651bd-cce3-43a2-8cb2-3961aa28bb5b",
+    "Name": "Loomian 98",
+    "Type1": 2,
+    "Type2": null
+  },
+  {
+    "Id": "3c270fbe-764e-4d81-ac37-4d4eb9f5824d",
+    "Name": "Loomian 99",
+    "Type1": 2,
+    "Type2": 6
+  }
+]
