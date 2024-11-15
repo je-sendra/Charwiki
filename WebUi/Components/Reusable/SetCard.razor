@@ -1,0 +1,23 @@
+@namespace Charwiki.WebUi.Components.Reusable
+
+<div class="card">
+    <div class="row no-gutters align-items-center h-100 flex-md-row">
+        <div class="col-4 d-flex justify-content-center">
+            <img src="images/placeholders/150x150.png" class="card-img" alt="Card image">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-center">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">@Set.Title</h5>
+                <p class="card-text">@Set.Explanation</p>
+                <div class="mt-auto d-flex justify-content-end">
+                    <a href="loomianSet/@Set.Id" class="btn btn-primary">See now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public required LoomianSet Set { get; set; }
+}
