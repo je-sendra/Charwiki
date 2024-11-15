@@ -1,0 +1,87 @@
+name: 🐛 Bug Report
+description: Help us by reporting a bug in the app
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug!
+  - type: dropdown
+    id: self-fix
+    attributes:
+      label: Are you able to fix this bug yourself?
+      description: Select "Yes" if you can fix the bug yourself, otherwise select "No"
+      options:
+        - "Yes"
+        - "No"
+  - type: input
+    id: contact
+    attributes:
+      label: (Optional) Contact Details
+      description: How can we reach you in case we need more information?
+      placeholder: email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Explain the problem in detail
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should have happened?
+      description: What did you expect to happen?
+      placeholder: Tell us what you expected!
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Please provide detailed steps to reproduce the issue
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Please provide details about your environment
+      placeholder: |
+        - OS: [e.g. Windows 10]
+        - Browser: [e.g. Chrome, Safari]
+        - Browser Version: [e.g. 22]
+    validations:
+      required: true
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Is there anything else you would like to add?
+      placeholder: |
+        - Screenshots
+        - Videos
+        - Links
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Which version of our software are you using?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Please copy and paste any logs that may be relevant
+      render: Shell
