@@ -15,7 +15,7 @@ public class LoomianAbilitiesController(CharwikiDbContext charwikiDbContext) : C
     /// <inheritdoc />
     [HttpPost]
     [Authorize(Roles="Admin")]
-    #pragma warning disable S6967
+    #pragma warning disable S6967 // ModelState.IsValid should be checked in controller actions.sonarlint(csharpsquid:S6967). Reason: The model state is checked in the base class.
     public override async Task<IActionResult> CreateNewAsync([FromBody] LoomianAbility loomianAbility)
     {
         return await base.CreateNewAsync(loomianAbility);
