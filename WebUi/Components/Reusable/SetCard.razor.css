@@ -1,0 +1,10 @@
+.card-img {
+    margin: 10px;
+    padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .card-img {
+        padding-left: 10px;
+    }
+}

@@ -1,3 +1,4 @@
+using Charwiki.ClassLib.Services;
 using Charwiki.WebUi.Components;
 
 namespace Charwiki.WebUi;
@@ -19,6 +20,9 @@ public static class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
+        // Register Charwiki custom services for development.
+        RegisterCharwikiDevelopmentServices(builder.Services);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -38,5 +42,12 @@ public static class Program
             .AddInteractiveServerRenderMode();
 
         app.Run();
+    }
+
+    private static void RegisterCharwikiDevelopmentServices(IServiceCollection services)
+    {
+        services.AddScoped<ILoomiansService, MockLoomiansService>();
+        services.AddScoped<ILoomianSetsService, MockLoomianSetsService>();
+        services.AddScoped<ILoomianMovesService, MockLoomianMovesService>();
     }
 }

@@ -1,14 +1,30 @@
 ﻿@page "/"
 
+@inject ILoomianSetsService LoomianSetsService;
+
 <PageTitle>Charwiki</PageTitle>
 
 <div class="container-fluid">
     <div class="row row-gap-3">
-        @for (int i = 0; i < 5; i++)
+        @foreach (var currentSet in LoomianSets)
         {
             <div class="col-sm-12 col-md-6 col-lg-4">
-                <SetCard />
+                <SetCard Set="@currentSet" />
             </div>
         }
     </div>
 </div>
+
+@code {
+    private IEnumerable<LoomianSet> LoomianSets { get; set; } = new List<LoomianSet>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoomianSets = await LoomianSetsService.GetAllAsync();
+        for (int i = 0; i < 5; i++)
+        {
+            LoomianSets = LoomianSets.Concat(LoomianSets);
+        }
+    }
+}
