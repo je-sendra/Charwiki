@@ -10,6 +10,6 @@ namespace Charwiki.ClassLib.Services;
 /// </summary>
 /// <param name="httpClient"></param>
 /// <param name="apiSettings"></param>
-public class LoomianAbilitiesService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : CrudControllerServiceTemplate<LoomianAbility>(httpClient, apiSettings, "abilities"), ILoomianAbilitiesService
+public class LoomianAbilitiesService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : CrudControllerServiceTemplate<LoomianAbility>(httpClient, apiSettings, "loomianAbilities"), ILoomianAbilitiesService
 {
 }
