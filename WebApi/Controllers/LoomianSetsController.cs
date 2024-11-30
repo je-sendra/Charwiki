@@ -28,9 +28,10 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// Endpoint to get a specific Loomian set.
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="includeValueToStatAssignments"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public IActionResult GetById(Guid id)
+    public IActionResult GetById(Guid id, bool includeValueToStatAssignments = false)
     {
         if (!ModelState.IsValid)
         {
@@ -43,6 +44,25 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
             return NotFound();
         }
 
+        // If the user wants to include the value to stat assignments, include them in the response.
+        if (includeValueToStatAssignments)
+        {
+            // Load the personality modifiers for the Loomian set.
+            charwikiDbContext.Entry(loomianSet)
+                .Collection(ls => ls.PersonalityModifiers)
+                .Load();
+
+            // Load the unique points for the Loomian set.
+            charwikiDbContext.Entry(loomianSet)
+                .Collection(ls => ls.UniquePoints)
+                .Load();
+
+            // Load the training points for the Loomian set.
+            charwikiDbContext.Entry(loomianSet)
+                .Collection(ls => ls.TrainingPoints)
+                .Load();
+        }
+
         return Ok(loomianSet);
     }
 
@@ -52,7 +72,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// <param name="loomianSetDto"></param>
     /// <returns></returns>
     [HttpPost]
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateLoomianSet([FromBody] LoomianSetDto loomianSetDto)
     {
         if (!ModelState.IsValid)
@@ -61,7 +81,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         }
 
         var user = await authService.GetUserFromClaimsAsync(User);
-        
+
         var loomianSet = new LoomianSet
         {
             LoomianId = loomianSetDto.LoomianId,
