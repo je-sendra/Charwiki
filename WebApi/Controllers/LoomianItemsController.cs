@@ -16,7 +16,7 @@ public class LoomianItemsController(CharwikiDbContext charwikiDbContext) : CrudC
     [HttpPost]
     [Authorize(Roles="Admin")]
     #pragma warning disable S6967
-    public override async Task<IActionResult> CreateNewAsync(LoomianItem model)
+    public override async Task<IActionResult> CreateNewAsync([FromBody] LoomianItem model)
     {
         return await base.CreateNewAsync(model);
     }
