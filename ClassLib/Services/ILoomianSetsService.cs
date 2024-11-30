@@ -8,5 +8,12 @@ namespace Charwiki.ClassLib.Services;
 /// </summary>
 public interface ILoomianSetsService : ICrudControllerServiceTemplate<LoomianSet>
 {
-    
+    /// <summary>
+    /// Get a specific Loomian set by its id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includeValueToStatAssignments"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false);
 }
