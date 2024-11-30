@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services.Templates;
@@ -8,8 +9,34 @@ namespace Charwiki.ClassLib.Services;
 /// <summary>
 /// Service for Loomian set-related operations against an API.
 /// </summary>
-/// <param name="httpClient"></param>
-/// <param name="apiSettings"></param>
-public class LoomianSetsService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : CrudControllerServiceTemplate<LoomianSet>(httpClient, apiSettings, "loomianSets"), ILoomianSetsService
+public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILoomianSetsService
 {
+    private readonly HttpClient _httpClient;
+    private readonly IOptions<ApiSettings> _apiSettings;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="httpClient"></param>
+    /// <param name="apiSettings"></param>
+    public LoomianSetsService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : base(httpClient, apiSettings, "loomianSets")
+    {
+        _httpClient = httpClient;
+        _apiSettings = apiSettings;
+    }
+
+    /// <inheritdoc />
+    public async Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false)
+    {
+        // Create a new request to the API.
+        var response = await _httpClient.GetAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{id}?" 
+            + $"includeValueToStatAssignments={includeValueToStatAssignments}");
+        response.EnsureSuccessStatusCode();
+        var item = await response.Content.ReadFromJsonAsync<LoomianSet>();
+        if (item is null)
+        {
+            throw new InvalidOperationException("Failed to deserialize the LoomianSet.");
+        }
+        return item;
+    }
 }

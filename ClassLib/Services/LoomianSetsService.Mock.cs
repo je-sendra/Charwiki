@@ -72,4 +72,10 @@ public class MockLoomianSetsService : ILoomianSetsService
         }
         return Task.FromResult(foundSet);
     }
+
+    /// <inheritdoc />
+    public Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false)
+    {
+        return GetByIdAsync(id);
+    }
 }
