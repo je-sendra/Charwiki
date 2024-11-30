@@ -1,3 +1,4 @@
+using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Services;
 using Charwiki.WebUi.Components;
 
@@ -20,8 +21,17 @@ public static class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
+        // Add API settings.
+        builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
+
+        // Add HttpClient.
+        builder.Services.AddHttpClient();
+
         // Register Charwiki custom services for development.
-        RegisterCharwikiDevelopmentServices(builder.Services);
+        RegisterCharwikiApiServices(builder.Services);
+
+        // Register Blazor Bootstrap.
+        builder.Services.AddBlazorBootstrap();
 
         var app = builder.Build();
 
@@ -44,7 +54,17 @@ public static class Program
         app.Run();
     }
 
-    private static void RegisterCharwikiDevelopmentServices(IServiceCollection services)
+    private static void RegisterCharwikiApiServices(IServiceCollection services)
+    {
+        services.AddScoped<ILoomiansService, LoomiansService>();
+        services.AddScoped<ILoomianSetsService, LoomianSetsService>();
+        services.AddScoped<ILoomianMovesService, LoomianMovesService>();
+        services.AddScoped<ILoomianAbilitiesService, LoomianAbilitiesService>();
+        services.AddScoped<ILoomianItemsService, LoomianItemsService>();
+        services.AddScoped<IUserService, UserService>();
+    }
+
+    private static void RegisterCharwikiMockServices(IServiceCollection services)
     {
         services.AddScoped<ILoomiansService, MockLoomiansService>();
         services.AddScoped<ILoomianSetsService, MockLoomianSetsService>();

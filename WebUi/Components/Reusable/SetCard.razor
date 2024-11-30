@@ -1,5 +1,7 @@
 @namespace Charwiki.WebUi.Components.Reusable
 
+@inject ILoomiansService LoomiansService;
+
 <div class="card">
     <div class="row no-gutters align-items-center h-100 flex-md-row">
         <div class="col-4 d-flex justify-content-center">
@@ -7,8 +9,8 @@
         </div>
         <div class="col-8 d-flex flex-column justify-content-center">
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title">@Set.Title</h5>
-                <p class="card-text">@Set.Explanation</p>
+                <h5 class="card-title">@_displayTitle</h5>
+                <p class="card-text">@_displayExplanation</p>
                 <div class="mt-auto d-flex justify-content-end">
                     <a href="loomianSet/@Set.Id" class="btn btn-primary">See now</a>
                 </div>
@@ -20,4 +22,30 @@
 @code {
     [Parameter]
     public required LoomianSet Set { get; set; }
+
+    private string _displayTitle = string.Empty;
+    private string _displayExplanation = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Set.Loomian = await LoomiansService.GetByIdAsync(Set.LoomianId);
+        _displayTitle = $"{Set.Title} {Set.Loomian.Name}";
+
+        // Truncate the explanation to X characters
+        if (Set.Explanation != null)
+        {
+            var allowedLength = 70;
+
+            // If the explanation is longer than the allowed length, truncate it
+            if (Set.Explanation.Length > allowedLength)
+            {
+                _displayExplanation = Set.Explanation.Substring(0, allowedLength) + "...";
+            }
+            // Else, just display the explanation
+            else
+            {
+                _displayExplanation = Set.Explanation;
+            }
+        }
+    }
 }

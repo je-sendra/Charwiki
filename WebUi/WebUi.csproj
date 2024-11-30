@@ -3,6 +3,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLib\ClassLib.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Blazor.Bootstrap" Version="3.1.1" />
+  </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
