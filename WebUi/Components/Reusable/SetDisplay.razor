@@ -1,0 +1,145 @@
+@inject ILoomiansService LoomiansService;
+@inject ILoomianItemsService LoomianItemsService;
+@inject ILoomianAbilitiesService LoomianAbilitiesService;
+@inject ILoomianMovesService LoomianMovesService;
+
+@if (LoomianSet.Loomian == null || LoomianSet.Item == null || LoomianSet.Ability == null || LoomianSet.Move1
+== null || LoomianSet.Move2 == null || LoomianSet.Move3 == null || LoomianSet.Move4 == null)
+{
+    <p>Loading...</p>
+    return;
+}
+
+<div class="container w-100">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h2>@LoomianSet.Title @LoomianSet.Loomian.Name</h2>
+
+            <h5>Item: @LoomianSet.Item.Name</h5>
+            <h5>Ability: @LoomianSet.Ability.Name</h5>
+
+            <h5>Personality:</h5>
+            @if (LoomianSet.PersonalityModifiers == null || LoomianSet.PersonalityModifiers.Count == 0)
+            {
+                <p>None</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var personality in LoomianSet.PersonalityModifiers)
+                    {
+                        if (personality.Value > 0)
+                        {
+                            <li>@personality.Stat.ToString() : +@personality.Value%</li>
+                        }
+                        else
+                        {
+                            <li>@personality.Stat.ToString() : @personality.Value%</li>
+                        }
+                    }
+                </ul>
+            }
+
+            <h5>UPs:</h5>
+            @if (LoomianSet.UniquePoints == null || LoomianSet.UniquePoints.Count == 0)
+            {
+                <p>None</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var up in LoomianSet.UniquePoints)
+                    {
+                        <li>@up.Stat.ToString() : @up.Value</li>
+                    }
+                </ul>
+            }
+
+            <h5>TPs:</h5>
+            @if (LoomianSet.TrainingPoints == null || LoomianSet.TrainingPoints.Count == 0)
+            {
+                <p>None</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var tp in LoomianSet.TrainingPoints)
+                    {
+                        <li>@tp.Stat.ToString() : @tp.Value</li>
+                    }
+                </ul>
+            }
+
+            <h5>Moves:</h5>
+            <ul>
+                <li>@LoomianSet.Move1.Name</li>
+                <li>@LoomianSet.Move2.Name</li>
+                <li>@LoomianSet.Move3.Name</li>
+                <li>@LoomianSet.Move4.Name</li>
+            </ul>
+        </div>
+        <div class="col-12 col-md-6">
+            <h5>Set explanation:</h5>@if (!string.IsNullOrEmpty(LoomianSet.Explanation))
+            {
+                @foreach (var paragraph in LoomianSet.Explanation.Split('\n'))
+                {
+                    <p>@paragraph</p>
+                }
+            }
+            else
+            {
+                <p>No explanation provided.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public required LoomianSet LoomianSet { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // If the LoomianSet Loomian is null, fetch it from the service
+        if (LoomianSet.Loomian == null)
+        {
+            LoomianSet.Loomian = await LoomiansService.GetByIdAsync(LoomianSet.LoomianId);
+        }
+
+        // If the LoomianSet Item is null and the Loomian is holding an item, fetch it from the service
+        if (LoomianSet.Item == null && LoomianSet.ItemId != null)
+        {
+            LoomianSet.Item = await LoomianItemsService.GetByIdAsync((Guid)LoomianSet.ItemId);
+        }
+
+        // If the LoomianSet Ability is null, fetch it from the service
+        if (LoomianSet.Ability == null)
+        {
+            LoomianSet.Ability = await LoomianAbilitiesService.GetByIdAsync(LoomianSet.LoomianAbilityId);
+        }
+
+        // If the LoomianSet Move1 is null and the Loomian has a Move1, fetch it from the service
+        if (LoomianSet.Move1 == null && LoomianSet.Move1Id != null)
+        {
+            LoomianSet.Move1 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move1Id);
+        }
+
+        // If the LoomianSet Move2 is null and the Loomian has a Move2, fetch it from the service
+        if (LoomianSet.Move2 == null && LoomianSet.Move2Id != null)
+        {
+            LoomianSet.Move2 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move2Id);
+        }
+
+        // If the LoomianSet Move3 is null and the Loomian has a Move3, fetch it from the service
+        if (LoomianSet.Move3 == null && LoomianSet.Move3Id != null)
+        {
+            LoomianSet.Move3 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move3Id);
+        }
+
+        // If the LoomianSet Move4 is null and the Loomian has a Move4, fetch it from the service
+        if (LoomianSet.Move4 == null && LoomianSet.Move4Id != null)
+        {
+            LoomianSet.Move4 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move4Id);
+        }
+    }
+}

@@ -2,9 +2,11 @@
 
 @inject ILoomianSetsService LoomianSetsService;
 
+@rendermode InteractiveServer
+
 <PageTitle>Charwiki</PageTitle>
 
-<div class="container-fluid">
+<div class="container-fluid mb-3">
     <div class="row row-gap-3">
         @foreach (var currentSet in LoomianSets)
         {
@@ -22,9 +24,5 @@
     protected override async Task OnInitializedAsync()
     {
         LoomianSets = await LoomianSetsService.GetAllAsync();
-        for (int i = 0; i < 5; i++)
-        {
-            LoomianSets = LoomianSets.Concat(LoomianSets);
-        }
     }
 }
