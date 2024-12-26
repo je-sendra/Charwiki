@@ -22,6 +22,16 @@ public class User : IDatabaseSaveable
     public string? PasswordHash { get; set; }
 
     /// <summary>
+    /// The password salt of the user.
+    /// </summary>
+    public string? PasswordSalt { get; set; }
+
+    /// <summary>
+    /// The version of password the hash.
+    /// </summary>
+    public int PasswordHashVersion { get; set; }
+
+    /// <summary>
     /// The role of the user.
     /// </summary>
     public required UserRole Role { get; set; }
