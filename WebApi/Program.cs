@@ -32,12 +32,15 @@ public static class Program
 
         // Configure security settings
         builder.Services.Configure<SecuritySettings>(builder.Configuration.GetSection("SecuritySettings"));
+        var securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
 
         // Add JWT Authentication
-        var securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
         builder.Services.AddJwtAuth(securitySettings);
 
-        // Register custom services
+        // Add password hashing
+        builder.Services.AddPasswordHashing(securitySettings);
+
+        // Add authentication service
         builder.Services.AddScoped<IAuthService, AuthService>();
 
         // Add Authorization
@@ -107,5 +110,30 @@ public static class Program
                 ValidateLifetime = true
             };
         });
+    }
+
+    /// <summary>
+    /// Adds password hashing to the service collection.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="securitySettings"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    private static void AddPasswordHashing(this IServiceCollection services, SecuritySettings securitySettings)
+    {
+        switch (securitySettings.PasswordHashingSettings.Algorithm)
+        {
+            case PasswordHashingAlgorithm.BCrypt:
+                if (securitySettings.PasswordHashingSettings.BcryptSettings == null)
+                {
+                    throw new InvalidOperationException("BCrypt settings are required for BCrypt hashing");
+                }
+                services.AddScoped<IPasswordHashingService>(
+                    provider =>
+                        new BcryptPasswordHashingService(securitySettings.PasswordHashingSettings.BcryptSettings.WorkFactor)
+                    );
+                break;
+            default:
+                throw new InvalidOperationException("Unsupported password hashing algorithm");
+        }
     }
 }
