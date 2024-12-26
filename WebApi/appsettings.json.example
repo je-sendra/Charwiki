@@ -24,6 +24,17 @@
           "BcryptSettings": {
             "WorkFactor": 14
           }
+        },
+        {
+          "Version": 1,
+          "Algorithm": 1,
+          "Argon2idSettings": {
+            "HashBytesSize": 32,
+            "SaltBytesSize": 16,
+            "Iterations": 3,
+            "DegreeOfParallelism": 1,
+            "MemorySize": 65536
+          }
         }
       ]
   },
