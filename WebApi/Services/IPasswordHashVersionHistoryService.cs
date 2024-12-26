@@ -24,4 +24,13 @@ public interface IPasswordHashVersionHistoryService
     /// <param name="version"></param>
     /// <returns></returns>
     bool HistoryContainsVersion(int version);
+
+    /// <summary>
+    /// Gets the latest password hashing service.
+    /// </summary>
+    /// <returns></returns>
+    IPasswordHashingService GetLatestPasswordHashingService()
+    {
+        return GetPasswordHashingServiceForVersion(GetLatestVersion());
+    }
 }
