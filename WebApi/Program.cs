@@ -32,12 +32,13 @@ public static class Program
 
         // Configure security settings
         builder.Services.Configure<SecuritySettings>(builder.Configuration.GetSection("SecuritySettings"));
-        var securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
+        SecuritySettings securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
 
         // Add JWT Authentication
         builder.Services.AddJwtAuth(securitySettings);
 
         // Add password hashing
+        builder.Services.AddSingleton<IPasswordHashVersionHistoryService, PasswordHashVersionHistoryService>();
         builder.Services.AddPasswordHashing(securitySettings);
 
         // Add authentication service
@@ -120,20 +121,17 @@ public static class Program
     /// <exception cref="InvalidOperationException"></exception>
     private static void AddPasswordHashing(this IServiceCollection services, SecuritySettings securitySettings)
     {
-        switch (securitySettings.PasswordHashingSettings.Algorithm)
+        // Get password hash version history service
+        IPasswordHashVersionHistoryService? passwordHashVersionHistoryService = services.BuildServiceProvider().GetService<IPasswordHashVersionHistoryService>();
+
+        if (passwordHashVersionHistoryService == null)
         {
-            case PasswordHashingAlgorithm.BCrypt:
-                if (securitySettings.PasswordHashingSettings.BcryptSettings == null)
-                {
-                    throw new InvalidOperationException("BCrypt settings are required for BCrypt hashing");
-                }
-                services.AddScoped<IPasswordHashingService>(
-                    provider =>
-                        new BcryptPasswordHashingService(securitySettings.PasswordHashingSettings.BcryptSettings.WorkFactor)
-                    );
-                break;
-            default:
-                throw new InvalidOperationException("Unsupported password hashing algorithm");
+            throw new InvalidOperationException("PasswordHashVersionHistoryService is required for password hashing");
         }
+
+        // Add password hashing
+        IPasswordHashingService passwordHashingService = passwordHashVersionHistoryService.GetPasswordHashingServiceForVersion(securitySettings.PasswordHashingSettings.Max(x => x.Version));
+
+        services.AddSingleton(passwordHashingService);
     }
 }
