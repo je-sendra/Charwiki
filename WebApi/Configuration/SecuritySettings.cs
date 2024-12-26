@@ -13,7 +13,7 @@ public class SecuritySettings
    /// <summary>
    /// The password hashing settings.
    /// </summary>
-    public required PasswordHashingSettings PasswordHashingSettings { get; set; }
+    public required List<PasswordHashingSettings> PasswordHashingSettings { get; set; }
 }
 
 /// <summary>
@@ -53,9 +53,9 @@ public class PasswordHashingSettings
     public required PasswordHashingAlgorithm Algorithm { get; set; }
 
     /// <summary>
-    /// The latest version of the password hash. This is used to determine if a password hash needs to be rehashed.
+    /// The version of the password hash. This is used to determine if a password hash needs to be rehashed.
     /// </summary>
-    public required int LatestVersion { get; set; }
+    public required int Version { get; set; }
 
     /// <summary>
     /// The BCrypt settings (optional).
