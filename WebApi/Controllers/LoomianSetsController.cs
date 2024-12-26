@@ -82,27 +82,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
 
         var user = await authService.GetUserFromClaimsAsync(User);
 
-        var loomianSet = new LoomianSet
-        {
-            LoomianId = loomianSetDto.LoomianId,
-            PersonalityModifiers = loomianSetDto.PersonalityModifiers,
-            LoomianAbilityId = loomianSetDto.AbilityId,
-            ItemId = loomianSetDto.ItemId,
-            TrainingPoints = loomianSetDto.TrainingPoints,
-            UniquePoints = loomianSetDto.UniquePoints,
-            Move1Id = loomianSetDto.Move1Id,
-            Move2Id = loomianSetDto.Move2Id,
-            Move3Id = loomianSetDto.Move3Id,
-            Move4Id = loomianSetDto.Move4Id,
-            Title = loomianSetDto.Title,
-            Explanation = loomianSetDto.Explanation,
-            Strategy = loomianSetDto.Strategy,
-            Strengths = loomianSetDto.Strengths,
-            Weaknesses = loomianSetDto.Weaknesses,
-            OtherOptions = loomianSetDto.OtherOptions,
-            GameVersionInfoId = loomianSetDto.GameVersionInfoId,
-            CreatorId = user.Id
-        };
+        var loomianSet = loomianSetDto.ToLoomianSet(user.Id);
 
         charwikiDbContext.LoomianSets.Add(loomianSet);
         await charwikiDbContext.SaveChangesAsync();
