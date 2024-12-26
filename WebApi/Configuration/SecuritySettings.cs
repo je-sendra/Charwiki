@@ -10,10 +10,10 @@ public class SecuritySettings
     /// </summary>
     public required JwtSettings JwtSettings { get; set; }
 
-    /// <summary>
-    /// The BCrypt work factor.
-    /// </summary>
-    public required int BCryptWorkFactor { get; set; }
+   /// <summary>
+   /// The password hashing settings.
+   /// </summary>
+    public required List<PasswordHashingSettings> PasswordHashingSettings { get; set; }
 }
 
 /// <summary>
@@ -40,4 +40,47 @@ public class JwtSettings
     /// The expiry minutes.
     /// </summary>
     public required int ExpiryMinutes { get; set; }
+}
+
+/// <summary>
+/// Represents the password hashing options.
+/// </summary>
+public class PasswordHashingSettings
+{
+    /// <summary>
+    /// The algorithm.
+    /// </summary>
+    public required PasswordHashingAlgorithm Algorithm { get; set; }
+
+    /// <summary>
+    /// The version of the password hash. This is used to determine if a password hash needs to be rehashed.
+    /// </summary>
+    public required int Version { get; set; }
+
+    /// <summary>
+    /// The BCrypt settings (optional).
+    /// </summary>
+    public BcryptSettings? BcryptSettings { get; set; }
+}
+
+/// <summary>
+/// Represents the algorithms for password hashing.
+/// </summary>
+public enum PasswordHashingAlgorithm
+{
+    /// <summary>
+    /// BCrypt.
+    /// </summary>
+    BCrypt
+}
+
+/// <summary>
+/// Represents the BCrypt settings.
+/// </summary>
+public class BcryptSettings
+{
+    /// <summary>
+    /// The work factor.
+    /// </summary>
+    public required int WorkFactor { get; set; }
 }

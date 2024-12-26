@@ -32,12 +32,16 @@ public static class Program
 
         // Configure security settings
         builder.Services.Configure<SecuritySettings>(builder.Configuration.GetSection("SecuritySettings"));
+        SecuritySettings securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
 
         // Add JWT Authentication
-        var securitySettings = builder.Configuration.GetSection("SecuritySettings").Get<SecuritySettings>()!;
         builder.Services.AddJwtAuth(securitySettings);
 
-        // Register custom services
+        // Add password hashing
+        builder.Services.AddSingleton<IPasswordHashVersionHistoryService, PasswordHashVersionHistoryService>();
+        builder.Services.AddPasswordHashing();
+
+        // Add authentication service
         builder.Services.AddScoped<IAuthService, AuthService>();
 
         // Add Authorization
@@ -107,5 +111,26 @@ public static class Program
                 ValidateLifetime = true
             };
         });
+    }
+
+    /// <summary>
+    /// Adds password hashing to the service collection.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    private static void AddPasswordHashing(this IServiceCollection services)
+    {
+        // Get password hash version history service
+        IPasswordHashVersionHistoryService? passwordHashVersionHistoryService = services.BuildServiceProvider().GetService<IPasswordHashVersionHistoryService>();
+
+        if (passwordHashVersionHistoryService == null)
+        {
+            throw new InvalidOperationException("PasswordHashVersionHistoryService is required for password hashing");
+        }
+
+        // Add password hashing
+        IPasswordHashingService passwordHashingService = passwordHashVersionHistoryService.GetLatestPasswordHashingService();
+
+        services.AddSingleton(passwordHashingService);
     }
 }
