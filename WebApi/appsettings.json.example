@@ -10,12 +10,17 @@
     "CharwikiDbContext": "Host=localhost;Port=5432;Database=charwiki;Username=postgres;Password=secretPassword"
   },
   "SecuritySettings": {
-    "BCryptWorkFactor": 14,
     "JwtSettings": {
       "Secret": "YourSuperSecretKey12345",
       "Issuer": "YourAppIssuer",
       "Audience": "YourAppAudience",
       "ExpiryMinutes": 60
+    },
+    "PasswordHashingSettings": {
+      "Algorithm": 0,
+      "BcryptSettings": {
+        "WorkFactor": 14
+      }
     }
   },
   "MigrateDatabaseOnStartup": true
