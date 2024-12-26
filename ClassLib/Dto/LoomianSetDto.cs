@@ -97,4 +97,36 @@ public class LoomianSetDto
     /// </summary>
     public required Guid GameVersionInfoId { get; set; }
     #endregion
+
+    #region Conversion Methods
+    /// <summary>
+    /// Converts the DTO to a Loomian set object.
+    /// </summary>
+    /// <param name="creatorId">The value that will be set to the LoomianSet's CreatorId</param>
+    /// <returns></returns>
+    public LoomianSet ToLoomianSet(Guid creatorId)
+    {
+        return new LoomianSet
+        {
+            LoomianId = LoomianId,
+            PersonalityModifiers = PersonalityModifiers,
+            LoomianAbilityId = AbilityId,
+            ItemId = ItemId,
+            TrainingPoints = TrainingPoints,
+            UniquePoints = UniquePoints,
+            Move1Id = Move1Id,
+            Move2Id = Move2Id,
+            Move3Id = Move3Id,
+            Move4Id = Move4Id,
+            Title = Title,
+            Explanation = Explanation,
+            Strategy = Strategy,
+            Strengths = Strengths,
+            Weaknesses = Weaknesses,
+            OtherOptions = OtherOptions,
+            GameVersionInfoId = GameVersionInfoId,
+            CreatorId = creatorId
+        };
+    }
+    #endregion
 }
