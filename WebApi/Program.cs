@@ -39,7 +39,7 @@ public static class Program
 
         // Add password hashing
         builder.Services.AddSingleton<IPasswordHashVersionHistoryService, PasswordHashVersionHistoryService>();
-        builder.Services.AddPasswordHashing(securitySettings);
+        builder.Services.AddPasswordHashing();
 
         // Add authentication service
         builder.Services.AddScoped<IAuthService, AuthService>();
@@ -117,9 +117,8 @@ public static class Program
     /// Adds password hashing to the service collection.
     /// </summary>
     /// <param name="services"></param>
-    /// <param name="securitySettings"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    private static void AddPasswordHashing(this IServiceCollection services, SecuritySettings securitySettings)
+    private static void AddPasswordHashing(this IServiceCollection services)
     {
         // Get password hash version history service
         IPasswordHashVersionHistoryService? passwordHashVersionHistoryService = services.BuildServiceProvider().GetService<IPasswordHashVersionHistoryService>();
@@ -130,7 +129,7 @@ public static class Program
         }
 
         // Add password hashing
-        IPasswordHashingService passwordHashingService = passwordHashVersionHistoryService.GetPasswordHashingServiceForVersion(securitySettings.PasswordHashingSettings.Max(x => x.Version));
+        IPasswordHashingService passwordHashingService = passwordHashVersionHistoryService.GetLatestPasswordHashingService();
 
         services.AddSingleton(passwordHashingService);
     }
