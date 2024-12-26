@@ -17,8 +17,10 @@ namespace Charwiki.WebApi.Services;
 /// Service for authentication-related operations.
 /// </summary>
 /// <param name="securitySettings"></param>
+/// <param name="passwordHashVersionHistoryService"></param>
+/// <param name="passwordHashingService"></param>
 /// <param name="charwikiDbContext"></param>
-public class AuthService(IOptions<SecuritySettings> securitySettings, CharwikiDbContext charwikiDbContext) : IAuthService
+public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordHashVersionHistoryService passwordHashVersionHistoryService, IPasswordHashingService passwordHashingService, CharwikiDbContext charwikiDbContext) : IAuthService
 {
     /// <inheritdoc/>
     public async Task RegisterUserAsync(UserRegisterDto userRegisterDto)
@@ -34,14 +36,15 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, CharwikiDb
         }
 
         // Hash the password
-        var bcryptWorkFactor = securitySettings.Value.BCryptWorkFactor;
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userRegisterDto.Password, bcryptWorkFactor);
+        var (hashedPassword, salt) = passwordHashingService.HashPassword(userRegisterDto.Password);
 
         // Create the user
         var user = new User
         {
             Username = userRegisterDto.Username,
             PasswordHash = hashedPassword,
+            PasswordSalt = salt,
+            PasswordHashVersion = passwordHashVersionHistoryService.GetLatestVersion(),
             Role = UserRole.User
         };
 
@@ -89,19 +92,44 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, CharwikiDb
         // Find the user
         var user = await charwikiDbContext.Users.FirstOrDefaultAsync(e => e.Username == userLoginDto.Username);
 
-        // If the user does not exist, return unauthorized
+        // // If the user does not exist, return unauthorized
         if (user == null)
         {
             throw new AuthenticationException("User not found");
         }
 
-        // If the password is incorrect, return unauthorized
-        if (!BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.PasswordHash))
+        // If the user does not have a password, return unauthorized
+        if (user.PasswordHash == null)
         {
             throw new AuthenticationException("Invalid username or password");
         }
 
-        return user;
+        // If the hash version is outdated, get the corresponding password hashing service to check the password and rehash it
+        if (user.PasswordHashVersion < passwordHashVersionHistoryService.GetLatestVersion())
+        {
+            IPasswordHashingService oldPasswordHashingService = passwordHashVersionHistoryService.GetPasswordHashingServiceForVersion(user.PasswordHashVersion);
+
+            // If the password is incorrect, return unauthorized
+            if (!oldPasswordHashingService.VerifyPassword(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                throw new AuthenticationException("Invalid username or password");
+            }
+
+            // Rehash the password
+            var (hashedPassword, newSalt) = passwordHashingService.HashPassword(userLoginDto.Password);
+            user.PasswordHash = hashedPassword;
+            user.PasswordSalt = newSalt;
+            user.PasswordHashVersion = passwordHashVersionHistoryService.GetLatestVersion();
+            await charwikiDbContext.SaveChangesAsync();
+        }
+
+        // If the password is incorrect, return unauthorized
+        if (!passwordHashingService.VerifyPassword(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
+        {
+            throw new AuthenticationException("Invalid username or password");
+        }
+
+        return new User() { Username = "", Role = UserRole.User };
     }
 
     /// <inheritdoc/>
