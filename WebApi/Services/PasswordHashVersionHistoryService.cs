@@ -29,6 +29,12 @@ public class PasswordHashVersionHistoryService(IOptions<SecuritySettings> securi
                     throw new InvalidOperationException("BCrypt settings are required for BCrypt hashing");
                 }
                 return new BcryptPasswordHashingService(passwordHashingSetting.BcryptSettings.WorkFactor);
+            case PasswordHashingAlgorithm.Argon2id:
+                if (passwordHashingSetting.Argon2idSettings == null)
+                {
+                    throw new InvalidOperationException("Argon2id settings are required for Argon2id hashing");
+                }
+                return new Argon2idPasswordHashingService(passwordHashingSetting.Argon2idSettings);
             default:
                 throw new InvalidOperationException("Unsupported password hashing algorithm");
         }

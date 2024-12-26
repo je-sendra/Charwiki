@@ -1,3 +1,5 @@
+using Konscious.Security.Cryptography;
+
 namespace Charwiki.WebApi.Configuration;
 
 /// <summary>
@@ -61,6 +63,11 @@ public class PasswordHashingSettings
     /// The BCrypt settings (optional).
     /// </summary>
     public BcryptSettings? BcryptSettings { get; set; }
+
+    /// <summary>
+    /// The Argon2id settings (optional).
+    /// </summary>
+    public Argon2idSettings? Argon2idSettings { get; set; }
 }
 
 /// <summary>
@@ -71,7 +78,12 @@ public enum PasswordHashingAlgorithm
     /// <summary>
     /// BCrypt.
     /// </summary>
-    BCrypt
+    BCrypt,
+
+    /// <summary>
+    /// Argon2id
+    /// </summary>
+    Argon2id
 }
 
 /// <summary>
@@ -83,4 +95,37 @@ public class BcryptSettings
     /// The work factor.
     /// </summary>
     public required int WorkFactor { get; set; }
+}
+
+#pragma warning disable S101 // Linter was detecting Argon2id as separate words and suggesting to change it to Argon2Id
+
+/// <summary>
+/// Represents the Argon2id settings.
+/// </summary>
+public class Argon2idSettings
+{
+    /// <summary>
+    /// The size of the hash in bytes.
+    /// </summary>
+    public required int HashBytesSize { get; set; }
+
+    /// <summary>
+    /// The size of the salt in bytes.
+    /// </summary>
+    public required int SaltBytesSize { get; set; }
+
+    /// <summary>
+    /// The number of iterations.
+    /// </summary>
+    public required int Iterations { get; set; }
+
+    /// <summary>
+    /// The memory size.
+    /// </summary>
+    public required int MemorySize { get; set; }
+
+    /// <summary>
+    /// The degree of parallelism.
+    /// </summary>
+    public required int DegreeOfParallelism { get; set; }
 }
