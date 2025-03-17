@@ -129,7 +129,7 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
             throw new AuthenticationException("Invalid username or password");
         }
 
-        return new User() { Username = "", Role = UserRole.User };
+        return user;
     }
 
     /// <inheritdoc/>
