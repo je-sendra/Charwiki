@@ -1,6 +1,7 @@
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Services;
 using Charwiki.WebUi.Components;
+using Charwiki.WebUi.Services;
 
 namespace Charwiki.WebUi;
 
@@ -24,8 +25,13 @@ public static class Program
         // Add API settings.
         builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
-        // Add HttpClient.
-        builder.Services.AddHttpClient();
+        // Add JWT token storing service.
+        builder.Services.AddScoped<JwtTokenStoringService>();
+
+        // Add JWT HTTP message handler and its HTPP client.
+        builder.Services.AddTransient<JwtHttpMessageHandler>();
+        builder.Services.AddHttpClient("ApiClient")
+            .AddHttpMessageHandler<JwtHttpMessageHandler>();
 
         // Register Charwiki custom services for development.
         RegisterCharwikiApiServices(builder.Services);
@@ -56,12 +62,12 @@ public static class Program
 
     private static void RegisterCharwikiApiServices(IServiceCollection services)
     {
-        services.AddScoped<ILoomiansService, LoomiansService>();
-        services.AddScoped<ILoomianSetsService, LoomianSetsService>();
-        services.AddScoped<ILoomianMovesService, LoomianMovesService>();
-        services.AddScoped<ILoomianAbilitiesService, LoomianAbilitiesService>();
-        services.AddScoped<ILoomianItemsService, LoomianItemsService>();
-        services.AddScoped<IUserService, UserService>();
+        RegisterApiServiceWithHttpClient<ILoomiansService, LoomiansService>(services);
+        RegisterApiServiceWithHttpClient<ILoomianSetsService, LoomianSetsService>(services);
+        RegisterApiServiceWithHttpClient<ILoomianMovesService, LoomianMovesService>(services);
+        RegisterApiServiceWithHttpClient<ILoomianAbilitiesService, LoomianAbilitiesService>(services);
+        RegisterApiServiceWithHttpClient<ILoomianItemsService, LoomianItemsService>(services);
+        RegisterApiServiceWithHttpClient<IUserService, UserService>(services);   
     }
 
     private static void RegisterCharwikiMockServices(IServiceCollection services)
@@ -69,5 +75,19 @@ public static class Program
         services.AddScoped<ILoomiansService, MockLoomiansService>();
         services.AddScoped<ILoomianSetsService, MockLoomianSetsService>();
         services.AddScoped<ILoomianMovesService, MockLoomianMovesService>();
+    }
+
+    private static void RegisterApiServiceWithHttpClient<T, Y>(IServiceCollection services)
+    where T : class  // T should be the interface
+    where Y : class, T  // Y should be a class and implement T (the interface)
+    {
+        services.AddScoped<T>(sp =>
+        {
+            var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+            var httpClient = httpClientFactory.CreateClient("ApiClient");
+
+            // Use ActivatorUtilities to create an instance of Y, passing the HttpClient
+            return ActivatorUtilities.CreateInstance<Y>(sp, httpClient) as T;
+        });
     }
 }
