@@ -3,7 +3,7 @@ namespace Charwiki.WebUi.Services;
 /// <summary>
 /// A custom HTTP message handler that adds a JWT token to the request headers.
 /// </summary>
-public class JwtHttpMessageHandler(JwtTokenStoringService jwtTokenStoringService) : DelegatingHandler
+public class JwtHttpMessageHandler(LoginStateService loginStateService) : DelegatingHandler
 {
     /// <summary>
     /// Overrides the SendAsync method to add the JWT token to the request headers.
@@ -13,7 +13,7 @@ public class JwtHttpMessageHandler(JwtTokenStoringService jwtTokenStoringService
     /// <returns></returns>
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        string? token = jwtTokenStoringService.GetToken();
+        string? token = loginStateService.GetToken();
 
         if (!string.IsNullOrEmpty(token))
         {

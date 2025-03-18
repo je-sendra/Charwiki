@@ -26,7 +26,7 @@ public static class Program
         builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
         // Add JWT token storing service.
-        builder.Services.AddScoped<JwtTokenStoringService>();
+        builder.Services.AddScoped<LoginStateService>();
 
         // Add JWT HTTP message handler and its HTPP client.
         builder.Services.AddTransient<JwtHttpMessageHandler>();
