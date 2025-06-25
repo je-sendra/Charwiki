@@ -19,7 +19,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The Loomian of the set.
     /// </summary>
-    public Loomian? Loomian { get; set; }
+    public virtual Loomian? Loomian { get; set; }
 
     /// <summary>
     /// The personality of the Loomian in the set.
@@ -34,7 +34,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The ability of the Loomian in the set.
     /// </summary>
-    public LoomianAbility? Ability { get; set; }
+    public virtual LoomianAbility? Ability { get; set; }
 
     /// <summary>
     /// The unique identifier of the item the Loomian is holding.
@@ -44,7 +44,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The item the Loomian is holding.
     /// </summary>
-    public LoomianItem? Item { get; set; }
+    public virtual LoomianItem? Item { get; set; }
 
     /// <summary>
     /// The training points of the Loomian.
@@ -65,7 +65,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The first move of the Loomian.
     /// </summary>
-    public LoomianMove? Move1 { get; set; }
+    public virtual LoomianMove? Move1 { get; set; }
 
     /// <summary>
     /// The unique identifier of the second move of the Loomian.
@@ -75,7 +75,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The second move of the Loomian.
     /// </summary>
-    public LoomianMove? Move2 { get; set; }
+    public virtual LoomianMove? Move2 { get; set; }
 
     /// <summary>
     /// The unique identifier of the third move of the Loomian.
@@ -85,7 +85,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The third move of the Loomian.
     /// </summary>
-    public LoomianMove? Move3 { get; set; }
+    public virtual LoomianMove? Move3 { get; set; }
 
     /// <summary>
     /// The unique identifier of the fourth move of the Loomian.
@@ -95,7 +95,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The fourth move of the Loomian.
     /// </summary>
-    public LoomianMove? Move4 { get; set; }
+    public virtual LoomianMove? Move4 { get; set; }
     #endregion
 
     #region Descriptive Fields
@@ -139,7 +139,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The game version the set is for.
     /// </summary>
-    public GameVersionInfo? GameVersionInfo { get; set; }
+    public virtual GameVersionInfo? GameVersionInfo { get; set; }
     #endregion
 
     #region Metadata
@@ -156,11 +156,26 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The user who created the set.
     /// </summary>
-    public User? Creator { get; set; }
+    public virtual User? Creator { get; set; }
 
     /// <summary>
     /// Whether the set has been approved by a moderator.
     /// </summary>
     public bool Approved { get; set; } = false;
+
+    /// <summary>
+    /// The unique identifier of the user who approved the set.
+    /// </summary>
+    public Guid ApproverId { get; set; }
+
+    /// <summary>
+    /// The user who approved the set.
+    /// </summary>
+    public virtual User? Approver { get; set; }
+
+    /// <summary>
+    /// The timestamp of when the set was approved.
+    /// </summary>
+    public DateTime? ApprovalTimestamp { get; set; }
     #endregion
 }
