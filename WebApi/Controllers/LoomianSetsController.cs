@@ -68,31 +68,6 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     }
 
     /// <summary>
-    /// Endpoint to create a new Loomian set.
-    /// </summary>
-    /// <param name="loomianSetDto"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> CreateLoomianSet([FromBody] LoomianSetDto loomianSetDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var user = await authService.GetUserFromClaimsAsync(User);
-
-        var loomianSet = loomianSetDto.ToLoomianSet(user.Id);
-
-        charwikiDbContext.LoomianSets.Add(loomianSet);
-        await charwikiDbContext.SaveChangesAsync();
-
-        return Created($"/loomianSets/{loomianSet.Id}", loomianSet);
-    }
-
-
-    /// <summary>
     /// Endpoint to submit a Loomian set. These sets are not approved by default and can be reviewed by admins later.
     /// This endpoint can be accessed by any authenticated user.
     /// </summary>
@@ -110,6 +85,8 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         User user = await authService.GetUserFromClaimsAsync(User);
 
         LoomianSet loomianSet = loomianSetDto.ToLoomianSet(user.Id);
+
+        loomianSet.CreationTimestamp = DateTime.UtcNow;
 
         await charwikiDbContext.LoomianSets.AddAsync(loomianSet);
         await charwikiDbContext.SaveChangesAsync();
