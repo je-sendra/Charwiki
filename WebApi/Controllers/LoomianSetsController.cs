@@ -3,6 +3,7 @@ using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -88,5 +89,65 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         await charwikiDbContext.SaveChangesAsync();
 
         return Created($"/loomianSets/{loomianSet.Id}", loomianSet);
+    }
+
+
+    /// <summary>
+    /// Endpoint to submit a Loomian set. These sets are not approved by default and can be reviewed by admins later.
+    /// This endpoint can be accessed by any authenticated user.
+    /// </summary>
+    /// <param name="loomianSetDto"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Submit([FromBody] LoomianSetDto loomianSetDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        User user = await authService.GetUserFromClaimsAsync(User);
+
+        LoomianSet loomianSet = loomianSetDto.ToLoomianSet(user.Id);
+
+        await charwikiDbContext.LoomianSets.AddAsync(loomianSet);
+        await charwikiDbContext.SaveChangesAsync();
+
+        return Created($"/loomianSets/{loomianSet.Id}", loomianSet);
+    }
+
+
+    /// <summary>
+    /// Endpoint to approve a Loomian set.
+    /// This endpoint can only be accessed by users with the "Admin" role.
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <returns></returns>
+    [HttpPost("{loomianSetId}/approve")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Approve(Guid loomianSetId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        LoomianSet? loomianSet = await charwikiDbContext.LoomianSets.FirstOrDefaultAsync(ls => ls.Id == loomianSetId);
+        if (loomianSet == null)
+        {
+            return NotFound();
+        }
+
+        User user = await authService.GetUserFromClaimsAsync(User);
+
+        loomianSet.ApproverId = user.Id;
+        loomianSet.Approved = true;
+        loomianSet.ApprovalTimestamp = DateTime.UtcNow;
+
+        charwikiDbContext.LoomianSets.Update(loomianSet);
+        await charwikiDbContext.SaveChangesAsync();
+
+        return Ok();
     }
 }
