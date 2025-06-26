@@ -1,5 +1,7 @@
 @rendermode InteractiveServer
 
+@inject UserTokenService UserTokenService
+
 <a class="btn btn-outline-dark" href="https://github.com/je-sendra/Charwiki">
     <i class="bi bi-github"></i>
     <span>GitHub</span>
@@ -10,7 +12,38 @@
     <span>Contribute</span>
 </a>
 
-<a class="btn btn-outline-success" href="login" style="display: none;">
-    <i class="bi bi-person"></i>
-    <span>Access</span>
-</a>
+@if (_isAuthenticated)
+{
+    <a class="btn btn-outline-danger" @onclick="HandleLogoutAsync">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+    </a>
+}
+else
+{    
+    <a class="btn btn-outline-success" href="login">
+        <i class="bi bi-person"></i>
+        <span>Access</span>
+    </a>
+}
+
+@code {
+
+    private bool _isAuthenticated;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isAuthenticated = await UserTokenService.IsAuthenticatedAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleLogoutAsync()
+    {
+        await UserTokenService.RemoveAuthTokenAsync();
+        _isAuthenticated = false;
+        StateHasChanged();
+    }
+}
