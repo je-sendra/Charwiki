@@ -44,7 +44,7 @@ public class UserTokenService(ILocalStorageService localStorageService)
     /// <returns></returns>
     public async Task<bool> IsAuthenticatedAsync()
     {
-        var token = await localStorageService.GetItemAsync<string>(_authTokenLocalStorageName);
+        string? token = await this.GetAuthTokenAsync();
         return !string.IsNullOrEmpty(token);
     }
 }
