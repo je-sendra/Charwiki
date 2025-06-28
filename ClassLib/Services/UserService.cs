@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Models;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -28,5 +29,21 @@ public class UserService(HttpClient httpClient, IOptions<ApiSettings> apiSetting
     {
         var response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/{_controllerRoute}/register", userRegisterDto);
         response.EnsureSuccessStatusCode();
+    }
+
+    /// <inheritdoc/>
+    public async Task<User> GetMeAsync(string token)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            throw new ArgumentException("Token cannot be null or empty.", nameof(token));
+        }
+
+        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/{_controllerRoute}/me");
+        response.EnsureSuccessStatusCode();
+        User? user = await response.Content.ReadFromJsonAsync<User>();
+        return user ?? throw new InvalidOperationException("Failed to retrieve user information.");
     }
 }

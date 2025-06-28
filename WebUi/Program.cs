@@ -1,6 +1,8 @@
+using Blazored.LocalStorage;
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Services;
 using Charwiki.WebUi.Components;
+using Charwiki.WebUi.Services;
 
 namespace Charwiki.WebUi;
 
@@ -26,6 +28,12 @@ public static class Program
 
         // Add HttpClient.
         builder.Services.AddHttpClient();
+
+        // Add Local Storage service.
+        builder.Services.AddBlazoredLocalStorage();
+
+        // Add User Token service.
+        builder.Services.AddScoped<UserTokenService>();
 
         // Register Charwiki custom services for development.
         RegisterCharwikiApiServices(builder.Services);

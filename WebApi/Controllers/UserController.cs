@@ -1,7 +1,10 @@
 using System.Security.Authentication;
 using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Services;
+using Charwiki.ClassLib.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -58,5 +61,18 @@ public class UserController(IAuthService authService) : ControllerBase
         {
             return Unauthorized(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Endpoint to get the currently logged in user.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<IActionResult> GetMeAsync()
+    {
+        User user = await authService.GetUserFromClaimsAsync(User);
+
+        return Ok(user.GetCopyWithoutSensitiveInformation());
     }
 }
