@@ -2,8 +2,6 @@
 
 @inject ILoomianSetsService LoomianSetsService;
 
-@rendermode InteractiveServer
-
 <PageTitle>Charwiki</PageTitle>
 
 <div class="container-fluid mb-3">
@@ -21,8 +19,12 @@
     private IEnumerable<LoomianSet> LoomianSets { get; set; } = new List<LoomianSet>();
 
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        LoomianSets = await LoomianSetsService.GetAllAsync();
+        if (firstRender)
+        {
+            LoomianSets = await LoomianSetsService.GetAllAsync();
+            StateHasChanged();
+        }
     }
 }

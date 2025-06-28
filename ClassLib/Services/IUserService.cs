@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -20,4 +21,11 @@ public interface IUserService
     /// <param name="userLoginDto"></param>
     /// <returns>The JWT token for the user.</returns>
     Task<string> LoginAsync(UserLoginDto userLoginDto);
+
+    /// <summary>
+    /// Retrieves the current user's information.
+    /// This is typically used to get the user's profile after login.
+    /// </summary>
+    /// <returns></returns>
+    Task<User> GetMeAsync(string token);
 }
