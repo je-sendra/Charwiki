@@ -177,5 +177,10 @@ public class LoomianSet : IDatabaseSaveable
     /// The timestamp of when the set was approved.
     /// </summary>
     public DateTime? ApprovalTimestamp { get; set; }
+
+    /// <summary>
+    /// User ratings for this Loomian set.
+    /// </summary>
+    public virtual List<UserToLoomianSetStarRating>? UserToLoomianSetStarRatings { get; set; }
     #endregion
 }
