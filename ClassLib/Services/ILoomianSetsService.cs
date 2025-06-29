@@ -1,3 +1,4 @@
+using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services.Templates;
 
@@ -16,4 +17,13 @@ public interface ILoomianSetsService : ICrudControllerServiceTemplate<LoomianSet
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
     Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false);
+
+    /// <summary>
+    /// Submits a Loomian set to the server.
+    /// These sets will require admin approval before being visible to other users.
+    /// </summary>
+    /// <param name="loomianSet"></param>
+    /// <param name="authToken"></param>
+    /// <returns></returns>
+    Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken);
 }

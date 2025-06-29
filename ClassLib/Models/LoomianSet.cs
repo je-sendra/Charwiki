@@ -166,7 +166,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The unique identifier of the user who approved the set.
     /// </summary>
-    public Guid ApproverId { get; set; }
+    public Guid? ApproverId { get; set; }
 
     /// <summary>
     /// The user who approved the set.

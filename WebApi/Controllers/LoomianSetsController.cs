@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -85,6 +86,8 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         User user = await authService.GetUserFromClaimsAsync(User);
 
         LoomianSet loomianSet = loomianSetDto.ToLoomianSet(user.Id);
+
+        loomianSet.EnsureSetIsValid();
 
         loomianSet.CreationTimestamp = DateTime.UtcNow;
 
