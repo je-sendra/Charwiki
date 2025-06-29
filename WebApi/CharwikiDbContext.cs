@@ -46,6 +46,10 @@ public class CharwikiDbContext : DbContext
         modelBuilder.Entity<LoomianMove>()
             .HasIndex(e => e.Name)
             .IsUnique();
+
+        // Configure the composite key for UserToLoomianSetStarRating
+        modelBuilder.Entity<UserToLoomianSetStarRating>()
+            .HasKey(e => new { e.UserId, e.LoomianSetId });
     }
 
     /// <summary>
@@ -87,4 +91,9 @@ public class CharwikiDbContext : DbContext
     /// The database table containing all value to stat assignments.
     /// </summary>
     public DbSet<ValueToStatAssignment> ValueToStatAssignments { get; set; }
+
+    /// <summary>
+    /// The database table containing the star ratings given by users to Loomian sets.
+    /// </summary>
+    public DbSet<UserToLoomianSetStarRating> UserToLoomianSetStarRatings { get; set; }
 }
