@@ -24,6 +24,7 @@
         if (firstRender)
         {
             LoomianSets = await LoomianSetsService.GetAllAsync();
+            LoomianSets = LoomianSets.OrderByDescending(x => x.GetAverageStarRating());
             LoomianSets = LoomianSets.Where(x => x.Approved);
             StateHasChanged();
         }

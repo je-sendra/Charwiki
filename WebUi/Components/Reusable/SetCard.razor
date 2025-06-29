@@ -12,6 +12,18 @@
                 <h5 class="card-title">@_displayTitle</h5>
                 <p class="card-text">@_displayExplanation</p>
                 <div class="mt-auto d-flex justify-content-end">
+                    <span class="=badge mt-2 me-2">
+                        <i class="bi bi-star-fill"></i>
+                        @Set.GetAverageStarRating().ToString("0.00")
+                        @if (Set.UserToLoomianSetStarRatings == null || Set.UserToLoomianSetStarRatings.Count == 0)
+                        {
+                            <span class="text-muted ms-2 me-2">(No ratings yet)</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted ms-2 me-2">(@Set.UserToLoomianSetStarRatings.Count ratings)</span>
+                        }
+                    </span>
                     <a href="loomianSet/@Set.Id" class="btn btn-primary">See now</a>
                 </div>
             </div>
