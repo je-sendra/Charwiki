@@ -1,8 +1,3 @@
-@inject ILoomiansService LoomiansService;
-@inject ILoomianItemsService LoomianItemsService;
-@inject ILoomianAbilitiesService LoomianAbilitiesService;
-@inject ILoomianMovesService LoomianMovesService;
-
 @if (LoomianSet.Loomian == null || LoomianSet.Ability == null)
 {
     <p>Loading...</p>
@@ -10,110 +5,133 @@
 }
 
 <div class="container w-100">
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <h2>@LoomianSet.Title @LoomianSet.Loomian.Name</h2>
-
-            @if (LoomianSet.Item != null)
-            {
-                <h5>Item: @LoomianSet.Item.Name</h5>
-            }
-            else
-            {
-                <h5>Item: No item equipped</h5>
-            }
-            <h5>Ability: @LoomianSet.Ability.Name</h5>
-
-            <h5>Personality:</h5>
-            @if (LoomianSet.PersonalityModifiers == null || LoomianSet.PersonalityModifiers.Count == 0)
-            {
-                <p>None</p>
-            }
-            else
-            {
-                <ul>
-                    @foreach (var personality in LoomianSet.PersonalityModifiers)
-                    {
-                        if (personality.Value > 0)
+    <div class="row" >
+        <div class="col-md-5">
+            <h1 class="display-5">@LoomianSet.Title</h1>
+            <h2 class="display-6">@LoomianSet.Loomian.Name</h2>
+            
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="display-6">Item:</h2>
+                        @if (LoomianSet.Item != null)
                         {
-                            <li>@personality.Stat.ToString() : +@personality.Value%</li>
+                            <p>@LoomianSet.Item.Name</p>
                         }
                         else
                         {
-                            <li>@personality.Stat.ToString() : @personality.Value%</li>
+                            <p>No item equipped</p>
                         }
-                    }
-                </ul>
-            }
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="display-6">Ability:</h2>
+                        @if (LoomianSet.Ability != null)
+                        {
+                            <p>@LoomianSet.Ability.Name</p>
+                        }
+                        else
+                        {
+                            <p>No ability selected</p>
+                        }
+                    </div>
+                </div>
+            </div>
 
-            <h5>UPs:</h5>
-            @if (LoomianSet.UniquePoints == null || LoomianSet.UniquePoints.Count == 0)
-            {
-                <p>None</p>
-            }
-            else
-            {
-                <ul>
-                    @foreach (var up in LoomianSet.UniquePoints)
+            <h2 class="display-6">Moves</h2>
+            <table class="table table-bordered w-75">
+                <tbody>
+                    <tr>
+                        @if (LoomianSet.Move1 != null)
+                        {
+                            <td>@LoomianSet.Move1.Name</td>
+                        }
+                        else
+                        {
+                            <td>None</td>
+                        }
+
+                        @if (LoomianSet.Move2 != null)
+                        {
+                            <td>@LoomianSet.Move2.Name</td>
+                        }
+                        else
+                        {
+                            <td>None</td>
+                        }
+                    </tr>
+                    <tr>
+                        @if (LoomianSet.Move3 != null)
+                        {
+                            <td>@LoomianSet.Move3.Name</td>
+                        }
+                        else
+                        {
+                            <td>None</td>
+                        }
+
+                        @if (LoomianSet.Move4 != null)
+                        {
+                            <td>@LoomianSet.Move4.Name</td>
+                        }
+                        else
+                        {
+                            <td>None</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="display-6">Stat modifiers</h2>
+            <table class="table table-bordered w-75">
+                <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>TPs</th>
+                        <th>UPs</th>
+                        <th>Personality</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(LoomianStat stat in DisplayedStats)
                     {
-                        <li>@up.Stat.ToString() : @up.Value</li>
-                    }
-                </ul>
-            }
+                        <tr>
+                            <td>@stat.ToString()</td>
 
-            <h5>TPs:</h5>
-            @if (LoomianSet.TrainingPoints == null || LoomianSet.TrainingPoints.Count == 0)
-            {
-                <p>None</p>
-            }
-            else
-            {
-                <ul>
-                    @foreach (var tp in LoomianSet.TrainingPoints)
-                    {
-                        <li>@tp.Stat.ToString() : @tp.Value</li>
-                    }
-                </ul>
-            }
+                            @if (LoomianSet.TrainingPoints == null || !LoomianSet.TrainingPoints.Any(x => x.Stat == stat))
+                            {
+                                <td>0</td>
+                            }
+                            else
+                            {
+                                <td>@LoomianSet.TrainingPoints!.Where(x => x.Stat == stat).First().Value</td>
+                            }
 
-            <h5>Moves:</h5>
-            <ul>
-                @if (LoomianSet.Move1 == null)
-                {
-                    <li>Move 1: None</li>
-                }
-                else
-                {
-                    <li>@LoomianSet.Move1.Name</li>
-                }
-                @if (LoomianSet.Move2 == null)
-                {
-                    <li>Move 2: None</li>
-                }
-                else
-                {
-                    <li>@LoomianSet.Move2.Name</li>
-                }
-                @if (LoomianSet.Move3 == null)
-                {
-                    <li>Move 3: None</li>
-                }
-                else
-                {
-                    <li>@LoomianSet.Move3.Name</li>
-                }
-                @if (LoomianSet.Move4 == null)
-                {
-                    <li>Move 4: None</li>
-                }
-                else
-                {
-                    <li>@LoomianSet.Move4.Name</li>
-                }
-            </ul>
+                            @if (LoomianSet.UniquePoints == null || !LoomianSet.UniquePoints.Any(x => x.Stat == stat))
+                            {
+                                <td>0</td>
+                            }
+                            else
+                            {
+                                <td>@LoomianSet.UniquePoints!.Where(x => x.Stat == stat).First().Value</td>
+                            }
+
+                            @if (LoomianSet.PersonalityModifiers == null || !LoomianSet.PersonalityModifiers.Any(x => x.Stat == stat))
+                            {
+                                <td>0%</td>
+                            }
+                            else
+                            {
+                                <td>@LoomianSet.PersonalityModifiers!.Where(x => x.Stat == stat).First().Value%</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-        <div class="col-12 col-md-6">
-            <h5>Set explanation:</h5>@if (!string.IsNullOrEmpty(LoomianSet.Explanation))
+
+        <div class="col-md-7">
+            <h2 class="display-6">Set explanation</h2>
+            @if (!string.IsNullOrEmpty(LoomianSet.Explanation))
             {
                 @foreach (var paragraph in LoomianSet.Explanation.Split('\n'))
                 {
@@ -124,56 +142,75 @@
             {
                 <p>No explanation provided.</p>
             }
+
+            <h2 class="display-6">Strategy</h2>
+            @if (!string.IsNullOrEmpty(LoomianSet.Strategy))
+            {
+                @foreach (var paragraph in LoomianSet.Strategy.Split('\n'))
+                {
+                    <p>@paragraph</p>
+                }
+            }
+            else
+            {
+                <p>No strategy provided.</p>
+            }
+
+            <h2 class="display-6">Other options</h2>
+            @if (!string.IsNullOrEmpty(LoomianSet.OtherOptions))
+            {
+                @foreach (var paragraph in LoomianSet.OtherOptions.Split('\n'))
+                {
+                    <p>@paragraph</p>
+                }
+            }
+            else
+            {
+                <p>No other options provided.</p>
+            }
+
+            <h2 class="display-6">Metadata</h2>
+            <table class="table table-bordered w-75">
+                <tbody>
+                    <tr>
+                        <td>Author</td>
+                        @if (LoomianSet.Creator == null)
+                        {
+                            <td>Unknown</td>
+                        }
+                        else
+                        {
+                            <td>@LoomianSet.Creator.Username</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Created on</td>
+                        <td>@LoomianSet.CreationTimestamp.ToString()</td>
+                    </tr>
+                    <tr>
+                        <td>Approved by</td>
+                        @if (LoomianSet.Approver == null)
+                        {
+                            <td>Not approved</td>
+                        }
+                        else
+                        {
+                            <td>@LoomianSet.Approver.Username</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Approved on</td>
+                        @if (LoomianSet.ApprovalTimestamp == null)
+                        {
+                            <td>Not approved</td>
+                        }
+                        else
+                        {
+                            <td>@LoomianSet.ApprovalTimestamp.Value.ToString()</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
-@code {
-    [Parameter]
-    public required LoomianSet LoomianSet { get; set; }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        // If the LoomianSet Loomian is null, fetch it from the service
-        if (LoomianSet.Loomian == null)
-        {
-            LoomianSet.Loomian = await LoomiansService.GetByIdAsync(LoomianSet.LoomianId);
-        }
-
-        // If the LoomianSet Item is null and the Loomian is holding an item, fetch it from the service
-        if (LoomianSet.Item == null && LoomianSet.ItemId != null)
-        {
-            LoomianSet.Item = await LoomianItemsService.GetByIdAsync((Guid)LoomianSet.ItemId);
-        }
-
-        // If the LoomianSet Ability is null, fetch it from the service
-        if (LoomianSet.Ability == null)
-        {
-            LoomianSet.Ability = await LoomianAbilitiesService.GetByIdAsync(LoomianSet.LoomianAbilityId);
-        }
-
-        // If the LoomianSet Move1 is null and the Loomian has a Move1, fetch it from the service
-        if (LoomianSet.Move1 == null && LoomianSet.Move1Id != null)
-        {
-            LoomianSet.Move1 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move1Id);
-        }
-
-        // If the LoomianSet Move2 is null and the Loomian has a Move2, fetch it from the service
-        if (LoomianSet.Move2 == null && LoomianSet.Move2Id != null)
-        {
-            LoomianSet.Move2 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move2Id);
-        }
-
-        // If the LoomianSet Move3 is null and the Loomian has a Move3, fetch it from the service
-        if (LoomianSet.Move3 == null && LoomianSet.Move3Id != null)
-        {
-            LoomianSet.Move3 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move3Id);
-        }
-
-        // If the LoomianSet Move4 is null and the Loomian has a Move4, fetch it from the service
-        if (LoomianSet.Move4 == null && LoomianSet.Move4Id != null)
-        {
-            LoomianSet.Move4 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move4Id);
-        }
-    }
-}
