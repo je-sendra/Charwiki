@@ -3,8 +3,7 @@
 @inject ILoomianAbilitiesService LoomianAbilitiesService;
 @inject ILoomianMovesService LoomianMovesService;
 
-@if (LoomianSet.Loomian == null || LoomianSet.Item == null || LoomianSet.Ability == null || LoomianSet.Move1
-== null || LoomianSet.Move2 == null || LoomianSet.Move3 == null || LoomianSet.Move4 == null)
+@if (LoomianSet.Loomian == null || LoomianSet.Ability == null)
 {
     <p>Loading...</p>
     return;
@@ -15,7 +14,14 @@
         <div class="col-12 col-md-6">
             <h2>@LoomianSet.Title @LoomianSet.Loomian.Name</h2>
 
-            <h5>Item: @LoomianSet.Item.Name</h5>
+            @if (LoomianSet.Item != null)
+            {
+                <h5>Item: @LoomianSet.Item.Name</h5>
+            }
+            else
+            {
+                <h5>Item: No item equipped</h5>
+            }
             <h5>Ability: @LoomianSet.Ability.Name</h5>
 
             <h5>Personality:</h5>
@@ -72,10 +78,38 @@
 
             <h5>Moves:</h5>
             <ul>
-                <li>@LoomianSet.Move1.Name</li>
-                <li>@LoomianSet.Move2.Name</li>
-                <li>@LoomianSet.Move3.Name</li>
-                <li>@LoomianSet.Move4.Name</li>
+                @if (LoomianSet.Move1 == null)
+                {
+                    <li>Move 1: None</li>
+                }
+                else
+                {
+                    <li>@LoomianSet.Move1.Name</li>
+                }
+                @if (LoomianSet.Move2 == null)
+                {
+                    <li>Move 2: None</li>
+                }
+                else
+                {
+                    <li>@LoomianSet.Move2.Name</li>
+                }
+                @if (LoomianSet.Move3 == null)
+                {
+                    <li>Move 3: None</li>
+                }
+                else
+                {
+                    <li>@LoomianSet.Move3.Name</li>
+                }
+                @if (LoomianSet.Move4 == null)
+                {
+                    <li>Move 4: None</li>
+                }
+                else
+                {
+                    <li>@LoomianSet.Move4.Name</li>
+                }
             </ul>
         </div>
         <div class="col-12 col-md-6">
