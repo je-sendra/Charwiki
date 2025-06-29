@@ -1,0 +1,164 @@
+@page "/submit-set"
+
+<h1>Submit a new Loomian Set</h1>
+
+<input type="text" class="form-control mb-3" @bind="Title" placeholder="Enter a title for your Loomian set">
+
+<select class="form-select mb-3" @bind="SelectedLoomianId">
+    <option value="" selected>Select a Loomian</option>
+    @foreach (Loomian currentLoomian in Loomians)
+    {
+        <option value="@currentLoomian.Id">@currentLoomian.Name</option>
+    }
+</select>
+
+<select class="form-select mb-3" @bind="SelectedAbilityId">
+    <option value="" selected>Select an Ability</option>
+    @foreach (LoomianAbility currentAbility in Abilities)
+    {
+        <option value="@currentAbility.Id">@currentAbility.Name</option>
+    }
+</select>
+
+<select class="form-select mb-3" @bind="SelectedItemId">
+    <option value="" selected>Select an Item (optional)</option>
+    @foreach (LoomianItem currentItem in Items)
+    {
+        <option value="@currentItem.Id">@currentItem.Name</option>
+    }
+</select>
+
+<select class="form-select mb-3" @bind="SelectedGameVersionId">
+    <option value="" selected>Select Game Version</option>
+    @foreach (GameVersionInfo currentGameVersion in GameVersions)
+    {
+        <option value="@currentGameVersion.Id">@currentGameVersion.VersionCode - @currentGameVersion.VersionTitle</option>
+    }
+</select>
+
+<h2>Stat modifiers</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Training Points (TPs)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ValueToStatAssignment stat in TrainingPoints)
+                    {
+                        <tr>
+                            <td>@stat.Stat.ToString()</td>
+                            <td><input type="number" class="form-control" @bind="stat.Value" min="0" max="200" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h3>Unique Points (UPs)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ValueToStatAssignment stat in UniquePoints)
+                    {
+                        <tr>
+                            <td>@stat.Stat.ToString()</td>
+                            <td><input type="number" class="form-control" @bind="stat.Value" min="0" max="200" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h3>Personality Modifiers</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ValueToStatAssignment stat in PersonalityModifiers)
+                    {
+                        <tr>
+                            <td>@stat.Stat.ToString()</td>
+                            <td>
+                                <select class="form-select" @bind="stat.Value">
+                                    <option value="0" selected>None</option>
+                                    <option value="10">Positive (+10%)</option>
+                                    <option value="-10">Negative (-10%)</option>
+                                    <option value="20">Very Positive (+20%)</option>
+                                    <option value="-20">Very Negative (-20%)</option>
+                                </select>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<h2>Moves</h2>
+
+<select class="form-select mb-3" @bind="SelectedMove1Id">
+    <option value="" selected>Select Move 1 (optional)</option>
+    @foreach (LoomianMove currentMove in Moves)
+    {
+        <option value="@currentMove.Id">@currentMove.Name</option>
+    }
+</select>
+
+<select class="form-select mb-3" @bind="SelectedMove2Id">
+    <option value="" selected>Select Move 2 (optional)</option>
+    @foreach (LoomianMove currentMove in Moves)
+    {
+        <option value="@currentMove.Id">@currentMove.Name</option>
+    }
+</select>
+
+<select class="form-select mb-3" @bind="SelectedMove3Id">
+    <option value="" selected>Select Move 3 (optional)</option>
+    @foreach (LoomianMove currentMove in Moves)
+    {
+        <option value="@currentMove.Id">@currentMove.Name</option>
+    }
+</select>
+
+<select class="form-select mb-3" @bind="SelectedMove4Id">
+    <option value="" selected>Select Move 4 (optional)
+
+    </option>
+    @foreach (LoomianMove currentMove in Moves)
+    {
+        <option value="@currentMove.Id">@currentMove.Name</option>
+    }
+</select>
+
+<h2>Descriptive Fields</h2>
+<h3>Explanation (optional)</h3>
+<textarea class="form-control mb-3" rows="7" @bind="Explanation"
+    placeholder="Enter an explanation for your Loomian set (optional)" />
+
+<h3>Strategy (optional)</h3>
+<textarea class="form-control mb-3" rows="7" @bind="Strategy"
+    placeholder="Enter a strategy for your Loomian set (optional)" />
+
+<h3>Other Options (optional)</h3>
+<textarea class="form-control mb-3" rows="7" @bind="OtherOptions"
+    placeholder="Enter other options for your Loomian set (optional)" />
+
+<p class="text-danger">@ErrorMessage</p>
+
+<button class="btn btn-primary mb-3" @onclick="SubmitSetAsync">Submit Set</button>

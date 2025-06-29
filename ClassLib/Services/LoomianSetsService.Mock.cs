@@ -1,3 +1,4 @@
+using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
 
@@ -66,7 +67,7 @@ public class MockLoomianSetsService : ILoomianSetsService
     public Task<LoomianSet> GetByIdAsync(Guid id)
     {
         var foundSet = _mockData.Find(x => x.Id == id);
-        if(foundSet == null)
+        if (foundSet == null)
         {
             throw new KeyNotFoundException();
         }
@@ -77,5 +78,13 @@ public class MockLoomianSetsService : ILoomianSetsService
     public Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false)
     {
         return GetByIdAsync(id);
+    }
+    
+    /// <inheritdoc />
+    public Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
+    {
+        LoomianSet item = loomianSet.ToLoomianSet(Guid.NewGuid());
+        _mockData.Add(item);
+        return Task.FromResult(item);
     }
 }
