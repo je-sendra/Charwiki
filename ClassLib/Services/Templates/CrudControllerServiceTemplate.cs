@@ -54,9 +54,9 @@ public abstract class CrudControllerServiceTemplate<T>(HttpClient httpClient, IO
     /// <exception cref="InvalidOperationException"></exception>
     public virtual async Task<T> CreateNewAsync(T model)
     {
-        var response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/gameversioninfos", model);
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/{controllerRoute}", model);
         response.EnsureSuccessStatusCode();
-        var createdItem = await response.Content.ReadFromJsonAsync<T>();
+        T? createdItem = await response.Content.ReadFromJsonAsync<T>();
         if (createdItem is null)
         {
             throw new InvalidOperationException("Failed to deserialize the created item.");
