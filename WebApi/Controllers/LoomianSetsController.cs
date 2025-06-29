@@ -21,9 +21,21 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult GetAllLoomianSets()
+    public async Task<IActionResult> GetAllLoomianSets()
     {
-        return Ok(charwikiDbContext.LoomianSets);
+        List<LoomianSet> loomianSets = await charwikiDbContext.LoomianSets.ToListAsync();
+
+        // Load all star ratings
+        foreach (LoomianSet loomianSet in loomianSets)
+        {
+            loomianSet.UserToLoomianSetStarRatings = await charwikiDbContext.UserToLoomianSetStarRatings
+                .Where(x => x.LoomianSetId == loomianSet.Id)
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .ToListAsync();
+        }
+
+        return Ok(loomianSets);
     }
 
     /// <summary>
