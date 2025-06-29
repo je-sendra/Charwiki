@@ -28,4 +28,11 @@ public interface IUserService
     /// </summary>
     /// <returns></returns>
     Task<User> GetMeAsync(string token);
+
+    /// <summary>
+    /// Retrieves a user by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to retrieve.</param>
+    /// <returns></returns>
+    Task<User> GetByIdAsync(Guid id);
 }

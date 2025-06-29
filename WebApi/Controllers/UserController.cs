@@ -5,15 +5,17 @@ using Charwiki.WebApi.Services;
 using Charwiki.ClassLib.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Charwiki.WebApi.Controllers;
 
 /// <summary>
 /// Controller for user-related endpoints.
 /// </summary>
+/// <param name="charwikiDbContext"></param>
 /// <param name="authService"></param>
 [Route("[controller]")]
-public class UserController(IAuthService authService) : ControllerBase
+public class UserController(CharwikiDbContext charwikiDbContext, IAuthService authService) : ControllerBase
 {
     /// <summary>
     /// Endpoint to register a new user.
@@ -72,6 +74,29 @@ public class UserController(IAuthService authService) : ControllerBase
     public async Task<IActionResult> GetMeAsync()
     {
         User user = await authService.GetUserFromClaimsAsync(User);
+
+        return Ok(user.GetCopyWithoutSensitiveInformation());
+    }
+
+    /// <summary>
+    /// Endpoint to get a user by their ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByIdAsync(Guid id)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        User? user = await charwikiDbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
 
         return Ok(user.GetCopyWithoutSensitiveInformation());
     }
