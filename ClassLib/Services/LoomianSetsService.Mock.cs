@@ -75,16 +75,22 @@ public class MockLoomianSetsService : ILoomianSetsService
     }
 
     /// <inheritdoc />
-    public Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false)
+    public Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false, bool includeRatings = false)
     {
         return GetByIdAsync(id);
     }
-    
+
     /// <inheritdoc />
     public Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
     {
         LoomianSet item = loomianSet.ToLoomianSet(Guid.NewGuid());
         _mockData.Add(item);
         return Task.FromResult(item);
+    }
+
+    /// <inheritdoc />
+    public Task RateLoomianSetAsync(Guid loomianSetId, int starRating, string authToken)
+    {
+        throw new NotImplementedException("Mock service does not support rating Loomian sets.");
     }
 }
