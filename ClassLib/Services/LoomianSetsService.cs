@@ -1,5 +1,7 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
+using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services.Templates;
 using Microsoft.Extensions.Options;
@@ -33,6 +35,20 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
             + $"includeValueToStatAssignments={includeValueToStatAssignments}");
         response.EnsureSuccessStatusCode();
         var item = await response.Content.ReadFromJsonAsync<LoomianSet>();
+        if (item is null)
+        {
+            throw new InvalidOperationException("Failed to deserialize the LoomianSet.");
+        }
+        return item;
+    }
+
+    /// <inheritdoc />
+    public async Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_apiSettings.Value.BaseUrl}/loomianSets", loomianSet);
+        response.EnsureSuccessStatusCode();
+        LoomianSet? item = await response.Content.ReadFromJsonAsync<LoomianSet>();
         if (item is null)
         {
             throw new InvalidOperationException("Failed to deserialize the LoomianSet.");
