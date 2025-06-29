@@ -34,6 +34,7 @@ public partial class SetDisplay
     private readonly List<LoomianStat> DisplayedStats =
     [
         LoomianStat.Health,
+        LoomianStat.Energy,
         LoomianStat.MeeleeAttack,
         LoomianStat.RangedAttack,
         LoomianStat.MeeleeDefense,
