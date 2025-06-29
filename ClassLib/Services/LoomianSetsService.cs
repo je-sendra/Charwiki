@@ -28,11 +28,12 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
     }
 
     /// <inheritdoc />
-    public async Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false)
+    public async Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false, bool includeRatings = false)
     {
         // Create a new request to the API.
-        var response = await _httpClient.GetAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{id}?" 
-            + $"includeValueToStatAssignments={includeValueToStatAssignments}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{id}?"
+            + $"includeValueToStatAssignments={includeValueToStatAssignments}"
+            + $"&includeRatings={includeRatings}");
         response.EnsureSuccessStatusCode();
         var item = await response.Content.ReadFromJsonAsync<LoomianSet>();
         if (item is null)
@@ -54,5 +55,13 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
             throw new InvalidOperationException("Failed to deserialize the LoomianSet.");
         }
         return item;
+    }
+
+    /// <inheritdoc />
+    public async Task RateLoomianSetAsync(Guid loomianSetId, int starRating, string authToken)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{loomianSetId}/rate", starRating);
+        response.EnsureSuccessStatusCode();
     }
 }
