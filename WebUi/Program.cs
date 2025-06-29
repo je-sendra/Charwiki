@@ -70,6 +70,7 @@ public static class Program
         services.AddScoped<ILoomianAbilitiesService, LoomianAbilitiesService>();
         services.AddScoped<ILoomianItemsService, LoomianItemsService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IGameVersionInfosService, GameVersionInfosService>();
     }
 
     private static void RegisterCharwikiMockServices(IServiceCollection services)
