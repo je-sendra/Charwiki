@@ -1,6 +1,7 @@
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services;
+using Charwiki.WebUi.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace Charwiki.WebUi.Components.Reusable;
@@ -21,6 +22,15 @@ public partial class SetDisplay
     [Inject]
     private IUserService UsersService { get; set; } = default!;
 
+    [Inject]
+    private UserTokenService UserTokenService { get; set; } = default!;
+
+    [Inject]
+    private ILoomianSetsService LoomianSetsService { get; set; } = default!;
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
     private readonly List<LoomianStat> DisplayedStats =
     [
         LoomianStat.Health,
@@ -30,6 +40,12 @@ public partial class SetDisplay
         LoomianStat.RangedDefense,
         LoomianStat.Speed
     ];
+
+    private bool IsAuthenticated = false;
+
+    private int StarRating { get; set; }
+
+    private int PreviousStarRating = -1;
 
 
     /// <inheritdoc/>
@@ -88,5 +104,50 @@ public partial class SetDisplay
         {
             LoomianSet.Approver = await UsersService.GetByIdAsync(LoomianSet.ApproverId.Value);
         }
+    }
+
+    /// <inheritdoc/>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+        IsAuthenticated = await UserTokenService.IsAuthenticatedAsync();
+
+        // If the user is authenticated, check if they have rated the Loomian set
+        if (IsAuthenticated && LoomianSet.UserToLoomianSetStarRatings != null)
+        {
+            string? token = await UserTokenService.GetAuthTokenAsync();
+            if (!string.IsNullOrEmpty(token))
+            {
+                User user = await UsersService.GetMeAsync(token);
+                UserToLoomianSetStarRating? rating = LoomianSet.UserToLoomianSetStarRatings
+                    .FirstOrDefault(r => r.UserId == user.Id);
+                if (rating != null)
+                {
+                    PreviousStarRating = rating.StarRating;
+                }
+            }
+        }
+        StateHasChanged();
+    }
+
+    private void SetSelectedStarRating(int rating)
+    {
+        StarRating = rating;
+    }
+
+    private async Task RateSetAsync()
+    {
+        string? token = await UserTokenService.GetAuthTokenAsync();
+        if (string.IsNullOrEmpty(token))
+        {
+            // Rating buttons are not enalbled if the user is not authenticated
+            return;
+        }
+        await LoomianSetsService.RateLoomianSetAsync(LoomianSet.Id, StarRating, token);
+        
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
