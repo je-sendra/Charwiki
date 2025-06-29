@@ -46,4 +46,18 @@ public class UserService(HttpClient httpClient, IOptions<ApiSettings> apiSetting
         User? user = await response.Content.ReadFromJsonAsync<User>();
         return user ?? throw new InvalidOperationException("Failed to retrieve user information.");
     }
+
+    /// <inheritdoc/>
+    public async Task<User> GetByIdAsync(Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            throw new ArgumentException("ID cannot be empty.", nameof(id));
+        }
+
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/{_controllerRoute}/{id}");
+        response.EnsureSuccessStatusCode();
+        User? user = await response.Content.ReadFromJsonAsync<User>();
+        return user ?? throw new InvalidOperationException("Failed to retrieve user information.");
+    }
 }
