@@ -31,16 +31,17 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// </summary>
     /// <param name="id"></param>
     /// <param name="includeValueToStatAssignments"></param>
+    /// <param name="includeRatings"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public IActionResult GetById(Guid id, bool includeValueToStatAssignments = false)
+    public async Task<IActionResult> GetById(Guid id, bool includeValueToStatAssignments = false, bool includeRatings = false)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var loomianSet = charwikiDbContext.LoomianSets.FirstOrDefault(e => e.Id == id);
+        LoomianSet? loomianSet = await charwikiDbContext.LoomianSets.FirstOrDefaultAsync(e => e.Id == id);
         if (loomianSet == null)
         {
             return NotFound();
@@ -50,19 +51,30 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         if (includeValueToStatAssignments)
         {
             // Load the personality modifiers for the Loomian set.
-            charwikiDbContext.Entry(loomianSet)
+            await charwikiDbContext.Entry(loomianSet)
                 .Collection(ls => ls.PersonalityModifiers)
-                .Load();
+                .LoadAsync();
 
             // Load the unique points for the Loomian set.
-            charwikiDbContext.Entry(loomianSet)
+            await charwikiDbContext.Entry(loomianSet)
                 .Collection(ls => ls.UniquePoints)
-                .Load();
+                .LoadAsync();
 
             // Load the training points for the Loomian set.
-            charwikiDbContext.Entry(loomianSet)
+            await charwikiDbContext.Entry(loomianSet)
                 .Collection(ls => ls.TrainingPoints)
-                .Load();
+                .LoadAsync();
+        }
+
+        // If the user wants to include the ratings, include them in the response.
+        if (includeRatings)
+        {
+            // Load the star ratings for the Loomian set.
+            loomianSet.UserToLoomianSetStarRatings = await charwikiDbContext.UserToLoomianSetStarRatings
+                .Where(x => x.LoomianSetId == id)
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .ToListAsync();
         }
 
         return Ok(loomianSet);
@@ -126,6 +138,62 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         loomianSet.ApprovalTimestamp = DateTime.UtcNow;
 
         charwikiDbContext.LoomianSets.Update(loomianSet);
+        await charwikiDbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    /// <summary>
+    /// Endpoint to star a Loomian set.
+    /// This endpoint can be accessed by any authenticated user.
+    /// Users can rate a Loomian set with a star rating from 1 to 5.
+    /// If the user has already rated the Loomian set, their rating will be updated.
+    /// If the user has not rated the Loomian set, a new rating will be created
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <param name="starRating"></param>
+    /// <returns></returns>
+    [HttpPost("{loomianSetId}/rate")]
+    [Authorize]
+    public async Task<IActionResult> StarLoomianSet(Guid loomianSetId, [FromBody] int starRating)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (starRating < 1 || starRating > 5)
+        {
+            return BadRequest("Star rating must be between 1 and 5.");
+        }
+
+        LoomianSet? loomianSet = await charwikiDbContext.LoomianSets.FirstOrDefaultAsync(ls => ls.Id == loomianSetId);
+        if (loomianSet == null)
+        {
+            return NotFound();
+        }
+
+        User user = await authService.GetUserFromClaimsAsync(User);
+
+        UserToLoomianSetStarRating? existingRating = await charwikiDbContext.UserToLoomianSetStarRatings
+            .FirstOrDefaultAsync(r => r.UserId == user.Id && r.LoomianSetId == loomianSetId);
+
+        if (existingRating != null)
+        {
+            existingRating.StarRating = starRating;
+            charwikiDbContext.UserToLoomianSetStarRatings.Update(existingRating);
+        }
+        else
+        {
+            UserToLoomianSetStarRating newRating = new()
+            {
+                UserId = user.Id,
+                LoomianSetId = loomianSetId,
+                StarRating = starRating
+            };
+            await charwikiDbContext.UserToLoomianSetStarRatings.AddAsync(newRating);
+        }
+
         await charwikiDbContext.SaveChangesAsync();
 
         return Ok();
