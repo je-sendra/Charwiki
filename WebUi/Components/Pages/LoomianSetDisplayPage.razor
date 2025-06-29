@@ -19,6 +19,6 @@ else
 
     override protected async Task OnParametersSetAsync()
     {
-        _loomianSet = await LoomianSetsService.GetByIdAsync(SetId, includeValueToStatAssignments: true);
+        _loomianSet = await LoomianSetsService.GetByIdAsync(SetId, includeValueToStatAssignments: true, includeRatings: true);
     }
 }

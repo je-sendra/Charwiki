@@ -209,8 +209,46 @@
                             <td>@LoomianSet.ApprovalTimestamp.Value.ToString()</td>
                         }
                     </tr>
+                    <tr>
+                        <td>Average rating</td>
+                        @if (LoomianSet.UserToLoomianSetStarRatings == null || LoomianSet.UserToLoomianSetStarRatings.Count == 0)
+                        {
+                            <td>No ratings yet</td>
+                        }
+                        else
+                        {
+                            <td>@LoomianSet.GetAverageStarRating().ToString("0.00") (@LoomianSet.UserToLoomianSetStarRatings.Count reviews)</td>
+                        }
+                    </tr>
                 </tbody>
             </table>
+
+
+            <div class="rating-card p-4">
+                <div class="star-rating animated-stars">
+                    <input type="radio" id="star5" name="rating" @onclick="() => SetSelectedStarRating(5)">
+                    <label for="star5" class="bi bi-star-fill"></label>
+                    <input type="radio" id="star4" name="rating" @onclick="() => SetSelectedStarRating(4)">
+                    <label for="star4" class="bi bi-star-fill"></label>
+                    <input type="radio" id="star3" name="rating" @onclick="() => SetSelectedStarRating(3)">
+                    <label for="star3" class="bi bi-star-fill"></label>
+                    <input type="radio" id="star2" name="rating" @onclick="() => SetSelectedStarRating(2)">
+                    <label for="star2" class="bi bi-star-fill"></label>
+                    <input type="radio" id="star1" name="rating" @onclick="() => SetSelectedStarRating(1)">
+                    <label for="star1" class="bi bi-star-fill"></label>
+                </div>
+
+                @if (IsAuthenticated)
+                {
+                    <button class="btn btn-primary ms-2" @onclick="RateSetAsync">Submit rating</button>
+                    @if (PreviousStarRating != -1)
+                    {
+                        <p class="text-muted">You previously rated this set with @PreviousStarRating stars.</p>
+                    }
+                } else {
+                    <p class="text-danger">You must be logged in to submit ratings.</p>
+                }
+            </div>
         </div>
     </div>
 </div>
