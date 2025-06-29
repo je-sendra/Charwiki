@@ -1,6 +1,8 @@
 @inject IUserService UserService
 @inject UserTokenService UserTokenService
 
+@inject NavigationManager NavigationManager
+
 <a class="btn btn-outline-dark" href="https://github.com/je-sendra/Charwiki">
     <i class="bi bi-github"></i>
     <span>GitHub</span>
@@ -59,6 +61,6 @@ else
     {
         await UserTokenService.RemoveAuthTokenAsync();
         _isAuthenticated = false;
-        StateHasChanged();
+        NavigationManager.NavigateTo("/", forceLoad: true);
     }
 }
