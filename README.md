@@ -38,7 +38,7 @@ The app is currently in development and is not yet available for public use.
 
 However, a VERY ROUGH AND UNSTABLE development version of the app can be accessed at:
 
-<https://charwiki.onrender.com/>
+<https://charwiki.vewtech.net/>
 
 ## Contributions 🤝
 
