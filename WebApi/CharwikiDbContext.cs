@@ -26,6 +26,26 @@ public class CharwikiDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(e => e.Username)
             .IsUnique();
+
+        // Ensure that the Loomian name is unique
+        modelBuilder.Entity<Loomian>()
+            .HasIndex(e => e.Name)
+            .IsUnique();
+
+        // Ensure that the Loomian ability name is unique
+        modelBuilder.Entity<LoomianAbility>()
+            .HasIndex(e => e.Name)
+            .IsUnique();
+
+        // Ensure that the Loomian item name is unique
+        modelBuilder.Entity<LoomianItem>()
+            .HasIndex(e => e.Name)
+            .IsUnique();
+
+        // Ensure that the Loomian move name is unique
+        modelBuilder.Entity<LoomianMove>()
+            .HasIndex(e => e.Name)
+            .IsUnique();
     }
 
     /// <summary>
