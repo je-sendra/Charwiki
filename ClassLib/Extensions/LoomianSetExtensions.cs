@@ -77,7 +77,7 @@ public static class LoomianSetExtensions
             var allowedModifiers = new List<int>() { -20, -10, 0, 10, 20 };
             if (!allowedModifiers.Contains(currentPersonality.Value))
             {
-                throw new InvalidSetException($"{currentPersonality.Value}% is not a valid personality modifier for {currentPersonality.Stat}.");    
+                throw new InvalidSetException($"{currentPersonality.Value}% is not a valid personality modifier for {currentPersonality.Stat}.");
             }
 
             // Count the number of positive and negative personality traits
@@ -150,5 +150,22 @@ public static class LoomianSetExtensions
         {
             throw new InvalidSetException("There can't be both a very negative and very positive personality trait.");
         }
+    }
+    
+    /// <summary>
+    /// Calculates the average star rating of a Loomian set.
+    /// If there are no ratings, it returns 0.0.
+    /// </summary>
+    /// <param name="loomianSet"></param>
+    /// <returns></returns>
+    public static double GetAverageStarRating(this LoomianSet loomianSet)
+    {
+        if (loomianSet.UserToLoomianSetStarRatings == null || loomianSet.UserToLoomianSetStarRatings.Count == 0)
+        {
+            return 0.0;
+        }
+
+        double totalStars = loomianSet.UserToLoomianSetStarRatings.Sum(rating => rating.StarRating);
+        return totalStars / loomianSet.UserToLoomianSetStarRatings.Count;
     }
 }
