@@ -4,6 +4,7 @@ using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
+using Charwiki.ClassLib.Models.OperationResult;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -87,10 +88,13 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         Guid userGuid = Guid.Parse(userId);
 
         LoomianSet loomianSet = loomianSetDto.ToLoomianSet(userGuid);
-
-        loomianSet.EnsureSetIsValid();
-
         loomianSet.CreationTimestamp = DateTime.UtcNow;
+
+        OperationResult validationResult = loomianSet.ValidateSet();
+        if (validationResult.HasFailed)
+        {
+            return BadRequest(validationResult.UserMessage);
+        }
 
         await charwikiDbContext.LoomianSets.AddAsync(loomianSet);
         await charwikiDbContext.SaveChangesAsync();
