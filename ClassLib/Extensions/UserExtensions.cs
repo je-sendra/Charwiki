@@ -18,7 +18,7 @@ public static class UserExtensions
         {
             Id = user.Id,
             Username = user.Username,
-            Role = user.Role
+            Roles = user.Roles
         };
     }
 }

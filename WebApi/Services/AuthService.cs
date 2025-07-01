@@ -7,6 +7,7 @@ using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -45,7 +46,7 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
             PasswordHash = hashedPassword,
             PasswordSalt = salt,
             PasswordHashVersion = passwordHashVersionHistoryService.GetLatestVersion(),
-            Role = UserRole.User
+            Roles = UserRoles.None
         };
 
         // Save the user
@@ -65,12 +66,19 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
+        List<Claim> claims =
+        [
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
-        };
+        ];
+
+        foreach (UserRoles role in Enum.GetValues(typeof(UserRoles)))
+        {
+            if (role != UserRoles.None && user.Roles.HasFlag(role))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            }            
+        }
 
         var token = new JwtSecurityToken(
             issuer: issuer,
