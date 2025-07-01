@@ -113,7 +113,7 @@ public partial class SubmitSet
 
     private async Task SubmitSetAsync()
     {
-        LoomianSetRequestDto? set = GenerateLoomianSetDto();
+        SubmitLoomianSetRequestDto? set = GenerateLoomianSetDto();
         if (set is null)
         {
             return;
@@ -143,7 +143,7 @@ public partial class SubmitSet
         }
     }
 
-    private LoomianSetRequestDto? GenerateLoomianSetDto()
+    private SubmitLoomianSetRequestDto? GenerateLoomianSetDto()
     {
         if (SelectedLoomianId is null)
         {
@@ -169,7 +169,7 @@ public partial class SubmitSet
             return null;
         }
 
-        return new LoomianSetRequestDto()
+        return new SubmitLoomianSetRequestDto()
         {
             LoomianId = SelectedLoomianId.Value,
             PersonalityModifiers = PersonalityModifiers,
