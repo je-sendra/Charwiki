@@ -238,6 +238,13 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
                 .Include(ls => ls.UserToLoomianSetStarRatings);
         }
 
+        // Include Loomian basic information if the query parameter is set.
+        if (queryParams.IncludeLoomian)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Loomian);
+        }
+
         // Include ability if the query parameter is set.
         if (queryParams.IncludeAbility)
         {
@@ -260,6 +267,13 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
                 .Include(ls => ls.Move2)
                 .Include(ls => ls.Move3)
                 .Include(ls => ls.Move4);
+        }
+
+        if (queryParams.IncludeMetadata)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Creator)
+                .Include(ls => ls.Approver);
         }
 
         // Apply pagination if the query parameters specify it.
