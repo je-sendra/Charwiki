@@ -1,11 +1,11 @@
 using Charwiki.ClassLib.Models;
 
-namespace Charwiki.ClassLib.Dto;
+namespace Charwiki.ClassLib.Dto.Request;
 
 /// <summary>
 /// Represents a Loomian set in the game.
 /// </summary>
-public class LoomianSetDto
+public class LoomianSetRequestDto
 {
     /// <summary>
     /// The unique identifier of the Loomian the set is for.

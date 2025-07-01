@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services.Templates;
 
@@ -26,7 +26,7 @@ public interface ILoomianSetsService : ICrudControllerServiceTemplate<LoomianSet
     /// <param name="loomianSet"></param>
     /// <param name="authToken"></param>
     /// <returns></returns>
-    Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken);
+    Task<LoomianSet> SubmitSetAsync(LoomianSetRequestDto loomianSet, string authToken);
 
     /// <summary>
     /// Rates a Loomian set with a star rating.

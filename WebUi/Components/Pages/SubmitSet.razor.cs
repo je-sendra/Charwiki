@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
@@ -113,7 +113,7 @@ public partial class SubmitSet
 
     private async Task SubmitSetAsync()
     {
-        LoomianSetDto? set = GenerateLoomianSetDto();
+        LoomianSetRequestDto? set = GenerateLoomianSetDto();
         if (set is null)
         {
             return;
@@ -143,7 +143,7 @@ public partial class SubmitSet
         }
     }
 
-    private LoomianSetDto? GenerateLoomianSetDto()
+    private LoomianSetRequestDto? GenerateLoomianSetDto()
     {
         if (SelectedLoomianId is null)
         {
@@ -169,7 +169,7 @@ public partial class SubmitSet
             return null;
         }
 
-        return new LoomianSetDto()
+        return new LoomianSetRequestDto()
         {
             LoomianId = SelectedLoomianId.Value,
             PersonalityModifiers = PersonalityModifiers,

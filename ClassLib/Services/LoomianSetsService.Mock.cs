@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
 
@@ -81,7 +81,7 @@ public class MockLoomianSetsService : ILoomianSetsService
     }
 
     /// <inheritdoc />
-    public Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
+    public Task<LoomianSet> SubmitSetAsync(LoomianSetRequestDto loomianSet, string authToken)
     {
         LoomianSet item = loomianSet.ToLoomianSet(Guid.NewGuid());
         _mockData.Add(item);
