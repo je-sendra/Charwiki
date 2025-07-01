@@ -44,7 +44,7 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
     }
 
     /// <inheritdoc />
-    public async Task<LoomianSet> SubmitSetAsync(LoomianSetRequestDto loomianSet, string authToken)
+    public async Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_apiSettings.Value.BaseUrl}/loomianSets", loomianSet);
