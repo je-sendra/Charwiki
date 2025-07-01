@@ -1,11 +1,11 @@
 using Charwiki.ClassLib.Models;
 
-namespace Charwiki.ClassLib.Dto;
+namespace Charwiki.ClassLib.Dto.Request;
 
 /// <summary>
 /// Represents a Loomian set in the game.
 /// </summary>
-public class LoomianSetDto
+public class SubmitLoomianSetRequestDto
 {
     /// <summary>
     /// The unique identifier of the Loomian the set is for.
@@ -30,12 +30,12 @@ public class LoomianSetDto
     /// <summary>
     /// The training points of the Loomian.
     /// </summary>
-    public required List<ValueToStatAssignment> TrainingPoints { get; set; }
+    public StatsSet? TrainingPoints { get; set; }
 
     /// <summary>
     /// The unique points of the Loomian.
     /// </summary>
-    public required List<ValueToStatAssignment> UniquePoints { get; set; }
+    public StatsSet? UniquePoints { get; set; }
 
     #region Moveset
     /// <summary>

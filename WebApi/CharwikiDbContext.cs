@@ -96,4 +96,9 @@ public class CharwikiDbContext : DbContext
     /// The database table containing the star ratings given by users to Loomian sets.
     /// </summary>
     public DbSet<UserToLoomianSetStarRating> UserToLoomianSetStarRatings { get; set; }
+
+    /// <summary>
+    /// The database table containing all stats sets.
+    /// </summary>
+    public DbSet<StatsSet> StatsSets { get; set; }
 }

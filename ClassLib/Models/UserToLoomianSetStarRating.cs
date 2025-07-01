@@ -13,19 +13,9 @@ public class UserToLoomianSetStarRating
     public required Guid UserId { get; set; }
 
     /// <summary>
-    /// The user who placed the star rating.
-    /// </summary>
-    public virtual User? User { get; set; }
-
-    /// <summary>
     /// The id of the Loomian set that was rated.
     /// </summary>
     public required Guid LoomianSetId { get; set; }
-
-    /// <summary>
-    /// The Loomian set that was rated.
-    /// </summary>
-    public virtual LoomianSet? LoomianSet { get; set; }
 
     /// <summary>
     /// Gets or sets the star rating.
