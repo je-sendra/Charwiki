@@ -26,7 +26,7 @@ public interface ILoomianSetsService : ICrudControllerServiceTemplate<LoomianSet
     /// <param name="loomianSet"></param>
     /// <param name="authToken"></param>
     /// <returns></returns>
-    Task<LoomianSet> SubmitSetAsync(LoomianSetRequestDto loomianSet, string authToken);
+    Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken);
 
     /// <summary>
     /// Rates a Loomian set with a star rating.

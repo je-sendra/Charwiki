@@ -14,7 +14,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The unique identifier of the Loomian the set is for.
     /// </summary>
-    public required Guid LoomianId { get; set; }
+    public Guid LoomianId { get; set; }
 
     /// <summary>
     /// The Loomian of the set.
