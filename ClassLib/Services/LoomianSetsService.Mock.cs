@@ -19,14 +19,7 @@ public class MockLoomianSetsService : ILoomianSetsService
             Id = Guid.NewGuid(),
             LoomianId = Guid.NewGuid(),
             Explanation = "Whatever explanation",
-            PersonalityModifiers = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeleeAttack
-                }
-            },
+            PersonalityModifiers = new StatsSet(),
             LoomianAbilityId = Guid.NewGuid(),
             TrainingPoints = new StatsSet(),
             UniquePoints = new StatsSet(),

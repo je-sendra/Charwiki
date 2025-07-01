@@ -115,12 +115,6 @@ public static class LoomianSetExtensions
     /// <exception cref="InvalidSetException"></exception>
     public static OperationResult ValidatePersonality(this LoomianSet loomianSet)
     {
-        // Variables for later logic checks
-        int totalNegativePersonalityTraits = 0;
-        int totalPositivePersonalityTraits = 0;
-        bool hasVeryNegativePersonalityTrait = false;
-        bool hasVeryPositivePersonalityTrait = false;
-
         if (loomianSet.PersonalityModifiers == null)
         {
             return new OperationResult
@@ -131,41 +125,34 @@ public static class LoomianSetExtensions
             };
         }
 
-        foreach (ValueToStatAssignment currentPersonality in loomianSet.PersonalityModifiers)
+        StatsSet personalityModifiers = loomianSet.PersonalityModifiers;
+
+        int[] allowedModifiers = [-20, -10, 0, 10, 20];
+        if (!allowedModifiers.Contains(personalityModifiers.Health) ||
+            !allowedModifiers.Contains(personalityModifiers.Energy) ||
+            !allowedModifiers.Contains(personalityModifiers.MeleeAttack) ||
+            !allowedModifiers.Contains(personalityModifiers.RangedAttack) ||
+            !allowedModifiers.Contains(personalityModifiers.MeleeDefense) ||
+            !allowedModifiers.Contains(personalityModifiers.RangedDefense) ||
+            !allowedModifiers.Contains(personalityModifiers.Speed))
         {
-            // Personality modifiers must be one of the following % values
-            int[] allowedModifiers = [-20, -10, 0, 10, 20];
-            if (!allowedModifiers.Contains(currentPersonality.Value))
+            string notAllowedMessage = "One or more personality modifiers are not valid.";
+            return new OperationResult
             {
-                string notAllowedMessage = $"{currentPersonality.Value}% is not a valid personality modifier for {currentPersonality.Stat}.";
-                return new OperationResult
-                {
-                    HasFailed = true,
-                    InternalMessage = notAllowedMessage,
-                    UserMessage = notAllowedMessage
-                };
-            }
-
-            // Count the number of positive and negative personality traits
-            if (currentPersonality.Value < 0)
-            {
-                totalNegativePersonalityTraits++;
-            }
-            else if (currentPersonality.Value > 0)
-            {
-                totalPositivePersonalityTraits++;
-            }
-
-            // Check if there are very negative or very positive personality traits
-            if (currentPersonality.Value == -20)
-            {
-                hasVeryNegativePersonalityTrait = true;
-            }
-            else if (currentPersonality.Value == 20)
-            {
-                hasVeryPositivePersonalityTrait = true;
-            }
+                HasFailed = true,
+                InternalMessage = notAllowedMessage,
+                UserMessage = notAllowedMessage
+            };
         }
+
+
+        // Variables for logic checks
+        int totalNegativePersonalityTraits = 0;
+        int totalPositivePersonalityTraits = 0;
+        bool hasVeryNegativePersonalityTrait = false;
+        bool hasVeryPositivePersonalityTrait = false;
+        CountPersonalityValues(personalityModifiers, ref totalNegativePersonalityTraits, ref totalPositivePersonalityTraits);
+        CheckIfPersonalityHasVery(personalityModifiers, ref hasVeryNegativePersonalityTrait, ref hasVeryPositivePersonalityTrait);
 
         // Perform all logic checks to make sure the personality makes sense
         OperationResult logicChecksResult = PerformPersonalityLogicChecks(totalNegativePersonalityTraits, totalPositivePersonalityTraits, hasVeryNegativePersonalityTrait, hasVeryPositivePersonalityTrait);
@@ -178,6 +165,56 @@ public static class LoomianSetExtensions
             InternalMessage = successMessage,
             UserMessage = successMessage
         };
+    }
+
+    /// <summary>
+    /// Counts the number of positive and negative personality traits in a Loomian set's personality modifiers.
+    /// </summary>
+    /// <param name="personalityModifiers"></param>
+    /// <param name="totalNegativePersonalityTraits"></param>
+    /// <param name="totalPositivePersonalityTraits"></param>
+    private static void CountPersonalityValues(StatsSet personalityModifiers, ref int totalNegativePersonalityTraits, ref int totalPositivePersonalityTraits)
+    {
+        // Count the number of positive and negative personality traits
+        if (personalityModifiers.Health < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.Health > 0) totalPositivePersonalityTraits++;
+        if (personalityModifiers.Energy < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.Energy > 0) totalPositivePersonalityTraits++;
+        if (personalityModifiers.MeleeAttack < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.MeleeAttack > 0) totalPositivePersonalityTraits++;
+        if (personalityModifiers.RangedAttack < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.RangedAttack > 0) totalPositivePersonalityTraits++;
+        if (personalityModifiers.MeleeDefense < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.MeleeDefense > 0) totalPositivePersonalityTraits++;
+        if (personalityModifiers.RangedDefense < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.RangedDefense > 0) totalPositivePersonalityTraits++;
+        if (personalityModifiers.Speed < 0) totalNegativePersonalityTraits++;
+        else if (personalityModifiers.Speed > 0) totalPositivePersonalityTraits++;
+    }
+
+    /// <summary>
+    /// Checks if the personality modifiers have very negative or very positive traits.
+    /// </summary>
+    /// <param name="personalityModifiers"></param>
+    /// <param name="hasVeryNegativePersonalityTrait"></param>
+    /// <param name="hasVeryPositivePersonalityTrait"></param>
+    private static void CheckIfPersonalityHasVery(StatsSet personalityModifiers, ref bool hasVeryNegativePersonalityTrait, ref bool hasVeryPositivePersonalityTrait)
+    {
+        // Check if there are very negative or very positive personality traits
+        if (personalityModifiers.Health == -20 || personalityModifiers.Energy == -20 ||
+            personalityModifiers.MeleeAttack == -20 || personalityModifiers.RangedAttack == -20 ||
+            personalityModifiers.MeleeDefense == -20 || personalityModifiers.RangedDefense == -20 ||
+            personalityModifiers.Speed == -20)
+        {
+            hasVeryNegativePersonalityTrait = true;
+        }
+        if (personalityModifiers.Health == 20 || personalityModifiers.Energy == 20 ||
+            personalityModifiers.MeleeAttack == 20 || personalityModifiers.RangedAttack == 20 ||
+            personalityModifiers.MeleeDefense == 20 || personalityModifiers.RangedDefense == 20 ||
+            personalityModifiers.Speed == 20)
+        {
+            hasVeryPositivePersonalityTrait = true;
+        }
     }
 
     /// <summary>

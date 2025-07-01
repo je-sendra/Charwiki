@@ -42,10 +42,16 @@ public class LoomianSet : IDatabaseSaveable
     public virtual LoomianItem? Item { get; set; }
 
     #region Stat Assignments
+
+    /// <summary>
+    /// The unique identifier of the personality modifiers of the Loomian set.
+    /// </summary>
+    public Guid? PersonalityModifiersId { get; set; }
+
     /// <summary>
     /// The personality of the Loomian in the set.
     /// </summary>
-    public IEnumerable<ValueToStatAssignment>? PersonalityModifiers { get; set; }
+    public StatsSet? PersonalityModifiers { get; set; }
 
     /// <summary>
     /// The unique identifier of the training points of the Loomian set.
