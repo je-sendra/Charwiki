@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
 
@@ -28,22 +28,8 @@ public class MockLoomianSetsService : ILoomianSetsService
                 }
             },
             LoomianAbilityId = Guid.NewGuid(),
-            TrainingPoints = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeleeAttack
-                }
-            },
-            UniquePoints = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeleeAttack
-                }
-            },
+            TrainingPoints = new StatsSet(),
+            UniquePoints = new StatsSet(),
             Title = "Test Set",
             GameVersionInfoId = Guid.NewGuid(),
             CreatorId = Guid.NewGuid()
@@ -81,7 +67,7 @@ public class MockLoomianSetsService : ILoomianSetsService
     }
 
     /// <inheritdoc />
-    public Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
+    public Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken)
     {
         LoomianSet item = loomianSet.ToLoomianSet(Guid.NewGuid());
         _mockData.Add(item);

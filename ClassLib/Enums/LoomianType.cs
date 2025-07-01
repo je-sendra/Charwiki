@@ -6,6 +6,13 @@ namespace Charwiki.ClassLib.Enums;
 public enum LoomianType
 {
     /// <summary>
+    /// Represents an unknown Loomian type.
+    /// This is used when the type is not specified or recognized.
+    /// It is typically used as a default value or when the type is not applicable.
+    /// </summary>
+    Unknown,
+
+    /// <summary>
     /// Represents the Fire type.
     /// </summary>
     Fire,

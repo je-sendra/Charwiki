@@ -34,7 +34,7 @@ public class User : IDatabaseSaveable
     /// <summary>
     /// The role of the user.
     /// </summary>
-    public required UserRole Role { get; set; }
+    public required UserRoles Roles { get; set; }
 
     /// <summary>
     /// The set ratings created by the user for Loomian sets.
