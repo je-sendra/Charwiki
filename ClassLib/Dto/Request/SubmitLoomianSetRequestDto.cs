@@ -15,7 +15,7 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The personality modifiers of the Loomian in the set.
     /// </summary>
-    public required List<ValueToStatAssignment> PersonalityModifiers { get; set; }
+    public StatsSet? PersonalityModifiers { get; set; }
 
     /// <summary>
     /// The unique identifier of the ability of the Loomian in the set.
