@@ -81,7 +81,7 @@ public class MockLoomianSetsService : ILoomianSetsService
     }
 
     /// <inheritdoc />
-    public Task<LoomianSet> SubmitSetAsync(LoomianSetRequestDto loomianSet, string authToken)
+    public Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken)
     {
         LoomianSet item = loomianSet.ToLoomianSet(Guid.NewGuid());
         _mockData.Add(item);

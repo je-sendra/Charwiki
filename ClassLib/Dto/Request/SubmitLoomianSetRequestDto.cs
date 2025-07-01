@@ -5,7 +5,7 @@ namespace Charwiki.ClassLib.Dto.Request;
 /// <summary>
 /// Represents a Loomian set in the game.
 /// </summary>
-public class LoomianSetRequestDto
+public class SubmitLoomianSetRequestDto
 {
     /// <summary>
     /// The unique identifier of the Loomian the set is for.
