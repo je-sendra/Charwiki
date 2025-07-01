@@ -69,27 +69,27 @@ public partial class SubmitSet
 
     private List<ValueToStatAssignment> PersonalityModifiers { get; set; } = [
         new ValueToStatAssignment { Stat = LoomianStat.Health, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeeleeAttack, Value = 0 },
+        new ValueToStatAssignment { Stat = LoomianStat.MeleeAttack, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.RangedAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeeleeDefense, Value = 0 },
+        new ValueToStatAssignment { Stat = LoomianStat.MeleeDefense, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.RangedDefense, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.Energy, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.Speed, Value = 0 }
     ];
     private List<ValueToStatAssignment> TrainingPoints { get; set; } = [
         new ValueToStatAssignment { Stat = LoomianStat.Health, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeeleeAttack, Value = 0 },
+        new ValueToStatAssignment { Stat = LoomianStat.MeleeAttack, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.RangedAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeeleeDefense, Value = 0 },
+        new ValueToStatAssignment { Stat = LoomianStat.MeleeDefense, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.RangedDefense, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.Energy, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.Speed, Value = 0 }
     ];
     private List<ValueToStatAssignment> UniquePoints { get; set; } = [
         new ValueToStatAssignment { Stat = LoomianStat.Health, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeeleeAttack, Value = 0 },
+        new ValueToStatAssignment { Stat = LoomianStat.MeleeAttack, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.RangedAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeeleeDefense, Value = 0 },
+        new ValueToStatAssignment { Stat = LoomianStat.MeleeDefense, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.RangedDefense, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.Energy, Value = 0 },
         new ValueToStatAssignment { Stat = LoomianStat.Speed, Value = 0 }

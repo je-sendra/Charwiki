@@ -35,9 +35,9 @@ public partial class SetDisplay
     [
         LoomianStat.Health,
         LoomianStat.Energy,
-        LoomianStat.MeeleeAttack,
+        LoomianStat.MeleeAttack,
         LoomianStat.RangedAttack,
-        LoomianStat.MeeleeDefense,
+        LoomianStat.MeleeDefense,
         LoomianStat.RangedDefense,
         LoomianStat.Speed
     ];
