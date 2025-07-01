@@ -26,7 +26,11 @@ public class AuthController(IAuthService authService) : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await authService.RegisterUserAsync(userRegisterDto);
+        OperationResult registerResult = await authService.RegisterUserAsync(userRegisterDto);
+        if (registerResult.HasFailed)
+        {
+            return BadRequest(registerResult.UserMessage);
+        }
 
         return Ok();
     }
