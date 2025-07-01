@@ -2,6 +2,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Models;
+using Charwiki.ClassLib.Models.OperationResult;
 
 namespace Charwiki.WebApi.Services;
 
@@ -15,18 +16,16 @@ public interface IAuthService
     /// </summary>
     /// <param name="userRegisterDto"></param>
     /// <returns></returns>
-    Task RegisterUserAsync(UserRegisterDto userRegisterDto);
+    Task<OperationResult> RegisterUserAsync(UserRegisterDto userRegisterDto);
 
     /// <summary>
     /// Ensures that the specified login is valid.
     /// </summary>
     /// <remarks>
-    /// Will throw an exception if the login is invalid, and returns the logged in user if the login is valid.
+    /// Will return the user if the login is valid, or an error if it is not.
     /// </remarks>
     /// <param name="userLoginDto"></param>
-    /// <returns></returns>
-    /// <exception cref="AuthenticationException"></exception>
-    Task<User> EnsureValidLoginAsync(UserLoginDto userLoginDto);
+    Task<OperationResultWithReturnData<User?>> ValidateLogin(UserLoginDto userLoginDto);
 
     /// <summary>
     /// Generates a JWT token for the specified user.
@@ -34,11 +33,4 @@ public interface IAuthService
     /// <param name="user"></param>
     /// <returns></returns>
     string GenerateJwtToken(User user);
-
-    /// <summary>
-    /// Gets the user from the specified claims principal.
-    /// </summary>
-    /// <param name="claimsPrincipal"></param>
-    /// <returns></returns>
-    Task<User> GetUserFromClaimsAsync(ClaimsPrincipal claimsPrincipal);
 }
