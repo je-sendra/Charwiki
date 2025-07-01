@@ -16,9 +16,8 @@ namespace Charwiki.WebApi.Controllers;
 /// Controller for Loomian set-related endpoints.
 /// </summary>
 /// <param name="charwikiDbContext"></param>
-/// <param name="authService"></param>
 [Route("[controller]")]
-public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthService authService) : ControllerBase
+public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : ControllerBase
 {
     /// <summary>
     /// Endpoint to get all Loomian sets.
@@ -172,10 +171,12 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
             return NotFound();
         }
 
-        User user = await authService.GetUserFromClaimsAsync(User);
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if(userId == null) return Unauthorized("User ID not found in claims.");
+        Guid userGuid = Guid.Parse(userId);
 
         UserToLoomianSetStarRating? existingRating = await charwikiDbContext.UserToLoomianSetStarRatings
-            .FirstOrDefaultAsync(r => r.UserId == user.Id && r.LoomianSetId == loomianSetId);
+            .FirstOrDefaultAsync(r => r.UserId == userGuid && r.LoomianSetId == loomianSetId);
 
         if (existingRating != null)
         {
@@ -186,7 +187,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
         {
             UserToLoomianSetStarRating newRating = new()
             {
-                UserId = user.Id,
+                UserId = userGuid,
                 LoomianSetId = loomianSetId,
                 StarRating = starRating
             };
