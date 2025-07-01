@@ -24,7 +24,7 @@ public class MockLoomianSetsService : ILoomianSetsService
                 new ValueToStatAssignment
                 {
                     Value = 1,
-                    Stat = LoomianStat.MeeleeAttack
+                    Stat = LoomianStat.MeleeAttack
                 }
             },
             LoomianAbilityId = Guid.NewGuid(),
@@ -33,7 +33,7 @@ public class MockLoomianSetsService : ILoomianSetsService
                 new ValueToStatAssignment
                 {
                     Value = 1,
-                    Stat = LoomianStat.MeeleeAttack
+                    Stat = LoomianStat.MeleeAttack
                 }
             },
             UniquePoints = new List<ValueToStatAssignment>
@@ -41,7 +41,7 @@ public class MockLoomianSetsService : ILoomianSetsService
                 new ValueToStatAssignment
                 {
                     Value = 1,
-                    Stat = LoomianStat.MeeleeAttack
+                    Stat = LoomianStat.MeleeAttack
                 }
             },
             Title = "Test Set",

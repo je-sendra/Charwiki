@@ -18,12 +18,12 @@ public enum LoomianStat
     /// <summary>
     /// The meelee attack stat.
     /// </summary>
-    MeeleeAttack,
+    MeleeAttack,
 
     /// <summary>
-    /// The meelee defense stat.
+    /// The melee defense stat.
     /// </summary>
-    MeeleeDefense,
+    MeleeDefense,
 
     /// <summary>
     /// The ranged attack stat.
