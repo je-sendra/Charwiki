@@ -1,5 +1,6 @@
 using Charwiki.ClassLib.Exceptions;
 using Charwiki.ClassLib.Models;
+using Charwiki.ClassLib.Models.OperationResult;
 
 namespace Charwiki.ClassLib.Extensions;
 
@@ -13,11 +14,24 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static void EnsureSetIsValid(this LoomianSet loomianSet)
+    public static OperationResult ValidateSet(this LoomianSet loomianSet)
     {
-        EnsureTpsAreValid(loomianSet);
-        EnsureUpsAreValid(loomianSet);
-        EnsurePersonalityIsValid(loomianSet);
+        OperationResult tpsValidationResult = ValidateTrainingPoints(loomianSet);
+        if (tpsValidationResult.HasFailed) return tpsValidationResult;
+
+        OperationResult upsValidationResult = ValidateUniquePoints(loomianSet);
+        if (upsValidationResult.HasFailed) return upsValidationResult;
+
+        OperationResult personalityValidationResult = ValidatePersonality(loomianSet);
+        if (personalityValidationResult.HasFailed) return personalityValidationResult;
+
+        string message = $"Loomian set {loomianSet.Title} is valid.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = message,
+            UserMessage = message
+        };
     }
 
     /// <summary>
@@ -25,21 +39,42 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static void EnsureTpsAreValid(this LoomianSet loomianSet)
+    public static OperationResult ValidateTrainingPoints(this LoomianSet loomianSet)
     {
-        var totalTps = 0;
-        foreach (var currentTp in loomianSet.TrainingPoints)
+        int totalTps = 0;
+        foreach (ValueToStatAssignment currentTp in loomianSet.TrainingPoints)
         {
             if (currentTp.Value < 0 || currentTp.Value > 200)
             {
-                throw new InvalidSetException($"Training points for {currentTp.Stat} must be between 0 and 200.");
+                string notBetweenRangeMessage = $"Training points for {currentTp.Stat} must be between 0 and 200.";
+                return new OperationResult
+                {
+                    HasFailed = true,
+                    InternalMessage = notBetweenRangeMessage,
+                    UserMessage = notBetweenRangeMessage
+                };
             }
             totalTps += currentTp.Value;
         }
         if (totalTps > 500)
         {
-            throw new InvalidSetException("Total training points must be less than or equal to 500.");
+            string moreThan500Message = "Total training points must not exceed 500.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = moreThan500Message,
+                UserMessage = moreThan500Message
+            };
         }
+
+        string successMessage = $"Training points for Loomian set {loomianSet.Title} are valid.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
+
     }
 
     /// <summary>
@@ -47,15 +82,29 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static void EnsureUpsAreValid(this LoomianSet loomianSet)
+    public static OperationResult ValidateUniquePoints(this LoomianSet loomianSet)
     {
-        foreach (var currentUp in loomianSet.UniquePoints)
+        foreach (ValueToStatAssignment currentUp in loomianSet.UniquePoints)
         {
             if (currentUp.Value < 0 || currentUp.Value > 40)
             {
-                throw new InvalidSetException($"Unique points for {currentUp.Stat} must be between 0 and 40.");
+                string notBetweenRangeMessage = $"Unique points for {currentUp.Stat} must be between 0 and 40.";
+                return new OperationResult
+                {
+                    HasFailed = true,
+                    InternalMessage = notBetweenRangeMessage,
+                    UserMessage = notBetweenRangeMessage
+                };
             }
         }
+
+        string successMessage = $"Unique points for Loomian set {loomianSet.Title} are valid.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
     }
 
     /// <summary>
@@ -63,21 +112,27 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static void EnsurePersonalityIsValid(this LoomianSet loomianSet)
+    public static OperationResult ValidatePersonality(this LoomianSet loomianSet)
     {
         // Variables for later logic checks
-        var totalNegativePersonalityTraits = 0;
-        var totalPositivePersonalityTraits = 0;
-        var hasVeryNegativePersonalityTrait = false;
-        var hasVeryPositivePersonalityTrait = false;
+        int totalNegativePersonalityTraits = 0;
+        int totalPositivePersonalityTraits = 0;
+        bool hasVeryNegativePersonalityTrait = false;
+        bool hasVeryPositivePersonalityTrait = false;
 
-        foreach (var currentPersonality in loomianSet.PersonalityModifiers)
+        foreach (ValueToStatAssignment currentPersonality in loomianSet.PersonalityModifiers)
         {
             // Personality modifiers must be one of the following % values
-            var allowedModifiers = new List<int>() { -20, -10, 0, 10, 20 };
+            int[] allowedModifiers = [-20, -10, 0, 10, 20];
             if (!allowedModifiers.Contains(currentPersonality.Value))
             {
-                throw new InvalidSetException($"{currentPersonality.Value}% is not a valid personality modifier for {currentPersonality.Stat}.");
+                string notAllowedMessage = $"{currentPersonality.Value}% is not a valid personality modifier for {currentPersonality.Stat}.";
+                return new OperationResult
+                {
+                    HasFailed = true,
+                    InternalMessage = notAllowedMessage,
+                    UserMessage = notAllowedMessage
+                };
             }
 
             // Count the number of positive and negative personality traits
@@ -102,7 +157,16 @@ public static class LoomianSetExtensions
         }
 
         // Perform all logic checks to make sure the personality makes sense
-        PerformPersonalityLogicChecks(totalNegativePersonalityTraits, totalPositivePersonalityTraits, hasVeryNegativePersonalityTrait, hasVeryPositivePersonalityTrait);
+        OperationResult logicChecksResult = PerformPersonalityLogicChecks(totalNegativePersonalityTraits, totalPositivePersonalityTraits, hasVeryNegativePersonalityTrait, hasVeryPositivePersonalityTrait);
+        if (logicChecksResult.HasFailed) return logicChecksResult;
+
+        string successMessage = $"Personality for Loomian set {loomianSet.Title} is valid.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
     }
 
     /// <summary>
@@ -113,59 +177,87 @@ public static class LoomianSetExtensions
     /// <param name="hasVeryNegativePersonalityTrait"></param>
     /// <param name="hasVeryPositivePersonalityTrait"></param>
     /// <exception cref="InvalidSetException"></exception>
-    private static void PerformPersonalityLogicChecks(int totalNegativePersonalityTraits, int totalPositivePersonalityTraits, bool hasVeryNegativePersonalityTrait, bool hasVeryPositivePersonalityTrait)
+    private static OperationResult PerformPersonalityLogicChecks(int totalNegativePersonalityTraits, int totalPositivePersonalityTraits, bool hasVeryNegativePersonalityTrait, bool hasVeryPositivePersonalityTrait)
     {
         // There can't be more than 3 total personality traits
         if (totalNegativePersonalityTraits + totalPositivePersonalityTraits > 3)
         {
-            throw new InvalidSetException("There can't be more than 3 total personality traits.");
+            string moreThanThreeMessage = "There can't be more than 3 total personality traits.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = moreThanThreeMessage,
+                UserMessage = moreThanThreeMessage
+            };
         }
 
         // There can't be more than 2 negative personality traits
         if (totalNegativePersonalityTraits > 2)
         {
-            throw new InvalidSetException("There can't be more than 2 negative personality traits.");
+            string moreThanTwoNegativeMessage = "There can't be more than 2 negative personality traits.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = moreThanTwoNegativeMessage,
+                UserMessage = moreThanTwoNegativeMessage
+            };
         }
 
         // There can't be more than 2 positive personality traits
         if (totalPositivePersonalityTraits > 2)
         {
-            throw new InvalidSetException("There can't be more than 2 positive personality traits.");
+            string moreThanTwoPositiveMessage = "There can't be more than 2 positive personality traits.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = moreThanTwoPositiveMessage,
+                UserMessage = moreThanTwoPositiveMessage
+            };
         }
 
         // If there is a very negative personality trait, there must be 2 positive personality traits
         if (hasVeryNegativePersonalityTrait && totalPositivePersonalityTraits != 2)
         {
-            throw new InvalidSetException("If there is a very negative personality trait, there must be 2 positive personality traits.");
+            string veryNegativeMessage = "If there is a very negative personality trait, there must be 2 positive personality traits.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = veryNegativeMessage,
+                UserMessage = veryNegativeMessage
+            };
         }
 
         // If there is a very positive personality trait, there must be 2 negative personality traits
         if (hasVeryPositivePersonalityTrait && totalNegativePersonalityTraits != 2)
         {
-            throw new InvalidSetException("If there is a very positive personality trait, there must be 2 negative personality traits.");
+            string veryPositiveMessage = "If there is a very positive personality trait, there must be 2 negative personality traits.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = veryPositiveMessage,
+                UserMessage = veryPositiveMessage
+            };
         }
 
         // There can't be both a very negative and very positive personality trait
         if (hasVeryNegativePersonalityTrait && hasVeryPositivePersonalityTrait)
         {
-            throw new InvalidSetException("There can't be both a very negative and very positive personality trait.");
-        }
-    }
-    
-    /// <summary>
-    /// Calculates the average star rating of a Loomian set.
-    /// If there are no ratings, it returns 0.0.
-    /// </summary>
-    /// <param name="loomianSet"></param>
-    /// <returns></returns>
-    public static double GetAverageStarRating(this LoomianSet loomianSet)
-    {
-        if (loomianSet.UserToLoomianSetStarRatings == null || loomianSet.UserToLoomianSetStarRatings.Count == 0)
-        {
-            return 0.0;
+            string bothVeryMessage = "There can't be both a very negative and very positive personality trait.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = bothVeryMessage,
+                UserMessage = bothVeryMessage
+            };
         }
 
-        double totalStars = loomianSet.UserToLoomianSetStarRatings.Sum(rating => rating.StarRating);
-        return totalStars / loomianSet.UserToLoomianSetStarRatings.Count;
+        // If all checks pass, return a success message
+        string successMessage = "Personality logic checks passed.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
     }
 }
