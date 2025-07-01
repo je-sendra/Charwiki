@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Services;
@@ -100,7 +100,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// <returns></returns>
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Submit([FromBody] LoomianSetDto loomianSetDto)
+    public async Task<IActionResult> Submit([FromBody] LoomianSetRequestDto loomianSetDto)
     {
         if (!ModelState.IsValid)
         {

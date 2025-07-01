@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services.Templates;
 using Microsoft.Extensions.Options;
@@ -44,7 +44,7 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
     }
 
     /// <inheritdoc />
-    public async Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
+    public async Task<LoomianSet> SubmitSetAsync(LoomianSetRequestDto loomianSet, string authToken)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_apiSettings.Value.BaseUrl}/loomianSets", loomianSet);
