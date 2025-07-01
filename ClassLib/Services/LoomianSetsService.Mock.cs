@@ -28,22 +28,8 @@ public class MockLoomianSetsService : ILoomianSetsService
                 }
             },
             LoomianAbilityId = Guid.NewGuid(),
-            TrainingPoints = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeleeAttack
-                }
-            },
-            UniquePoints = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeleeAttack
-                }
-            },
+            TrainingPoints = new StatsSet(),
+            UniquePoints = new StatsSet(),
             Title = "Test Set",
             GameVersionInfoId = Guid.NewGuid(),
             CreatorId = Guid.NewGuid()

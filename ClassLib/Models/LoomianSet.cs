@@ -22,11 +22,6 @@ public class LoomianSet : IDatabaseSaveable
     public virtual Loomian? Loomian { get; set; }
 
     /// <summary>
-    /// The personality of the Loomian in the set.
-    /// </summary>
-    public required List<ValueToStatAssignment> PersonalityModifiers { get; set; }
-
-    /// <summary>
     /// The unique identifier of the ability of the Loomian in the set.
     /// </summary>
     public required Guid LoomianAbilityId { get; set; }
@@ -46,15 +41,32 @@ public class LoomianSet : IDatabaseSaveable
     /// </summary>
     public virtual LoomianItem? Item { get; set; }
 
+    #region Stat Assignments
     /// <summary>
-    /// The training points of the Loomian.
+    /// The personality of the Loomian in the set.
     /// </summary>
-    public required List<ValueToStatAssignment> TrainingPoints { get; set; }
+    public IEnumerable<ValueToStatAssignment>? PersonalityModifiers { get; set; }
 
     /// <summary>
-    /// The unique points of the Loomian.
+    /// The unique identifier of the training points of the Loomian set.
     /// </summary>
-    public required List<ValueToStatAssignment> UniquePoints { get; set; }
+    public Guid? TrainingPointsId { get; set; }
+
+    /// <summary>
+    /// The training points of the Loomian set.
+    /// </summary>
+    public virtual StatsSet? TrainingPoints { get; set; }
+
+    /// <summary>
+    /// The unique identifier of the unique points of the Loomian set.
+    /// </summary>
+    public Guid? UniquePointsId { get; set; }
+
+    /// <summary>
+    /// The unique points of the Loomian set.
+    /// </summary>
+    public virtual StatsSet? UniquePoints { get; set; }
+    #endregion
 
     #region Moveset
     /// <summary>

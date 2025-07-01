@@ -41,21 +41,29 @@ public static class LoomianSetExtensions
     /// <exception cref="InvalidSetException"></exception>
     public static OperationResult ValidateTrainingPoints(this LoomianSet loomianSet)
     {
-        int totalTps = 0;
-        foreach (ValueToStatAssignment currentTp in loomianSet.TrainingPoints)
+        if (loomianSet.TrainingPoints == null)
         {
-            if (currentTp.Value < 0 || currentTp.Value > 200)
+            return new OperationResult
             {
-                string notBetweenRangeMessage = $"Training points for {currentTp.Stat} must be between 0 and 200.";
-                return new OperationResult
-                {
-                    HasFailed = true,
-                    InternalMessage = notBetweenRangeMessage,
-                    UserMessage = notBetweenRangeMessage
-                };
-            }
-            totalTps += currentTp.Value;
+                HasFailed = true,
+                InternalMessage = "Training points cannot be null.",
+                UserMessage = "Training points have not been sent to the server."
+            };
         }
+
+        StatsSet trainingPoints = loomianSet.TrainingPoints;
+
+        // Check if each stat has valid training points
+        OperationResult statsValidation = ValidateAllStatsInRange(trainingPoints, 0, 200, "Training Points");
+        if (statsValidation.HasFailed) return statsValidation;
+
+        int totalTps = trainingPoints.Health +
+                       trainingPoints.Energy +
+                       trainingPoints.MeleeAttack +
+                       trainingPoints.RangedAttack +
+                       trainingPoints.MeleeDefense +
+                       trainingPoints.RangedDefense +
+                       trainingPoints.Speed;
         if (totalTps > 500)
         {
             string moreThan500Message = "Total training points must not exceed 500.";
@@ -84,27 +92,20 @@ public static class LoomianSetExtensions
     /// <exception cref="InvalidSetException"></exception>
     public static OperationResult ValidateUniquePoints(this LoomianSet loomianSet)
     {
-        foreach (ValueToStatAssignment currentUp in loomianSet.UniquePoints)
+        if (loomianSet.UniquePoints == null)
         {
-            if (currentUp.Value < 0 || currentUp.Value > 40)
+            return new OperationResult
             {
-                string notBetweenRangeMessage = $"Unique points for {currentUp.Stat} must be between 0 and 40.";
-                return new OperationResult
-                {
-                    HasFailed = true,
-                    InternalMessage = notBetweenRangeMessage,
-                    UserMessage = notBetweenRangeMessage
-                };
-            }
+                HasFailed = true,
+                InternalMessage = "Unique points cannot be null.",
+                UserMessage = "Unique points have not been sent to the server."
+            };
         }
+        StatsSet uniquePoints = loomianSet.UniquePoints;
 
-        string successMessage = $"Unique points for Loomian set {loomianSet.Title} are valid.";
-        return new OperationResult
-        {
-            HasFailed = false,
-            InternalMessage = successMessage,
-            UserMessage = successMessage
-        };
+        // Check if each stat has valid unique points
+        OperationResult statsValidation = ValidateAllStatsInRange(uniquePoints, 0, 200, "Unique Points");
+        return statsValidation;
     }
 
     /// <summary>
@@ -119,6 +120,16 @@ public static class LoomianSetExtensions
         int totalPositivePersonalityTraits = 0;
         bool hasVeryNegativePersonalityTrait = false;
         bool hasVeryPositivePersonalityTrait = false;
+
+        if (loomianSet.PersonalityModifiers == null)
+        {
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = "Personality modifiers cannot be null.",
+                UserMessage = "Personality modifiers have not been sent to the server."
+            };
+        }
 
         foreach (ValueToStatAssignment currentPersonality in loomianSet.PersonalityModifiers)
         {
@@ -161,6 +172,71 @@ public static class LoomianSetExtensions
         if (logicChecksResult.HasFailed) return logicChecksResult;
 
         string successMessage = $"Personality for Loomian set {loomianSet.Title} is valid.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
+    }
+
+    /// <summary>
+    /// Validates that all stats in a StatsSet are within a specified range.
+    /// </summary>
+    /// <param name="stats"></param>
+    /// <param name="minValue"></param>
+    /// <param name="maxValue"></param>
+    /// <param name="statType"></param>
+    /// <returns></returns>
+    private static OperationResult ValidateAllStatsInRange(StatsSet stats, int minValue, int maxValue, string statType)
+    {
+        OperationResult hpValidation = ValidateStatInRange(stats.Health, "Health", minValue, maxValue, statType);
+        if (hpValidation.HasFailed) return hpValidation;
+        OperationResult energyValidation = ValidateStatInRange(stats.Energy, "Energy", minValue, maxValue, statType);
+        if (energyValidation.HasFailed) return energyValidation;
+        OperationResult meleeAttackValidation = ValidateStatInRange(stats.MeleeAttack, "Melee Attack", minValue, maxValue, statType);
+        if (meleeAttackValidation.HasFailed) return meleeAttackValidation;
+        OperationResult rangedAttackValidation = ValidateStatInRange(stats.RangedAttack, "Ranged Attack", minValue, maxValue, statType);
+        if (rangedAttackValidation.HasFailed) return rangedAttackValidation;
+        OperationResult meleeDefenseValidation = ValidateStatInRange(stats.MeleeDefense, "Melee Defense", minValue, maxValue, statType);
+        if (meleeDefenseValidation.HasFailed) return meleeDefenseValidation;
+        OperationResult rangedDefenseValidation = ValidateStatInRange(stats.RangedDefense, "Ranged Defense", minValue, maxValue, statType);
+        if (rangedDefenseValidation.HasFailed) return rangedDefenseValidation;
+        OperationResult speedValidation = ValidateStatInRange(stats.Speed, "Speed", minValue, maxValue, statType);
+        if (speedValidation.HasFailed) return speedValidation;
+
+        string successMessage = $"{statType} are valid.";
+        return new OperationResult
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
+    }
+
+    /// <summary>
+    /// Validates that a stat is within a specified range.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="statName"></param>
+    /// <param name="minValue"></param>
+    /// <param name="maxValue"></param>
+    /// <param name="statType"></param>
+    /// <returns></returns>
+    private static OperationResult ValidateStatInRange(int value, string statName, int minValue, int maxValue, string statType)
+    {
+        if (value < minValue || value > maxValue)
+        {
+            string notBetweenRangeMessage = $"T{statType} for {statName} must be between {minValue} and {maxValue}.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = notBetweenRangeMessage,
+                UserMessage = notBetweenRangeMessage
+            };
+        }
+
+        string successMessage = $"{statType} for {statName} are valid.";
         return new OperationResult
         {
             HasFailed = false,
