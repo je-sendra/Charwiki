@@ -30,12 +30,12 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The training points of the Loomian.
     /// </summary>
-    public required List<ValueToStatAssignment> TrainingPoints { get; set; }
+    public StatsSet? TrainingPoints { get; set; }
 
     /// <summary>
     /// The unique points of the Loomian.
     /// </summary>
-    public required List<ValueToStatAssignment> UniquePoints { get; set; }
+    public StatsSet? UniquePoints { get; set; }
 
     #region Moveset
     /// <summary>
