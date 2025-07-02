@@ -1,6 +1,6 @@
+using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
-using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Services.Templates;
+using Charwiki.ClassLib.Dto.Response;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -10,6 +10,17 @@ namespace Charwiki.ClassLib.Services;
 /// </summary>
 /// <param name="httpClient"></param>
 /// <param name="apiSettings"></param>
-public class LoomianMovesService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : CrudControllerServiceTemplate<LoomianMove>(httpClient, apiSettings, "loomianMoves"), ILoomianMovesService
+public class LoomianMovesService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : ILoomianMovesService
 {
+    /// <inheritdoc/>
+    public async Task<IEnumerable<LoomianMoveResponseDto>> GetAllAsync()
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomianMoves");
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+        }
+        IEnumerable<LoomianMoveResponseDto>? moves = await response.Content.ReadFromJsonAsync<IEnumerable<LoomianMoveResponseDto>>();
+        return moves ?? [];
+    }
 }

@@ -1,12 +1,15 @@
-using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Services.Templates;
+using Charwiki.ClassLib.Dto.Response;
 
 namespace Charwiki.ClassLib.Services;
 
 /// <summary>
 /// Represents a service for Loomian item-related operations.
 /// </summary>
-public interface ILoomianItemsService : ICrudControllerServiceTemplate<LoomianItem>
+public interface ILoomianItemsService
 {
-    
+    /// <summary>
+    /// Gets all Loomian items.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation, containing a collection of Loomian items.</returns>
+    Task<IEnumerable<LoomianItemResponseDto>> GetAllAsync();
 }
