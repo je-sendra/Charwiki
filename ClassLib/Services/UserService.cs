@@ -18,8 +18,11 @@ public class UserService(HttpClient httpClient, IOptions<ApiSettings> apiSetting
     /// <inheritdoc/>
     public async Task<string> LoginAsync(UserLoginDto userLoginDto)
     {
-        var response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/{_controllerRoute}/login", userLoginDto);
-        response.EnsureSuccessStatusCode();
+        HttpResponseMessage? response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/auth/login", userLoginDto);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+        }
         var token = await response.Content.ReadAsStringAsync();
         return token;
     }
@@ -27,8 +30,11 @@ public class UserService(HttpClient httpClient, IOptions<ApiSettings> apiSetting
     /// <inheritdoc/>
     public async Task RegisterAsync(UserRegisterDto userRegisterDto)
     {
-        var response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/{_controllerRoute}/register", userRegisterDto);
-        response.EnsureSuccessStatusCode();
+        var response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/auth/register", userRegisterDto);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+        }
     }
 
     /// <inheritdoc/>

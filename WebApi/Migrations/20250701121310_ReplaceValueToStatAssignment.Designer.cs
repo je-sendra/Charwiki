@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Charwiki.WebApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Charwiki.WebApi.Migrations
 {
     [DbContext(typeof(CharwikiDbContext))]
-    partial class CharwikiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250701121310_ReplaceValueToStatAssignment")]
+    partial class ReplaceValueToStatAssignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,13 +180,6 @@ namespace Charwiki.WebApi.Migrations
                     b.Property<string>("OtherOptions")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("PersonalityModifiersId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Strategy")
                         .HasColumnType("text");
 
@@ -224,8 +220,6 @@ namespace Charwiki.WebApi.Migrations
                     b.HasIndex("Move3Id");
 
                     b.HasIndex("Move4Id");
-
-                    b.HasIndex("PersonalityModifiersId");
 
                     b.HasIndex("TrainingPointsId");
 
@@ -314,6 +308,28 @@ namespace Charwiki.WebApi.Migrations
                     b.ToTable("UserToLoomianSetStarRatings");
                 });
 
+            modelBuilder.Entity("Charwiki.ClassLib.Models.ValueToStatAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LoomianSetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Stat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoomianSetId");
+
+                    b.ToTable("ValueToStatAssignments");
+                });
+
             modelBuilder.Entity("Charwiki.ClassLib.Models.LoomianSet", b =>
                 {
                     b.HasOne("Charwiki.ClassLib.Models.User", "Approver")
@@ -364,10 +380,6 @@ namespace Charwiki.WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("Move4Id");
 
-                    b.HasOne("Charwiki.ClassLib.Models.StatsSet", "PersonalityModifiers")
-                        .WithMany()
-                        .HasForeignKey("PersonalityModifiersId");
-
                     b.HasOne("Charwiki.ClassLib.Models.StatsSet", "TrainingPoints")
                         .WithMany()
                         .HasForeignKey("TrainingPointsId");
@@ -396,8 +408,6 @@ namespace Charwiki.WebApi.Migrations
 
                     b.Navigation("Move4");
 
-                    b.Navigation("PersonalityModifiers");
-
                     b.Navigation("TrainingPoints");
 
                     b.Navigation("UniquePoints");
@@ -418,8 +428,17 @@ namespace Charwiki.WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Charwiki.ClassLib.Models.ValueToStatAssignment", b =>
+                {
+                    b.HasOne("Charwiki.ClassLib.Models.LoomianSet", null)
+                        .WithMany("PersonalityModifiers")
+                        .HasForeignKey("LoomianSetId");
+                });
+
             modelBuilder.Entity("Charwiki.ClassLib.Models.LoomianSet", b =>
                 {
+                    b.Navigation("PersonalityModifiers");
+
                     b.Navigation("UserToLoomianSetStarRatings");
                 });
 

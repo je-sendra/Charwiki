@@ -1,164 +1,382 @@
 @page "/submit-set"
 
-<h1>Submit a new Loomian Set</h1>
+@if (LoomianSetDto == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="container">
 
-<input type="text" class="form-control mb-3" @bind="Title" placeholder="Enter a title for your Loomian set">
+        <h1>Submit a new Loomian Set</h1>
+        <p class="text-muted">The submitted set will be displayed to other users once it gets approved by a moderator.</p>
 
-<select class="form-select mb-3" @bind="SelectedLoomianId">
-    <option value="" selected>Select a Loomian</option>
-    @foreach (Loomian currentLoomian in Loomians)
-    {
-        <option value="@currentLoomian.Id">@currentLoomian.Name</option>
-    }
-</select>
+        <EditForm Model="LoomianSetDto" OnValidSubmit="SubmitSetAsync" FormName="SubmitLoomianSetForm">
 
-<select class="form-select mb-3" @bind="SelectedAbilityId">
-    <option value="" selected>Select an Ability</option>
-    @foreach (LoomianAbility currentAbility in Abilities)
-    {
-        <option value="@currentAbility.Id">@currentAbility.Name</option>
-    }
-</select>
+            <DataAnnotationsValidator />
 
-<select class="form-select mb-3" @bind="SelectedItemId">
-    <option value="" selected>Select an Item (optional)</option>
-    @foreach (LoomianItem currentItem in Items)
-    {
-        <option value="@currentItem.Id">@currentItem.Name</option>
-    }
-</select>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="title" class="form-label">Title</label>
+                    <InputText class="form-control mb-3" id="title" @bind-Value="LoomianSetDto.Title"
+                        placeholder="Enter a title for your Loomian set" maxlength="15" />
+                </div>
+            </div>
 
-<select class="form-select mb-3" @bind="SelectedGameVersionId">
-    <option value="" selected>Select Game Version</option>
-    @foreach (GameVersionInfo currentGameVersion in GameVersions)
-    {
-        <option value="@currentGameVersion.Id">@currentGameVersion.VersionCode - @currentGameVersion.VersionTitle</option>
-    }
-</select>
 
-<h2>Stat modifiers</h2>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <h3>Training Points (TPs)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Stat</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (ValueToStatAssignment stat in TrainingPoints)
-                    {
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="loomian" class="form-label">Loomian</label>
+                    <InputSelect class="form-select mb-3" id="loomian" @bind-Value="LoomianSetDto.LoomianId">
+                        <option value="" selected>Select a Loomian</option>
+                        @foreach (Loomian currentLoomian in Loomians)
+                        {
+                            <option value="@currentLoomian.Id">@currentLoomian.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ability">Ability</label>
+                    <InputSelect class="form-select mb-3" id="ability" @bind-Value="LoomianSetDto.AbilityId">
+                        <option value="" selected>Select an Ability</option>
+                        @foreach (LoomianAbility currentAbility in Abilities)
+                        {
+                            <option value="@currentAbility.Id">@currentAbility.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="item">Item</label>
+                    <InputSelect class="form-select mb-3" id="item" @bind-Value="LoomianSetDto.ItemId">
+                        <option value="" selected>Select an Item (optional)</option>
+                        @foreach (LoomianItem currentItem in Items)
+                        {
+                            <option value="@currentItem.Id">@currentItem.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="gameVersion">Game Version</label>
+                    <InputSelect class="form-select mb-3" id="gameVersion" @bind-Value="LoomianSetDto.GameVersionInfoId">
+                        <option value="" selected>Select a Game Version</option>
+                        @foreach (GameVersionInfo currentGameVersion in GameVersions)
+                        {
+                            <option value="@currentGameVersion.Id">@currentGameVersion.VersionCode -
+                                @currentGameVersion.VersionTitle
+                            </option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+
+            <h2>Moves</h2>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="move1" class="form-label">Move 1</label>
+                        <InputSelect class="form-select mb-3" id="move1" @bind-Value="LoomianSetDto.Move1Id">
+                            <option value="" selected>Select Move 1 (optional)</option>
+                            @foreach (LoomianMove currentMove in Moves)
+                            {
+                                <option value="@currentMove.Id">@currentMove.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="move2" class="form-label">Move 2</label>
+                        <InputSelect class="form-select mb-3" id="move2" @bind-Value="LoomianSetDto.Move2Id">
+                            <option value="" selected>Select Move 2 (optional)</option>
+                            @foreach (LoomianMove currentMove in Moves)
+                            {
+                                <option value="@currentMove.Id">@currentMove.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="move3" class="form-label">Move 3</label>
+                        <InputSelect class="form-select mb-3" id="move3" @bind-Value="LoomianSetDto.Move3Id">
+                            <option value="" selected>Select Move 3 (optional)</option>
+                            @foreach (LoomianMove currentMove in Moves)
+                            {
+                                <option value="@currentMove.Id">@currentMove.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="move4" class="form-label">Move 4</label>
+                        <InputSelect class="form-select mb-3" id="move4" @bind-Value="LoomianSetDto.Move4Id">
+                            <option value="" selected>Select Move 4 (optional)</option>
+                            @foreach (LoomianMove currentMove in Moves)
+                            {
+                                <option value="@currentMove.Id">@currentMove.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Stats</h2>
+
+            @if (LoomianSetDto.TrainingPoints == null || LoomianSetDto.UniquePoints == null ||
+                    LoomianSetDto.PersonalityModifiers == null)
+            {
+                <p class="text-muted">Loading...</p>
+            }
+            else
+            {
+                <table class="table table-bordered mb-3 text-center align-middle">
+                    <thead>
                         <tr>
-                            <td>@stat.Stat.ToString()</td>
-                            <td><input type="number" class="form-control" @bind="stat.Value" min="0" max="200" /></td>
+                            <th>Stat</th>
+                            <th>Training Points</th>
+                            <th>Unique Points</th>
+                            <th>Personality Modifier</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-4">
-            <h3>Unique Points (UPs)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Stat</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (ValueToStatAssignment stat in UniquePoints)
-                    {
+                    </thead>
+                    <tbody>
                         <tr>
-                            <td>@stat.Stat.ToString()</td>
-                            <td><input type="number" class="form-control" @bind="stat.Value" min="0" max="200" /></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-4">
-            <h3>Personality Modifiers</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Stat</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (ValueToStatAssignment stat in PersonalityModifiers)
-                    {
-                        <tr>
-                            <td>@stat.Stat.ToString()</td>
+                            <td>Health</td>
                             <td>
-                                <select class="form-select" @bind="stat.Value">
-                                    <option value="0" selected>None</option>
-                                    <option value="10">Positive (+10%)</option>
-                                    <option value="-10">Negative (-10%)</option>
-                                    <option value="20">Very Positive (+20%)</option>
-                                    <option value="-20">Very Negative (-20%)</option>
-                                </select>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Health"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Health"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select"
+                                    @bind-Value="LoomianSetDto.PersonalityModifiers.Health">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option>
+                                        }
+                                    }
+                                </InputSelect>
                             </td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+
+
+                        <tr>
+                            <td>Energy</td>
+
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Energy"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Energy"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.Energy">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option> 
+                                        }
+                                    }
+                                </InputSelect>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Melee Attack</td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.MeleeAttack"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.MeleeAttack"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select"
+                                    @bind-Value="LoomianSetDto.PersonalityModifiers.MeleeAttack">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Melee Defense</td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.MeleeDefense"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.MeleeDefense"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select"
+                                    @bind-Value="LoomianSetDto.PersonalityModifiers.MeleeDefense">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Ranged Attack</td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.RangedAttack"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.RangedAttack"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select"
+                                    @bind-Value="LoomianSetDto.PersonalityModifiers.RangedAttack">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Ranged Defense</td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.RangedDefense"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.RangedDefense"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select"
+                                    @bind-Value="LoomianSetDto.PersonalityModifiers.RangedDefense">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Speed</td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Speed"
+                                    min="0" max="200" />
+                            </td>
+                            <td>
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Speed"
+                                    min="0" max="40" />
+                            </td>
+                            <td>
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.Speed">
+                                    <option value="0" selected>-</option>
+                                    @foreach (int currentModifier in AllowedPersonalityModifiers)
+                                    {
+                                        if (currentModifier > 0)
+                                        {
+                                            <option value="@currentModifier">+@currentModifier%</option>
+                                        }
+                                        else if (currentModifier < 0)
+                                        {
+                                            <option value="@currentModifier">@currentModifier%</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+            }
+
+            <h2>Descriptive Fields</h2>
+
+            <label for="shortDescription" class="form-label">Short Description</label>
+            <InputText class="form-control mb-3" id="shortDescription" @bind-Value="LoomianSetDto.ShortDescription"
+                placeholder="Enter a short description for your Loomian set" maxlength="50" />
+
+            <label for="explanation" class="form-label">Explanation (optional)</label>
+            <InputTextArea class="form-control mb-3" id="explanation" @bind-Value="LoomianSetDto.Explanation"
+                placeholder="Enter an explanation for your Loomian set (optional)" rows="4" maxlength="500" />
+
+            <label for="strategy" class="form-label">Strategy (optional)</label>
+            <InputTextArea class="form-control mb-3" id="strategy" @bind-Value="LoomianSetDto.Strategy"
+                placeholder="Enter a strategy for your Loomian set (optional)" rows="4" maxlength="500" />
+
+            <label for="otherOptions" class="form-label">Other Options (optional)</label>
+            <InputTextArea class="form-control mb-3" id="otherOptions" @bind-Value="LoomianSetDto.OtherOptions"
+                placeholder="Enter other options for your Loomian set (optional)" rows="4" maxlength="500" />
+
+            <p class="text-danger">@ErrorMessage</p>
+
+            <ValidationSummary />
+
+            <button type="submit" class="btn btn-primary mb-4">Submit Loomian Set</button>
+        </EditForm>
     </div>
-</div>
-
-<h2>Moves</h2>
-
-<select class="form-select mb-3" @bind="SelectedMove1Id">
-    <option value="" selected>Select Move 1 (optional)</option>
-    @foreach (LoomianMove currentMove in Moves)
-    {
-        <option value="@currentMove.Id">@currentMove.Name</option>
-    }
-</select>
-
-<select class="form-select mb-3" @bind="SelectedMove2Id">
-    <option value="" selected>Select Move 2 (optional)</option>
-    @foreach (LoomianMove currentMove in Moves)
-    {
-        <option value="@currentMove.Id">@currentMove.Name</option>
-    }
-</select>
-
-<select class="form-select mb-3" @bind="SelectedMove3Id">
-    <option value="" selected>Select Move 3 (optional)</option>
-    @foreach (LoomianMove currentMove in Moves)
-    {
-        <option value="@currentMove.Id">@currentMove.Name</option>
-    }
-</select>
-
-<select class="form-select mb-3" @bind="SelectedMove4Id">
-    <option value="" selected>Select Move 4 (optional)
-
-    </option>
-    @foreach (LoomianMove currentMove in Moves)
-    {
-        <option value="@currentMove.Id">@currentMove.Name</option>
-    }
-</select>
-
-<h2>Descriptive Fields</h2>
-<h3>Explanation (optional)</h3>
-<textarea class="form-control mb-3" rows="7" @bind="Explanation"
-    placeholder="Enter an explanation for your Loomian set (optional)" />
-
-<h3>Strategy (optional)</h3>
-<textarea class="form-control mb-3" rows="7" @bind="Strategy"
-    placeholder="Enter a strategy for your Loomian set (optional)" />
-
-<h3>Other Options (optional)</h3>
-<textarea class="form-control mb-3" rows="7" @bind="OtherOptions"
-    placeholder="Enter other options for your Loomian set (optional)" />
-
-<p class="text-danger">@ErrorMessage</p>
-
-<button class="btn btn-primary mb-3" @onclick="SubmitSetAsync">Submit Set</button>
+}

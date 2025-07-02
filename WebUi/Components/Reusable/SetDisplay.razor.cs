@@ -1,92 +1,95 @@
+using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Enums;
-using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services;
+using Charwiki.WebUi.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace Charwiki.WebUi.Components.Reusable;
 
+/// <summary>
+/// Represents a component for displaying a Loomian set.
+/// </summary>
 public partial class SetDisplay
 {
+    /// <summary>
+    /// The Loomian set to display.
+    /// </summary>
     [Parameter]
-    public required LoomianSet LoomianSet { get; set; }
+    public required LoomianSetResponseDto LoomianSet { get; set; }
 
     [Inject]
-    private ILoomiansService LoomiansService { get; set; } = default!;
+    private UserTokenService UserTokenService { get; set; } = default!;
+
     [Inject]
-    private ILoomianAbilitiesService LoomianAbilitiesService { get; set; } = default!;
+    private ILoomianSetsService LoomianSetsService { get; set; } = default!;
+
     [Inject]
-    private ILoomianItemsService LoomianItemsService { get; set; } = default!;
-    [Inject]
-    private ILoomianMovesService LoomianMovesService { get; set; } = default!;
-    [Inject]
-    private IUserService UsersService { get; set; } = default!;
+    private NavigationManager NavigationManager { get; set; } = default!;
 
     private readonly List<LoomianStat> DisplayedStats =
     [
         LoomianStat.Health,
-        LoomianStat.MeeleeAttack,
+        LoomianStat.Energy,
+        LoomianStat.MeleeAttack,
         LoomianStat.RangedAttack,
-        LoomianStat.MeeleeDefense,
+        LoomianStat.MeleeDefense,
         LoomianStat.RangedDefense,
         LoomianStat.Speed
     ];
 
+    private bool IsAuthenticated = false;
+
+    private int StarRating { get; set; }
+
+    private int PreviousStarRating = -1;
 
     /// <inheritdoc/>
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // If the LoomianSet Loomian is null, fetch it from the service
-        if (LoomianSet.Loomian == null)
+        if (!firstRender)
         {
-            LoomianSet.Loomian = await LoomiansService.GetByIdAsync(LoomianSet.LoomianId);
+            return;
         }
+        await UpdatePreviousRating();
+        StateHasChanged();
+    }
 
-        // If the LoomianSet Item is null and the Loomian is holding an item, fetch it from the service
-        if (LoomianSet.Item == null && LoomianSet.ItemId != null)
-        {
-            LoomianSet.Item = await LoomianItemsService.GetByIdAsync((Guid)LoomianSet.ItemId);
-        }
+    private async Task UpdatePreviousRating(bool forceWithNoRatings = false)
+    {
+        IsAuthenticated = await UserTokenService.IsAuthenticatedAsync();
 
-        // If the LoomianSet Ability is null, fetch it from the service
-        if (LoomianSet.Ability == null)
+        // If the user is authenticated, check if they have rated the Loomian set
+        if (IsAuthenticated && LoomianSet.RatingsCount != 0 || forceWithNoRatings)
         {
-            LoomianSet.Ability = await LoomianAbilitiesService.GetByIdAsync(LoomianSet.LoomianAbilityId);
+            string? token = await UserTokenService.GetAuthTokenAsync();
+            if (!string.IsNullOrEmpty(token))
+            {
+                StarRatingResponseDto? myRating = await LoomianSetsService.GetMyRatingAsync(LoomianSet.Id, token);
+                if (myRating != null)
+                {
+                    PreviousStarRating = myRating.Stars;
+                    Console.WriteLine($"Previous rating for set {LoomianSet.Id}: {PreviousStarRating}");
+                }
+            }
         }
+    }
 
-        // If the LoomianSet Move1 is null and the Loomian has a Move1, fetch it from the service
-        if (LoomianSet.Move1 == null && LoomianSet.Move1Id != null)
-        {
-            LoomianSet.Move1 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move1Id);
-        }
+    private void SetSelectedStarRating(int rating)
+    {
+        StarRating = rating;
+    }
 
-        // If the LoomianSet Move2 is null and the Loomian has a Move2, fetch it from the service
-        if (LoomianSet.Move2 == null && LoomianSet.Move2Id != null)
+    private async Task RateSetAsync()
+    {
+        string? token = await UserTokenService.GetAuthTokenAsync();
+        if (string.IsNullOrEmpty(token))
         {
-            LoomianSet.Move2 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move2Id);
+            // Rating buttons are not enalbled if the user is not authenticated
+            return;
         }
+        await LoomianSetsService.RateLoomianSetAsync(LoomianSet.Id, StarRating, token);
 
-        // If the LoomianSet Move3 is null and the Loomian has a Move3, fetch it from the service
-        if (LoomianSet.Move3 == null && LoomianSet.Move3Id != null)
-        {
-            LoomianSet.Move3 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move3Id);
-        }
-
-        // If the LoomianSet Move4 is null and the Loomian has a Move4, fetch it from the service
-        if (LoomianSet.Move4 == null && LoomianSet.Move4Id != null)
-        {
-            LoomianSet.Move4 = await LoomianMovesService.GetByIdAsync((Guid)LoomianSet.Move4Id);
-        }
-
-        // If the LoomianSet Creator is null, fetch it from the service
-        if (LoomianSet.Creator == null)
-        {
-            LoomianSet.Creator = await UsersService.GetByIdAsync(LoomianSet.CreatorId);
-        }
-
-        // If the LoomianSet Approver is null and the LoomianSet is approved, fetch it from the service
-        if (LoomianSet.Approver == null && LoomianSet.Approved && LoomianSet.ApproverId != null)
-        {
-            LoomianSet.Approver = await UsersService.GetByIdAsync(LoomianSet.ApproverId.Value);
-        }
+        await UpdatePreviousRating(true);
+        StateHasChanged();
     }
 }

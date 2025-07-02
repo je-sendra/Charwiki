@@ -1,4 +1,6 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.QueryParams;
+using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
 
@@ -19,31 +21,10 @@ public class MockLoomianSetsService : ILoomianSetsService
             Id = Guid.NewGuid(),
             LoomianId = Guid.NewGuid(),
             Explanation = "Whatever explanation",
-            PersonalityModifiers = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeeleeAttack
-                }
-            },
+            PersonalityModifiers = new StatsSet(),
             LoomianAbilityId = Guid.NewGuid(),
-            TrainingPoints = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeeleeAttack
-                }
-            },
-            UniquePoints = new List<ValueToStatAssignment>
-            {
-                new ValueToStatAssignment
-                {
-                    Value = 1,
-                    Stat = LoomianStat.MeeleeAttack
-                }
-            },
+            TrainingPoints = new StatsSet(),
+            UniquePoints = new StatsSet(),
             Title = "Test Set",
             GameVersionInfoId = Guid.NewGuid(),
             CreatorId = Guid.NewGuid()
@@ -58,33 +39,35 @@ public class MockLoomianSetsService : ILoomianSetsService
     }
 
     /// <inheritdoc />
-    public Task<IEnumerable<LoomianSet>> GetAllAsync()
+    public Task<IEnumerable<LoomianSetResponseDto>?> GetAllAsync(LoomianSetQueryParams? queryParams = null)
     {
-        return Task.FromResult(_mockData.AsEnumerable());
+        return Task.FromResult<IEnumerable<LoomianSetResponseDto>?>([]);
     }
 
     /// <inheritdoc />
-    public Task<LoomianSet> GetByIdAsync(Guid id)
+    public Task<LoomianSetResponseDto?> GetByIdAsync(Guid id, LoomianSetQueryParams? queryParams = null)
     {
-        var foundSet = _mockData.Find(x => x.Id == id);
-        if (foundSet == null)
-        {
-            throw new KeyNotFoundException();
-        }
-        return Task.FromResult(foundSet);
+        LoomianSetResponseDto? loomianSet = null;
+        return Task.FromResult(loomianSet);
     }
 
     /// <inheritdoc />
-    public Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false)
-    {
-        return GetByIdAsync(id);
-    }
-    
-    /// <inheritdoc />
-    public Task<LoomianSet> SubmitSetAsync(LoomianSetDto loomianSet, string authToken)
+    public Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken)
     {
         LoomianSet item = loomianSet.ToLoomianSet(Guid.NewGuid());
         _mockData.Add(item);
         return Task.FromResult(item);
+    }
+
+    /// <inheritdoc />
+    public Task RateLoomianSetAsync(Guid loomianSetId, int starRating, string authToken)
+    {
+        throw new NotImplementedException("Mock service does not support rating Loomian sets.");
+    }
+
+    /// <inheritdoc />
+    public Task<StarRatingResponseDto?> GetMyRatingAsync(Guid loomianSetId, string authToken)
+    {
+        throw new NotImplementedException("Mock service does not support retrieving user ratings for Loomian sets.");
     }
 }

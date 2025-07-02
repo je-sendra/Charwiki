@@ -1,11 +1,10 @@
-using System.Security.Authentication;
-using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Services;
 using Charwiki.ClassLib.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -13,58 +12,9 @@ namespace Charwiki.WebApi.Controllers;
 /// Controller for user-related endpoints.
 /// </summary>
 /// <param name="charwikiDbContext"></param>
-/// <param name="authService"></param>
 [Route("[controller]")]
-public class UserController(CharwikiDbContext charwikiDbContext, IAuthService authService) : ControllerBase
+public class UserController(CharwikiDbContext charwikiDbContext) : ControllerBase
 {
-    /// <summary>
-    /// Endpoint to register a new user.
-    /// </summary>
-    /// <param name="userRegisterDto"></param>
-    /// <returns></returns>
-    [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDto userRegisterDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        await authService.RegisterUserAsync(userRegisterDto);
-
-        return Ok();
-    }
-
-    /// <summary>
-    /// Endpoint to log in a user.
-    /// </summary>
-    /// <param name="userLoginDto"></param>
-    /// <returns></returns>
-    [HttpPost("login")]
-    public async Task<IActionResult> LoginAsync([FromBody] UserLoginDto userLoginDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        try
-        {
-            // Ensure the login is valid
-            var loggedInUser = await authService.EnsureValidLoginAsync(userLoginDto);
-
-            // Generate JWT token for the user
-            var token = authService.GenerateJwtToken(loggedInUser);
-
-            // Return OK with the token
-            return Ok(token);
-        }
-        catch (AuthenticationException e)
-        {
-            return Unauthorized(e.Message);
-        }
-    }
-
     /// <summary>
     /// Endpoint to get the currently logged in user.
     /// </summary>
@@ -73,7 +23,12 @@ public class UserController(CharwikiDbContext charwikiDbContext, IAuthService au
     [Authorize]
     public async Task<IActionResult> GetMeAsync()
     {
-        User user = await authService.GetUserFromClaimsAsync(User);
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return Unauthorized("User ID not found in claims.");
+        Guid userGuid = Guid.Parse(userId);
+
+        User? user = await charwikiDbContext.Users.FindAsync(userGuid);
+        if (user == null) return NotFound("User not found.");
 
         return Ok(user.GetCopyWithoutSensitiveInformation());
     }
@@ -91,7 +46,7 @@ public class UserController(CharwikiDbContext charwikiDbContext, IAuthService au
             return BadRequest(ModelState);
         }
 
-        User? user = await charwikiDbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        User? user = await charwikiDbContext.Users.FindAsync(id);
 
         if (user == null)
         {

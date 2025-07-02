@@ -1,7 +1,10 @@
-using Charwiki.ClassLib.Dto;
+using System.Security.Claims;
+using Charwiki.ClassLib.Dto.QueryParams;
+using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
-using Charwiki.WebApi.Services;
+using Charwiki.ClassLib.Models.OperationResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,60 +15,55 @@ namespace Charwiki.WebApi.Controllers;
 /// Controller for Loomian set-related endpoints.
 /// </summary>
 /// <param name="charwikiDbContext"></param>
-/// <param name="authService"></param>
 [Route("[controller]")]
-public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthService authService) : ControllerBase
+public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : ControllerBase
 {
     /// <summary>
     /// Endpoint to get all Loomian sets.
     /// </summary>
+    /// <param name="queryParams"></param>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult GetAllLoomianSets()
-    {
-        return Ok(charwikiDbContext.LoomianSets);
-    }
-
-    /// <summary>
-    /// Endpoint to get a specific Loomian set.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="includeValueToStatAssignments"></param>
-    /// <returns></returns>
-    [HttpGet("{id}")]
-    public IActionResult GetById(Guid id, bool includeValueToStatAssignments = false)
+    public async Task<IActionResult> GetAllLoomianSets([FromQuery] LoomianSetQueryParams queryParams)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var loomianSet = charwikiDbContext.LoomianSets.FirstOrDefault(e => e.Id == id);
+        IEnumerable<LoomianSet> loomianSets = await InternalGetLoomianSetsAsync(queryParams);
+
+        IEnumerable<LoomianSetResponseDto> loomianSetResponse = loomianSets
+            .Select(ls => new LoomianSetResponseDto(ls));
+
+        return Ok(loomianSetResponse);
+    }
+
+    /// <summary>
+    /// Endpoint to get a specific Loomian set.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="queryParams"></param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id, [FromQuery] LoomianSetQueryParams queryParams)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        LoomianSet? loomianSet = (await InternalGetLoomianSetsAsync(queryParams, id))
+            .FirstOrDefault();
+
         if (loomianSet == null)
         {
             return NotFound();
         }
 
-        // If the user wants to include the value to stat assignments, include them in the response.
-        if (includeValueToStatAssignments)
-        {
-            // Load the personality modifiers for the Loomian set.
-            charwikiDbContext.Entry(loomianSet)
-                .Collection(ls => ls.PersonalityModifiers)
-                .Load();
+        LoomianSetResponseDto loomianSetResponse = new(loomianSet);
 
-            // Load the unique points for the Loomian set.
-            charwikiDbContext.Entry(loomianSet)
-                .Collection(ls => ls.UniquePoints)
-                .Load();
-
-            // Load the training points for the Loomian set.
-            charwikiDbContext.Entry(loomianSet)
-                .Collection(ls => ls.TrainingPoints)
-                .Load();
-        }
-
-        return Ok(loomianSet);
+        return Ok(loomianSetResponse);
     }
 
     /// <summary>
@@ -74,22 +72,27 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
     /// </summary>
     /// <param name="loomianSetDto"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("submit")]
     [Authorize]
-    public async Task<IActionResult> Submit([FromBody] LoomianSetDto loomianSetDto)
+    public async Task<IActionResult> Submit([FromBody] SubmitLoomianSetRequestDto loomianSetDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        User user = await authService.GetUserFromClaimsAsync(User);
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return Unauthorized("User ID not found in claims.");
+        Guid userGuid = Guid.Parse(userId);
 
-        LoomianSet loomianSet = loomianSetDto.ToLoomianSet(user.Id);
-
-        loomianSet.EnsureSetIsValid();
-
+        LoomianSet loomianSet = loomianSetDto.ToLoomianSet(userGuid);
         loomianSet.CreationTimestamp = DateTime.UtcNow;
+
+        OperationResult validationResult = loomianSet.ValidateSet();
+        if (validationResult.HasFailed)
+        {
+            return BadRequest(validationResult.UserMessage);
+        }
 
         await charwikiDbContext.LoomianSets.AddAsync(loomianSet);
         await charwikiDbContext.SaveChangesAsync();
@@ -113,21 +116,227 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext, IAuthSer
             return BadRequest(ModelState);
         }
 
-        LoomianSet? loomianSet = await charwikiDbContext.LoomianSets.FirstOrDefaultAsync(ls => ls.Id == loomianSetId);
+        LoomianSet? loomianSet = await charwikiDbContext.LoomianSets.FindAsync(loomianSetId);
         if (loomianSet == null)
         {
             return NotFound();
         }
 
-        User user = await authService.GetUserFromClaimsAsync(User);
+        if (loomianSet.Approved)
+        {
+            return BadRequest("This Loomian set is already approved.");
+        }
 
-        loomianSet.ApproverId = user.Id;
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return Unauthorized("User ID not found in claims.");
+
+        loomianSet.ApproverId = Guid.Parse(userId);
         loomianSet.Approved = true;
         loomianSet.ApprovalTimestamp = DateTime.UtcNow;
 
         charwikiDbContext.LoomianSets.Update(loomianSet);
         await charwikiDbContext.SaveChangesAsync();
 
+        return Ok(loomianSet);
+    }
+
+    /// <summary>
+    /// Endpoint to rate a Loomian set.
+    /// This endpoint can be accessed by any authenticated user.
+    /// Users can rate a Loomian set with a star rating from 1 to 5.
+    /// If the user has already rated the Loomian set, their rating will be updated.
+    /// If the user has not rated the Loomian set, a new rating will be created
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <param name="starRating"></param>
+    /// <returns></returns>
+    [HttpPost("{loomianSetId}/rate")]
+    [Authorize]
+    public async Task<IActionResult> RateLoomianSet(Guid loomianSetId, [FromBody] int starRating)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (starRating < 1 || starRating > 5)
+        {
+            return BadRequest("Star rating must be between 1 and 5.");
+        }
+
+        LoomianSet? loomianSet = await charwikiDbContext.LoomianSets.FirstOrDefaultAsync(ls => ls.Id == loomianSetId);
+        if (loomianSet == null)
+        {
+            return NotFound();
+        }
+
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return Unauthorized("User ID not found in claims.");
+        Guid userGuid = Guid.Parse(userId);
+
+        UserToLoomianSetStarRating? existingRating = await charwikiDbContext.UserToLoomianSetStarRatings
+            .FirstOrDefaultAsync(r => r.UserId == userGuid && r.LoomianSetId == loomianSetId);
+
+        if (existingRating != null)
+        {
+            existingRating.StarRating = starRating;
+            charwikiDbContext.UserToLoomianSetStarRatings.Update(existingRating);
+        }
+        else
+        {
+            UserToLoomianSetStarRating newRating = new()
+            {
+                UserId = userGuid,
+                LoomianSetId = loomianSetId,
+                StarRating = starRating
+            };
+            await charwikiDbContext.UserToLoomianSetStarRatings.AddAsync(newRating);
+        }
+
+        await charwikiDbContext.SaveChangesAsync();
+
         return Ok();
+    }
+
+    /// <summary>
+    /// Method to retrieve Loomian sets based on query parameters.
+    /// This method is used internally by the controller to fetch Loomian sets.
+    /// </summary>
+    /// <param name="queryParams"></param>
+    /// <param name="setId"></param>
+    /// <returns></returns>
+    private async Task<IEnumerable<LoomianSet>> InternalGetLoomianSetsAsync(LoomianSetQueryParams queryParams, Guid setId = default)
+    {
+        IQueryable<LoomianSet> loomianSets = charwikiDbContext.LoomianSets;
+
+        // If a specific Loomian set ID is provided, only retrieve that set.
+        // This allows for more efficient queries when looking for a single set.
+        if (setId != Guid.Empty)
+        {
+            loomianSets = loomianSets.Where(ls => ls.Id == setId);
+        }
+
+        // Only include Loomian sets that are approved if the query parameter is set.
+        if (queryParams.HideNonApprovedSets)
+        {
+            loomianSets = loomianSets.Where(ls => ls.Approved);
+        }
+
+        // Only include related ValueToStatAssignments if the query parameter is set.
+        if (queryParams.IncludeValueToStatAssignments)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.PersonalityModifiers)
+                .Include(ls => ls.UniquePoints)
+                .Include(ls => ls.TrainingPoints);
+        }
+
+        // Include ratings if the query parameter is set.
+        if (queryParams.IncludeAverageRating)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.UserToLoomianSetStarRatings);
+        }
+
+        // Include Loomian basic information if the query parameter is set.
+        if (queryParams.IncludeLoomian)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Loomian);
+        }
+
+        // Include ability if the query parameter is set.
+        if (queryParams.IncludeAbility)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Ability);
+        }
+
+        // Include item if the query parameter is set.
+        if (queryParams.IncludeItem)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Item);
+        }
+
+        // Include moves if the query parameter is set.
+        if (queryParams.IncludeMoves)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Move1)
+                .Include(ls => ls.Move2)
+                .Include(ls => ls.Move3)
+                .Include(ls => ls.Move4);
+        }
+
+        if (queryParams.IncludeMetadata)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Creator)
+                .Include(ls => ls.Approver)
+                .Include(ls => ls.GameVersionInfo);
+        }
+
+        // Apply pagination if the query parameters specify it.
+        int maximumPageSize = 30;
+        if (queryParams.PageSize > 0 && queryParams.PageSize < maximumPageSize)
+        {
+            loomianSets = loomianSets
+                .Skip(queryParams.Page * queryParams.PageSize)
+                .Take(queryParams.PageSize);
+        }
+        else
+        {
+            // Limit the number of results to prevent excessive data retrieval.
+            loomianSets = loomianSets.Take(maximumPageSize);
+        }
+
+        // The database query is executed here.
+        // This is where the actual data retrieval happens.
+        IEnumerable<LoomianSet> result = await loomianSets
+            .ToListAsync();
+
+        // Do not return long explanations if the query parameter is not set.
+        if (!queryParams.IncludeDetailedExplanation)
+        {
+            foreach (LoomianSet loomianSet in result)
+            {
+                loomianSet.Strategy = null;
+                loomianSet.Strengths = null;
+                loomianSet.Weaknesses = null;
+                loomianSet.OtherOptions = null;
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Endpoint to get the rating of a Loomian set by the current user.
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <returns></returns>
+    [HttpGet("{loomianSetId}/myRating")]
+    [Authorize]
+    public async Task<IActionResult> GetMyRating(Guid loomianSetId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return Unauthorized();
+        Guid userGuid = Guid.Parse(userId);
+
+        UserToLoomianSetStarRating? rating = await charwikiDbContext.UserToLoomianSetStarRatings
+            .FirstOrDefaultAsync(r => r.UserId == userGuid && r.LoomianSetId == loomianSetId);
+
+        if (rating == null)
+        {
+            return NotFound("You have not rated this Loomian set.");
+        }
+
+        return Ok(new StarRatingResponseDto(rating));
     }
 }

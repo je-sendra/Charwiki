@@ -6,7 +6,9 @@ using System.Text;
 using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
+using Charwiki.ClassLib.Models.OperationResult;
 using Charwiki.WebApi.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -23,16 +25,22 @@ namespace Charwiki.WebApi.Services;
 public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordHashVersionHistoryService passwordHashVersionHistoryService, IPasswordHashingService passwordHashingService, CharwikiDbContext charwikiDbContext) : IAuthService
 {
     /// <inheritdoc/>
-    public async Task RegisterUserAsync(UserRegisterDto userRegisterDto)
+    public async Task<OperationResult> RegisterUserAsync(UserRegisterDto userRegisterDto)
     {
         // Make the username lowercase
         userRegisterDto.Username = userRegisterDto.Username.ToLower();
 
         // Check if the user already exists
-        var existingUser = await charwikiDbContext.Users.FirstOrDefaultAsync(e => e.Username == userRegisterDto.Username);
+        User? existingUser = await charwikiDbContext.Users.FirstOrDefaultAsync(e => e.Username == userRegisterDto.Username);
         if (existingUser != null)
         {
-            throw new InvalidOperationException("User already exists");
+            string errorMessage = $"User with username '{userRegisterDto.Username}' already exists.";
+            return new OperationResult()
+            {
+                HasFailed = true,
+                InternalMessage = errorMessage,
+                UserMessage = errorMessage
+            };
         }
 
         // Hash the password
@@ -45,12 +53,20 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
             PasswordHash = hashedPassword,
             PasswordSalt = salt,
             PasswordHashVersion = passwordHashVersionHistoryService.GetLatestVersion(),
-            Role = UserRole.User
+            Roles = UserRoles.None
         };
 
         // Save the user
         charwikiDbContext.Users.Add(user);
         await charwikiDbContext.SaveChangesAsync();
+
+        string successMessage = $"User '{user.Username}' registered successfully.";
+        return new OperationResult()
+        {
+            HasFailed = false,
+            InternalMessage = successMessage,
+            UserMessage = successMessage
+        };
     }
 
     /// <inheritdoc/>
@@ -65,12 +81,19 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
+        List<Claim> claims =
+        [
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
-        };
+        ];
+
+        foreach (UserRoles role in Enum.GetValues(typeof(UserRoles)))
+        {
+            if (role != UserRoles.None && user.Roles.HasFlag(role))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            }
+        }
 
         var token = new JwtSecurityToken(
             issuer: issuer,
@@ -84,24 +107,31 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
     }
 
     /// <inheritdoc/>
-    public async Task<User> EnsureValidLoginAsync(UserLoginDto userLoginDto)
+    public async Task<OperationResultWithReturnData<User?>> ValidateLogin(UserLoginDto userLoginDto)
     {
         // Make the username lowercase
         userLoginDto.Username = userLoginDto.Username.ToLower();
 
         // Find the user
-        var user = await charwikiDbContext.Users.FirstOrDefaultAsync(e => e.Username == userLoginDto.Username);
+        User? user = await charwikiDbContext.Users.FirstOrDefaultAsync(e => e.Username == userLoginDto.Username);
+
+        OperationResultWithReturnData<User?> failedResult = new()
+        {
+            HasFailed = true,
+            InternalMessage = "Invalid username or password",
+            UserMessage = "Invalid username or password"
+        };
 
         // // If the user does not exist, return unauthorized
         if (user == null)
         {
-            throw new AuthenticationException("User not found");
+            return failedResult;
         }
 
         // If the user does not have a password, return unauthorized
         if (user.PasswordHash == null)
         {
-            throw new AuthenticationException("Invalid username or password");
+            return failedResult;
         }
 
         // If the hash version is outdated, get the corresponding password hashing service to check the password and rehash it
@@ -112,7 +142,7 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
             // If the password is incorrect, return unauthorized
             if (!oldPasswordHashingService.VerifyPassword(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
             {
-                throw new AuthenticationException("Invalid username or password");
+                return failedResult;
             }
 
             // Rehash the password
@@ -126,21 +156,15 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
         // If the password is incorrect, return unauthorized
         if (!passwordHashingService.VerifyPassword(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
         {
-            throw new AuthenticationException("Invalid username or password");
+            return failedResult;
         }
 
-        return user;
-    }
-
-    /// <inheritdoc/>
-    public async Task<User> GetUserFromClaimsAsync(ClaimsPrincipal claimsPrincipal)
-    {
-        var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null) throw new NoNullAllowedException("User ID not found in claims");
-
-        var user = await charwikiDbContext.Users.FindAsync(Guid.Parse(userId));
-        if (user == null) throw new NoNullAllowedException("User not found");
-
-        return user;
+        return new OperationResultWithReturnData<User?>
+        {
+            HasFailed = false,
+            InternalMessage = "Login successful",
+            UserMessage = "Login successful",
+            ReturnData = user
+        };
     }
 }
