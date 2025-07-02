@@ -25,7 +25,7 @@ public partial class Home
         {
             LoomianSetQueryParams queryParams = new()
             {
-                HideNonApprovedSets = true,
+                HideNonApprovedSets = false,
                 IncludeMetadata = true,
                 IncludeLoomian = true,
                 IncludeAverageRating = true,

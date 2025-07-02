@@ -56,6 +56,11 @@ public class LoomianSetQueryParams : PaginatedQueryParams
     public bool IncludeMetadata { get; set; } 
 
     /// <summary>
+    /// If true, the response will include tags associated with the Loomian set.
+    /// </summary>
+    public bool IncludeTags { get; set; } = false;
+
+    /// <summary>
     /// Converts the query parameters to a query string format.
     /// </summary>
     /// <returns></returns>
@@ -98,6 +103,10 @@ public class LoomianSetQueryParams : PaginatedQueryParams
         if (IncludeMetadata)
         {
             queryParams.Add("includeMetadata=true");
+        }
+        if (IncludeTags)
+        {
+            queryParams.Add("includeTags=true");
         }
 
         // Add pagination parameters
