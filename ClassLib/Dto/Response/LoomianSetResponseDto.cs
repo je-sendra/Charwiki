@@ -150,6 +150,12 @@ public class LoomianSetResponseDto
     /// The date and time when this Loomian set was approved.
     /// </summary>
     public DateTime? ApprovedAt { get; set; }
+
+    /// <summary>
+    /// The tags associated with this Loomian set.
+    /// Tags can be used to categorize or label Loomian sets for easier identification and organization.
+    /// </summary>
+    public IEnumerable<TagResponseDto>? Tags { get; set; } = null!;
     #endregion
 
     #region Constructors
@@ -211,6 +217,14 @@ public class LoomianSetResponseDto
                 .Average(rating => rating.StarRating);
 
             RatingsCount = loomianSet.UserToLoomianSetStarRatings.Count;
+        }
+
+        if (loomianSet.Tags != null)
+        {
+            Tags = loomianSet.Tags
+                .Where(t => t.Tag != null)
+                .Select(t => new TagResponseDto(t.Tag!))
+                .OrderBy(t => t.Name);
         }
     }
     #endregion

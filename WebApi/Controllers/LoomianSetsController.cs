@@ -97,6 +97,25 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         await charwikiDbContext.LoomianSets.AddAsync(loomianSet);
         await charwikiDbContext.SaveChangesAsync();
 
+        // If tags are provided, associate them with the Loomian set.
+        if (loomianSetDto.TagsIds != null)
+        {
+            foreach (Guid tagId in loomianSetDto.TagsIds)
+            {
+                Tag? tag = await charwikiDbContext.Tags.FindAsync(tagId);
+                if (tag != null)
+                {
+                    TagToLoomianSet loomianSetTag = new()
+                    {
+                        LoomianSetId = loomianSet.Id,
+                        TagId = tagId
+                    };
+                    await charwikiDbContext.TagToLoomianSet.AddAsync(loomianSetTag);
+                }
+            }
+            await charwikiDbContext.SaveChangesAsync();
+        }
+
         return Created($"/loomianSets/{loomianSet.Id}", loomianSet);
     }
 
@@ -275,6 +294,13 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
                 .Include(ls => ls.Creator)
                 .Include(ls => ls.Approver)
                 .Include(ls => ls.GameVersionInfo);
+        }
+
+        if (queryParams.IncludeTags)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Tags)
+                .ThenInclude(tls => tls.Tag);
         }
 
         // Apply pagination if the query parameters specify it.
