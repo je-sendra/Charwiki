@@ -114,6 +114,13 @@ public class SubmitLoomianSetRequestDto
     public Guid? GameVersionInfoId { get; set; }
     #endregion
 
+    #region Metadata
+    /// <summary>
+    /// A list of tags associated with the Loomian set.
+    /// </summary>
+    public List<Guid>? TagsIds { get; set; } = new();
+    #endregion
+
     #region Conversion Methods
     /// <summary>
     /// Converts the DTO to a Loomian set object.

@@ -206,5 +206,10 @@ public class LoomianSet : IDatabaseSaveable
     /// User ratings for this Loomian set.
     /// </summary>
     public virtual List<UserToLoomianSetStarRating>? UserToLoomianSetStarRatings { get; set; }
+
+    /// <summary>
+    /// A list of tags associated with the Loomian set.
+    /// </summary>
+    public virtual List<TagToLoomianSet>? Tags { get; set; }
     #endregion
 }

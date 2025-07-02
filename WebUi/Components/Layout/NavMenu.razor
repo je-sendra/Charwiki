@@ -52,8 +52,6 @@
 @code {
 
     private bool _isAuthenticated;
-    private User? _user;
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         _isAuthenticated = await UserTokenService.IsAuthenticatedAsync();
