@@ -24,6 +24,16 @@ public class LoomianMoveResponseDto
     public LoomianType Type { get; set; }
 
     /// <summary>
+    /// Default constructor for LoomianMoveResponseDto.
+    /// </summary>
+    public LoomianMoveResponseDto()
+    {
+        Id = Guid.Empty;
+        Name = string.Empty;
+        Type = LoomianType.Unknown;
+    }
+
+    /// <summary>
     /// Constructor to create a LoomianMoveResponseDto from a LoomianMove model.
     /// </summary>
     /// <param name="loomianMove"></param>

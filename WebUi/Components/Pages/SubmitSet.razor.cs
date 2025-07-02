@@ -2,9 +2,11 @@ using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
+using Charwiki.ClassLib.Models.OperationResult;
 using Charwiki.ClassLib.Services;
 using Charwiki.WebUi.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Charwiki.WebUi.Components.Pages;
 
@@ -47,54 +49,15 @@ public partial class SubmitSet
     private IEnumerable<LoomianItem> Items { get; set; } = [];
     private IEnumerable<LoomianMove> Moves { get; set; } = [];
     private IEnumerable<GameVersionInfo> GameVersions { get; set; } = [];
+
+    private IEnumerable<int> AllowedPersonalityModifiers { get; set; } = new[]
+    {
+        -20, -10, 10, 20
+    };
     #endregion
 
-    #region Selected values
-    private Guid? SelectedLoomianId { get; set; } = null;
-    private Guid? SelectedAbilityId { get; set; } = null;
-    private Guid? SelectedItemId { get; set; } = null;
-    private Guid? SelectedGameVersionId { get; set; } = null;
-
-    private Guid? SelectedMove1Id { get; set; } = null;
-    private Guid? SelectedMove2Id { get; set; } = null;
-    private Guid? SelectedMove3Id { get; set; } = null;
-    private Guid? SelectedMove4Id { get; set; } = null;
-
-    private string Title { get; set; } = string.Empty;
-    private string Explanation { get; set; } = string.Empty;
-    private string Strategy { get; set; } = string.Empty;
-    private List<string> Strengths { get; set; } = [];
-    private List<string> Weaknesses { get; set; } = [];
-    private string OtherOptions { get; set; } = string.Empty;
-
-    private List<ValueToStatAssignment> PersonalityModifiers { get; set; } = [
-        new ValueToStatAssignment { Stat = LoomianStat.Health, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeleeAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.RangedAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeleeDefense, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.RangedDefense, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.Energy, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.Speed, Value = 0 }
-    ];
-    private List<ValueToStatAssignment> TrainingPoints { get; set; } = [
-        new ValueToStatAssignment { Stat = LoomianStat.Health, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeleeAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.RangedAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeleeDefense, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.RangedDefense, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.Energy, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.Speed, Value = 0 }
-    ];
-    private List<ValueToStatAssignment> UniquePoints { get; set; } = [
-        new ValueToStatAssignment { Stat = LoomianStat.Health, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeleeAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.RangedAttack, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.MeleeDefense, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.RangedDefense, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.Energy, Value = 0 },
-        new ValueToStatAssignment { Stat = LoomianStat.Speed, Value = 0 }
-    ];
-    #endregion
+    [SupplyParameterFromForm]
+    private SubmitLoomianSetRequestDto? LoomianSetDto { get; set; }
 
     #region Methods
     /// <inheritdoc/>
@@ -109,12 +72,27 @@ public partial class SubmitSet
         Moves = await LoomianMoveService.GetAllAsync();
         Moves = Moves.OrderBy(m => m.Name);
         GameVersions = await GameVersionInfosService.GetAllAsync();
+
+        LoomianSetDto = new()
+        {
+            TrainingPoints = new(),
+            UniquePoints = new()
+            {
+                Health = 40,
+                Energy = 40,
+                MeleeAttack = 40,
+                MeleeDefense = 40,
+                RangedAttack = 40,
+                RangedDefense = 40,
+                Speed = 40
+            },
+            PersonalityModifiers = new()
+        };
     }
 
     private async Task SubmitSetAsync()
     {
-        SubmitLoomianSetRequestDto? set = GenerateLoomianSetDto();
-        if (set is null)
+        if (LoomianSetDto is null)
         {
             return;
         }
@@ -129,66 +107,23 @@ public partial class SubmitSet
         try
         {
             // Convert the LoomianSetDto to a temporary LoomianSet for pre-validation.
-            LoomianSet prevalidations = set.ToLoomianSet(Guid.Empty);
-            prevalidations.EnsureSetIsValid();
+            LoomianSet prevalidations = LoomianSetDto.ToLoomianSet(Guid.Empty);
+            OperationResult validationResult = prevalidations.ValidateSet();
+            if (validationResult.HasFailed)
+            {
+                // If validation fails, set the error message and return.
+                ErrorMessage = validationResult.UserMessage;
+                return;
+            }
 
             // If the Loomian set is valid, proceed to submit it.
-            LoomianSet createdSet = await LoomianSetsService.SubmitSetAsync(set!, userToken);
+            LoomianSet createdSet = await LoomianSetsService.SubmitSetAsync(LoomianSetDto, userToken);
             NavigationManager.NavigateTo($"/loomianset/{createdSet.Id}", forceLoad: true);
         }
         catch (Exception ex)
         {
             ErrorMessage = $"{ex.Message}";
-            return;
         }
-    }
-
-    private SubmitLoomianSetRequestDto? GenerateLoomianSetDto()
-    {
-        if (SelectedLoomianId is null)
-        {
-            ErrorMessage = "Please select a Loomian.";
-            return null;
-        }
-
-        if (SelectedAbilityId is null)
-        {
-            ErrorMessage = "Please select an ability.";
-            return null;
-        }
-
-        if (SelectedGameVersionId is null)
-        {
-            ErrorMessage = "Please select a game version.";
-            return null;
-        }
-
-        if (string.IsNullOrEmpty(Title))
-        {
-            ErrorMessage = "Please provide a title for the Loomian set.";
-            return null;
-        }
-
-        return new SubmitLoomianSetRequestDto()
-        {
-            LoomianId = SelectedLoomianId.Value,
-            PersonalityModifiers = PersonalityModifiers,
-            AbilityId = SelectedAbilityId.Value,
-            ItemId = SelectedItemId,
-            TrainingPoints = TrainingPoints,
-            UniquePoints = UniquePoints,
-            Move1Id = SelectedMove1Id,
-            Move2Id = SelectedMove2Id,
-            Move3Id = SelectedMove3Id,
-            Move4Id = SelectedMove4Id,
-            Title = Title,
-            Explanation = Explanation,
-            Strategy = Strategy,
-            Strengths = Strengths,
-            Weaknesses = Weaknesses,
-            OtherOptions = OtherOptions,
-            GameVersionInfoId = SelectedGameVersionId.Value
-        };
     }
     #endregion
 }

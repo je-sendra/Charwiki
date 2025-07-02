@@ -5,11 +5,11 @@
 }
 
 <div class="container w-100">
-    <div class="row" >
+    <div class="row">
         <div class="col-md-5">
             <h1 class="display-5">@LoomianSet.Title</h1>
             <h2 class="display-6">@LoomianSet.Loomian.Name</h2>
-            
+
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
@@ -92,39 +92,68 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(LoomianStat stat in DisplayedStats)
+
+                    @if (LoomianSet.TrainingPoints == null)
                     {
-                        <tr>
-                            <td>@stat.ToString()</td>
-
-                            @if (LoomianSet.TrainingPoints == null || !LoomianSet.TrainingPoints.Any(x => x.Stat == stat))
-                            {
-                                <td>0</td>
-                            }
-                            else
-                            {
-                                <td>@LoomianSet.TrainingPoints!.Where(x => x.Stat == stat).First().Value</td>
-                            }
-
-                            @if (LoomianSet.UniquePoints == null || !LoomianSet.UniquePoints.Any(x => x.Stat == stat))
-                            {
-                                <td>0</td>
-                            }
-                            else
-                            {
-                                <td>@LoomianSet.UniquePoints!.Where(x => x.Stat == stat).First().Value</td>
-                            }
-
-                            @if (LoomianSet.PersonalityModifiers == null || !LoomianSet.PersonalityModifiers.Any(x => x.Stat == stat))
-                            {
-                                <td>0%</td>
-                            }
-                            else
-                            {
-                                <td>@LoomianSet.PersonalityModifiers!.Where(x => x.Stat == stat).First().Value%</td>
-                            }
-                        </tr>
+                        LoomianSet.TrainingPoints = new StatsSetResponseDto();
                     }
+                    @if (LoomianSet.UniquePoints == null)
+                    {
+                        LoomianSet.UniquePoints = new StatsSetResponseDto();
+                    }
+                    @if (LoomianSet.PersonalityModifiers == null)
+                    {
+                        LoomianSet.PersonalityModifiers = new StatsSetResponseDto();
+                    }
+
+                    <tr>
+                        <td>Health</td>
+                        <td>@LoomianSet.TrainingPoints.Health</td>
+                        <td>@LoomianSet.UniquePoints.Health</td>
+                        <td>@LoomianSet.PersonalityModifiers.Health</td>
+                    </tr>
+
+                    <tr>
+                        <td>Energy</td>
+                        <td>@LoomianSet.TrainingPoints.Energy</td>
+                        <td>@LoomianSet.UniquePoints.Energy</td>
+                        <td>@LoomianSet.PersonalityModifiers.Energy</td>
+                    </tr>
+
+                    <tr>
+                        <td>Melee Attack</td>
+                        <td>@LoomianSet.TrainingPoints.MeleeAttack</td>
+                        <td>@LoomianSet.UniquePoints.MeleeAttack</td>
+                        <td>@LoomianSet.PersonalityModifiers.MeleeAttack</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ranged Attack</td>
+                        <td>@LoomianSet.TrainingPoints.RangedAttack</td>
+                        <td>@LoomianSet.UniquePoints.RangedAttack</td>
+                        <td>@LoomianSet.PersonalityModifiers.RangedAttack</td>
+                    </tr>
+
+                    <tr>
+                        <td>Melee Defense</td>
+                        <td>@LoomianSet.TrainingPoints.MeleeDefense</td>
+                        <td>@LoomianSet.UniquePoints.MeleeDefense</td>
+                        <td>@LoomianSet.PersonalityModifiers.MeleeDefense</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ranged Defense</td>
+                        <td>@LoomianSet.TrainingPoints.RangedDefense</td>
+                        <td>@LoomianSet.UniquePoints.RangedDefense</td>
+                        <td>@LoomianSet.PersonalityModifiers.RangedDefense</td>
+                    </tr>
+
+                    <tr>
+                        <td>Speed</td>
+                        <td>@LoomianSet.TrainingPoints.Speed</td>
+                        <td>@LoomianSet.UniquePoints.Speed</td>
+                        <td>@LoomianSet.PersonalityModifiers.Speed</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -174,18 +203,25 @@
                 <tbody>
                     <tr>
                         <td>Author</td>
-                        @if (LoomianSet.Creator == null)
+                        @if (LoomianSet.Author == null)
                         {
                             <td>Unknown</td>
                         }
                         else
                         {
-                            <td>@LoomianSet.Creator.Username</td>
+                            <td>@LoomianSet.Author.Username</td>
                         }
                     </tr>
                     <tr>
                         <td>Created on</td>
-                        <td>@LoomianSet.CreationTimestamp.ToString()</td>
+                        @if (LoomianSet.CreatedAt == null)
+                        {
+                            <td>Unknown</td>
+                        }
+                        else
+                        {
+                            <td>@LoomianSet.CreatedAt.Value.ToString()</td>
+                        }
                     </tr>
                     <tr>
                         <td>Approved by</td>
@@ -200,24 +236,35 @@
                     </tr>
                     <tr>
                         <td>Approved on</td>
-                        @if (LoomianSet.ApprovalTimestamp == null)
+                        @if (LoomianSet.ApprovedAt == null)
                         {
                             <td>Not approved</td>
                         }
                         else
                         {
-                            <td>@LoomianSet.ApprovalTimestamp.Value.ToString()</td>
+                            <td>@LoomianSet.ApprovedAt.Value.ToString()</td>
                         }
                     </tr>
                     <tr>
                         <td>Average rating</td>
-                        @if (LoomianSet.UserToLoomianSetStarRatings == null || LoomianSet.UserToLoomianSetStarRatings.Count == 0)
+                        @if (LoomianSet.RatingsCount == 0)
                         {
                             <td>No ratings yet</td>
                         }
                         else
                         {
-                            <td>@LoomianSet.GetAverageStarRating().ToString("0.00") (@LoomianSet.UserToLoomianSetStarRatings.Count reviews)</td>
+                            <td>@LoomianSet.AverageRating.ToString("0.00") (@LoomianSet.RatingsCount reviews)</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Game version:</td>
+                        @if (LoomianSet.GameVersionInfo == null)
+                        {
+                            <td>Unknown</td>
+                        }
+                        else
+                        {
+                            <td>@LoomianSet.GameVersionInfo.VersionCode - @LoomianSet.GameVersionInfo.VersionTitle</td>
                         }
                     </tr>
                 </tbody>
@@ -243,9 +290,15 @@
                     <button class="btn btn-primary ms-2" @onclick="RateSetAsync">Submit rating</button>
                     @if (PreviousStarRating != -1)
                     {
-                        <p class="text-muted">You previously rated this set with @PreviousStarRating stars.</p>
+                        <p class="text-muted">Your current rating for this set is @PreviousStarRating stars.</p>
                     }
-                } else {
+                    else
+                    {
+                        <p class="text-muted">You have not rated this set yet.</p>
+                    }
+                }
+                else
+                {
                     <p class="text-danger">You must be logged in to submit ratings.</p>
                 }
             </div>

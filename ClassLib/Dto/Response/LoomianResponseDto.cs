@@ -16,6 +16,15 @@ public class LoomianResponseDto
     /// The name of the Loomian.
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// Default constructor with empty properties for serialization purposes.
+    /// </summary>
+    public LoomianResponseDto()
+    {
+        Id = Guid.Empty;
+        Name = string.Empty;
+    }
     
     /// <summary>
     /// Constructor to create a LoomianResponseDto from a Loomian model.
