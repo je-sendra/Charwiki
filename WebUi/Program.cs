@@ -71,6 +71,7 @@ public static class Program
         services.AddScoped<ILoomianItemsService, LoomianItemsService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IGameVersionInfosService, GameVersionInfosService>();
+        services.AddScoped<ITagsService, TagsService>();
     }
 
     private static void RegisterCharwikiMockServices(IServiceCollection services)

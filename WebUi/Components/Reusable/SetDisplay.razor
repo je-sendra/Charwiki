@@ -267,6 +267,23 @@
                             <td>@LoomianSet.GameVersionInfo.VersionCode - @LoomianSet.GameVersionInfo.VersionTitle</td>
                         }
                     </tr>
+                    <tr>
+                        <td>Tags</td>
+                        @if (LoomianSet.Tags == null || !LoomianSet.Tags.Any())
+                        {
+                            <td>No tags</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @foreach (TagResponseDto tag in LoomianSet.Tags)
+                                {
+                                    <span class="badge bg-secondary me-2">@tag.Name</span>
+                                    
+                                }
+                            </td>
+                        }
+                    </tr>
                 </tbody>
             </table>
 
