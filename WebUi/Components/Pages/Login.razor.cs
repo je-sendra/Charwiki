@@ -25,6 +25,8 @@ public partial class Login
     private string Password { get; set; } = string.Empty;
     private string ErrorMessage { get; set; } = string.Empty;
 
+    private string ActiveTab { get; set; } = "Login";
+
     private async Task HandleLoginAsync()
     {
         try
@@ -53,5 +55,31 @@ public partial class Login
         {
             ErrorMessage = $"Login failed: {ex.Message}";
         }
+    }
+
+    private async Task HandleRegisterAsync()
+    {
+        try
+        {
+            UserRegisterDto userRegisterDto = new()
+            {
+                Username = Username,
+                Password = Password
+            };
+
+            await UserService.RegisterAsync(userRegisterDto);
+
+            await HandleLoginAsync(); // Automatically log in after registration
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Registration failed: {ex.Message}";
+        }
+    }
+
+    private void SwitchTab(string tab)
+    {
+        ActiveTab = tab;
+        ErrorMessage = string.Empty; // Clear error message when switching tabs
     }
 }
