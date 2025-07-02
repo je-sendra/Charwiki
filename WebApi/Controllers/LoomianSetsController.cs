@@ -355,7 +355,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         if (queryParams.PageSize > 0 && queryParams.PageSize < maximumPageSize)
         {
             loomianSets = loomianSets
-                .Skip(queryParams.Page * queryParams.PageSize)
+                .Skip(queryParams.PageNumber * queryParams.PageSize)
                 .Take(queryParams.PageSize);
         }
         else

@@ -25,6 +25,10 @@ public partial class Home
     private Guid? SelectedGameVersionInfoId { get; set; }
     private Guid? SelectedTagId { get; set; }
 
+    private int CurrentPage { get; set; }
+
+    private bool HasMoreSets;
+
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -36,6 +40,7 @@ public partial class Home
             SelectedMoveId = null;
             SelectedGameVersionInfoId = null;
             SelectedTagId = null;
+            HasMoreSets = true;
 
             await UpdateLoomianSetsAsync();
 
@@ -44,6 +49,32 @@ public partial class Home
     }
 
     private async Task UpdateLoomianSetsAsync()
+    {
+        IEnumerable<LoomianSetResponseDto>? loomianSetsFromDb = await RetrieveSetsFromDb();
+        if (loomianSetsFromDb != null)
+        {
+            LoomianSets = loomianSetsFromDb;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task LoadMoreSets()
+    {
+        CurrentPage++;
+        IEnumerable<LoomianSetResponseDto>? moreSets = await RetrieveSetsFromDb();
+        if (moreSets != null && moreSets.Any())
+        {
+            LoomianSets = [..LoomianSets, ..moreSets];
+        }
+        else
+        {
+            HasMoreSets = false;
+        }
+        StateHasChanged();
+    }
+    
+    private async Task<IEnumerable<LoomianSetResponseDto>?> RetrieveSetsFromDb()
     {
         LoomianSetQueryParams queryParams = new()
         {
@@ -57,6 +88,8 @@ public partial class Home
             ItemId = SelectedItemId,
             MoveId = SelectedMoveId,
             GameVersionInfoId = SelectedGameVersionInfoId,
+            PageSize = 18,
+            PageNumber = CurrentPage
         };
         if (SelectedTagId != null)
         {
@@ -64,11 +97,8 @@ public partial class Home
         }
 
         IEnumerable<LoomianSetResponseDto>? loomianSetsFromDb = await LoomianSetsService.GetAllAsync(queryParams);
-        if (loomianSetsFromDb != null)
-        {
-            LoomianSets = loomianSetsFromDb;
-        }
 
         StateHasChanged();
+        return loomianSetsFromDb;
     }
 }

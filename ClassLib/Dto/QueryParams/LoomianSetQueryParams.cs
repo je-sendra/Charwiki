@@ -175,9 +175,9 @@ public class LoomianSetQueryParams : PaginatedQueryParams
         }
 
         // Add pagination parameters
-        if (Page > 0)
+        if (PageNumber > 0)
         {
-            queryParams.Add($"pageNumber={Page}");
+            queryParams.Add($"pageNumber={PageNumber}");
         }
         if (PageSize > 0)
         {

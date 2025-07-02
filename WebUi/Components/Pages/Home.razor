@@ -87,4 +87,17 @@
             </div>
         }
     </div>
+
+    <div class="row mt-3">
+        <div class="col text-center">
+            @if (HasMoreSets)
+            {
+                <button class="btn btn-primary" @onclick="LoadMoreSets">Load More</button>
+            }
+            else
+            {
+                <p>No more sets to load.</p>
+            }
+        </div>
+    </div>
 </div>
