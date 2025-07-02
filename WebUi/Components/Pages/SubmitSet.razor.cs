@@ -1,13 +1,11 @@
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
-using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Models.OperationResult;
 using Charwiki.ClassLib.Services;
 using Charwiki.WebUi.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace Charwiki.WebUi.Components.Pages;
 
@@ -20,25 +18,7 @@ public partial class SubmitSet
 
     #region Injected Services
     [Inject]
-    private ILoomiansService LoomianService { get; set; } = default!;
-
-    [Inject]
-    private ILoomianAbilitiesService LoomianAbilityService { get; set; } = default!;
-
-    [Inject]
-    private ILoomianItemsService LoomianItemService { get; set; } = default!;
-
-    [Inject]
-    private ILoomianMovesService LoomianMoveService { get; set; } = default!;
-
-    [Inject]
-    private IGameVersionInfosService GameVersionInfosService { get; set; } = default!;
-
-    [Inject]
     private ILoomianSetsService LoomianSetsService { get; set; } = default!;
-
-    [Inject]
-    private ITagsService TagsService { get; set; } = default!;
 
     [Inject]
     private UserTokenService UserTokenService { get; set; } = default!;
@@ -48,11 +28,11 @@ public partial class SubmitSet
     #endregion
 
     #region Option storing lists
-    private IEnumerable<Loomian> Loomians { get; set; } = [];
-    private IEnumerable<LoomianAbility> Abilities { get; set; } = [];
-    private IEnumerable<LoomianItem> Items { get; set; } = [];
-    private IEnumerable<LoomianMove> Moves { get; set; } = [];
-    private IEnumerable<GameVersionInfo> GameVersions { get; set; } = [];
+    private IEnumerable<LoomianResponseDto> Loomians { get; set; } = [];
+    private IEnumerable<LoomianAbilityResponseDto> Abilities { get; set; } = [];
+    private IEnumerable<LoomianItemResponseDto> Items { get; set; } = [];
+    private IEnumerable<LoomianMoveResponseDto> Moves { get; set; } = [];
+    private IEnumerable<GameVersionInfoResponseDto> GameVersions { get; set; } = [];
     private IEnumerable<TagResponseDto>? Tags { get; set; } = [];
 
     private IEnumerable<int> AllowedPersonalityModifiers { get; set; } = new[]
@@ -68,22 +48,14 @@ public partial class SubmitSet
 
     #region Methods
     /// <inheritdoc/>
-    protected async override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Loomians = await LoomianService.GetAllAsync();
-        Loomians = Loomians.OrderBy(l => l.Name);
-        Abilities = await LoomianAbilityService.GetAllAsync();
-        Abilities = Abilities.OrderBy(a => a.Name);
-        Items = await LoomianItemService.GetAllAsync();
-        Items = Items.OrderBy(i => i.Name);
-        Moves = await LoomianMoveService.GetAllAsync();
-        Moves = Moves.OrderBy(m => m.Name);
-        GameVersions = await GameVersionInfosService.GetAllAsync();
-        Tags = await TagsService.GetAllAsync();
-        if (Tags != null && Tags.Any())
-        {
-            Tags = Tags.OrderBy(t => t.Name);
-        }
+        Loomians = CachedDataLists.Loomians.OrderBy(l => l.Name);
+        Abilities = CachedDataLists.Abilities.OrderBy(a => a.Name);
+        Items = CachedDataLists.Items.OrderBy(i => i.Name);
+        Moves = CachedDataLists.Moves.OrderBy(m => m.Name);
+        GameVersions = CachedDataLists.GameVersionInfos.OrderBy(g => g.VersionCode);
+        Tags = CachedDataLists.Tags.OrderBy(t => t.Name);
 
         SelectedTags = [];
 
@@ -163,7 +135,7 @@ public partial class SubmitSet
         newTag = string.Empty;
         StateHasChanged();
     }
-    
+
 
     private void RemoveTag(TagResponseDto tagToRemove)
     {
