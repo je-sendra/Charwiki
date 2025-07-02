@@ -67,14 +67,14 @@ public class SubmitLoomianSetRequestDto
     /// The title of the set.
     /// </summary>
     [Required(ErrorMessage = "Title is required.")]
-    [StringLength(15, ErrorMessage = "Title cannot exceed 15 characters.")]
+    [StringLength(30, ErrorMessage = "Title cannot exceed 30 characters.")]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
     /// A short description of the set.
     /// </summary>
     [Required(ErrorMessage = "Short description is required.")]
-    [StringLength(50, ErrorMessage = "Short description cannot exceed 50 characters.")]
+    [StringLength(100, ErrorMessage = "Short description cannot exceed 100 characters.")]
     public string ShortDescription { get; set; } = string.Empty;
 
     /// <summary>
