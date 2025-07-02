@@ -61,6 +61,48 @@ public class LoomianSetQueryParams : PaginatedQueryParams
     public bool IncludeTags { get; set; } = false;
 
     /// <summary>
+    /// The unique identifier of the Loomian for which the sets are being queried.
+    /// This can be used to filter the sets to only those that pertain to a specific Loomian.
+    /// If null, the query will not filter by Loomian ID.
+    /// </summary>
+    public Guid? LoomianId { get; set; } = null;
+
+    /// <summary>
+    /// The unique identifier of the ability for which the sets are being queried.
+    /// This can be used to filter the sets to only those that use a specific ability.
+    /// If null, the query will not filter by ability ID.
+    /// </summary>
+    public Guid? AbilityId { get; set; } = null;
+
+    /// <summary>
+    /// The unique identifier of the item for which the sets are being queried.
+    /// This can be used to filter the sets to only those that use a specific item.
+    /// If null, the query will not filter by item ID.
+    /// </summary>
+    public Guid? ItemId { get; set; } = null;
+
+    /// <summary>
+    /// The unique identifier of the move for which the sets are being queried.
+    /// This can be used to filter the sets to only those that use a specific move.
+    /// If null, the query will not filter by move ID.
+    /// </summary>
+    public Guid? MoveId { get; set; } = null;
+
+    /// <summary>
+    /// The unique identifier of the game version information for which the sets are being queried.
+    /// This can be used to filter the sets to only those that are relevant to a specific game version.
+    /// If null, the query will not filter by game version information ID.
+    /// </summary>
+    public Guid? GameVersionInfoId { get; set; } = null;
+
+    /// <summary>
+    /// A collection of unique identifiers for tags associated with the Loomian sets.
+    /// This can be used to filter the sets to only those that have specific tags.
+    /// If null, the query will not filter by tags.
+    /// </summary>
+    public IEnumerable<Guid>? TagsIds { get; set; } = null;
+
+    /// <summary>
     /// Converts the query parameters to a query string format.
     /// </summary>
     /// <returns></returns>
@@ -107,6 +149,29 @@ public class LoomianSetQueryParams : PaginatedQueryParams
         if (IncludeTags)
         {
             queryParams.Add("includeTags=true");
+        }
+
+        // Add filters for specific IDs if they are provided
+        if (LoomianId.HasValue)
+        {
+            queryParams.Add($"loomianId={LoomianId.Value}");
+        }
+        if (AbilityId.HasValue)
+        {
+            queryParams.Add($"abilityId={AbilityId.Value}");
+        }
+        if (ItemId.HasValue)
+        {
+            queryParams.Add($"itemId={ItemId.Value}");
+        }
+        if (MoveId.HasValue)
+        {
+            queryParams.Add($"moveId={MoveId.Value}");
+        }
+        if (TagsIds != null && TagsIds.Any())
+        {
+            // Join the tags with commas to create a single query parameter
+            queryParams.Add($"tagsIds={string.Join(",", TagsIds)}");
         }
 
         // Add pagination parameters
