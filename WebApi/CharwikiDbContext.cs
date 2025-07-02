@@ -50,6 +50,15 @@ public class CharwikiDbContext : DbContext
         // Configure the composite key for UserToLoomianSetStarRating
         modelBuilder.Entity<UserToLoomianSetStarRating>()
             .HasKey(e => new { e.UserId, e.LoomianSetId });
+
+        // Configure the composite key for TaggedLoomianSet
+        modelBuilder.Entity<TagToLoomianSet>()
+            .HasKey(e => new { e.LoomianSetId, e.TagId });
+
+        // Make tag name unique
+        modelBuilder.Entity<Tag>()
+            .HasIndex(e => e.Name)
+            .IsUnique();
     }
 
     /// <summary>
@@ -96,4 +105,14 @@ public class CharwikiDbContext : DbContext
     /// The database table containing all stats sets.
     /// </summary>
     public DbSet<StatsSet> StatsSets { get; set; }
+
+    /// <summary>
+    /// The database table containing all tags.
+    /// </summary>
+    public DbSet<Tag> Tags { get; set; }
+
+    /// <summary>
+    /// The database table containing the tags associated with Loomian sets.
+    /// </summary>
+    public DbSet<TagToLoomianSet> TagToLoomianSet { get; set;  }
 }
