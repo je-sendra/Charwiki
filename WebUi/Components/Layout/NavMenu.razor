@@ -12,7 +12,7 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Sets Loomipedia
@@ -28,6 +28,18 @@
             </div>
         }
 
+        @if (_user != null)
+        {
+            @if (_user.Roles.HasFlag(UserRoles.Admin) || _user.Roles.HasFlag(UserRoles.Moderator))
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/unapproved-sets">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Unapproved Sets
+                    </NavLink>
+                </div>
+            }
+
+        }
 
         <div class="nav-item px-3" style="display: none;">
             <NavLink class="nav-link" href="#">
@@ -52,10 +64,19 @@
 @code {
 
     private bool _isAuthenticated;
+    private User? _user;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _isAuthenticated = await UserTokenService.IsAuthenticatedAsync();
+        if (firstRender)
+        {
+            _isAuthenticated = await UserTokenService.IsAuthenticatedAsync();
+            if (_isAuthenticated)
+            {
+                string? token = await UserTokenService.GetAuthTokenAsync();
+                _user = await UserService.GetMeAsync(token!);
+            }
 
-        StateHasChanged();
+            StateHasChanged();
+        }
     }
 }
