@@ -3,6 +3,82 @@
 <PageTitle>Charwiki</PageTitle>
 
 <div class="container-fluid mb-3">
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label for="loomianSelect" class="form-label">Loomian</label>
+            <InputSelect @bind-Value="SelectedLoomianId" @bind-Value:after="UpdateLoomianSetsAsync" id="loomianSelect"
+                class="form-select">
+                <option value="" selected>Select a Loomian</option>
+                @foreach (LoomianResponseDto loomian in CachedDataLists.Loomians)
+                {
+                    <option value="@loomian.Id">@loomian.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-md-2">
+            <label for="abilitySelect" class="form-label">Ability</label>
+            <InputSelect @bind-Value="SelectedAbilityId" @bind-Value:after="UpdateLoomianSetsAsync" id="abilitySelect"
+                class="form-select">
+                <option value="" selected>Select an Ability</option>
+                @foreach (LoomianAbilityResponseDto ability in CachedDataLists.Abilities)
+                {
+                    <option value="@ability.Id">@ability.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-md-2">
+            <label for="itemSelect" class="form-label">Item</label>
+            <InputSelect @bind-Value="SelectedItemId" @bind-Value:after="UpdateLoomianSetsAsync" id="itemSelect"
+                class="form-select">
+                <option value="" selected>Select an Item</option>
+                @foreach (LoomianItemResponseDto item in CachedDataLists.Items)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-md-2">
+            <label for="moveSelect" class="form-label">Move</label>
+            <InputSelect @bind-Value="SelectedMoveId" @bind-Value:after="UpdateLoomianSetsAsync" id="moveSelect"
+                class="form-select">
+                <option value="" selected>Select a Move</option>
+                @foreach (LoomianMoveResponseDto move in CachedDataLists.Moves)
+                {
+                    <option value="@move.Id">@move.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-md-2">
+            <label for="gameVersionSelect" class="form-label">Game Version</label>
+            <InputSelect @bind-Value="SelectedGameVersionInfoId" @bind-Value:after="UpdateLoomianSetsAsync"
+                id="gameVersionSelect" class="form-select">
+                <option value="" selected>Select a Game Version</option>
+                @foreach (GameVersionInfoResponseDto gameVersion in CachedDataLists.GameVersionInfos)
+                {
+                    <option value="@gameVersion.Id">@gameVersion.VersionCode - @gameVersion.VersionTitle</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-md-2">
+            <label for="tagsSelect" class="form-label">Tag</label>
+            <InputSelect @bind-Value="SelectedTagId" @bind-Value:after="UpdateLoomianSetsAsync" id="tagsSelect"
+                class="form-select" multiple>
+                <option value="" selected>Select a Tag</option>
+                @foreach (TagResponseDto tag in CachedDataLists.Tags)
+                {
+                    <option value="@tag.Id">@tag.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+    </div>
+
     <div class="row row-gap-3">
         @foreach (LoomianSetResponseDto currentSet in LoomianSets)
         {
