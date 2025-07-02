@@ -19,7 +19,7 @@ else
                 <div class="col-md-12">
                     <label for="title" class="form-label">Title</label>
                     <InputText class="form-control mb-3" id="title" @bind-Value="LoomianSetDto.Title"
-                        placeholder="Enter a title for your Loomian set" maxlength="15" />
+                        placeholder="Enter a title for your Loomian set" maxlength="30" />
                 </div>
             </div>
 
@@ -358,7 +358,7 @@ else
 
             <label for="shortDescription" class="form-label">Short Description</label>
             <InputText class="form-control mb-3" id="shortDescription" @bind-Value="LoomianSetDto.ShortDescription"
-                placeholder="Enter a short description for your Loomian set" maxlength="50" />
+                placeholder="Enter a short description for your Loomian set" maxlength="100" />
 
             <label for="explanation" class="form-label">Explanation (optional)</label>
             <InputTextArea class="form-control mb-3" id="explanation" @bind-Value="LoomianSetDto.Explanation"
