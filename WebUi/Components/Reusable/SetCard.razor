@@ -5,47 +5,49 @@
 <div class="card">
     <div class="row no-gutters align-items-center h-100 flex-md-row">
         <div class="col-4 d-flex justify-content-center">
-            <img src="images/placeholders/150x150.png" class="card-img" alt="Card image">
+
+            <div class="container">
+                <div class="row">
+                    <img src="images/placeholders/150x150.png" class="card-img" alt="Card image">
+                </div>
+
+                <div class="row">
+                    <span class="badge me-2">
+                        <i class="bi bi-clock-fill text-black size-full ms-2 me-2"></i>
+                        @if (Set.GameVersionInfo == null)
+                        {
+                            <span class="text-muted">Unknown</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">@Set.GameVersionInfo.VersionCode</span>
+                        }
+                    </span>
+                </div>
+            </div>
+
         </div>
-        <div class="col-8 d-flex flex-column justify-content-center">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">@_displayTitle</h5>
-                <p class="card-text">@_displayExplanation</p>
-                <div class="mt-auto d-flex justify-content-end">
+        <div class="col-8 d-flex flex-column h-100">
+            <div class="card-body d-flex flex-column h-100">
+                <h5 class="card-title">@DisplayTitle</h5>
+                <p class="card-text">@DisplayExplanation</p>
+
+                <div class="d-flex justify-content-end align-items-center mb-0">
+                    <span class="=badge mt-2 me-2">
+                        <i class="bi bi-star-fill"></i>
+                        @Set.AverageRating.ToString("0.00")
+                        @if (Set.RatingsCount == 0)
+                        {
+                            <span class="text-muted ms-2 me-2">(No ratings yet)</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted ms-2 me-2">(@Set.RatingsCount ratings)</span>
+                        }
+                    </span>
                     <a href="loomianSet/@Set.Id" class="btn btn-primary">See now</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@code {
-    [Parameter]
-    public required LoomianSet Set { get; set; }
-
-    private string _displayTitle = string.Empty;
-    private string _displayExplanation = string.Empty;
-
-    protected override async Task OnParametersSetAsync()
-    {
-        Set.Loomian = await LoomiansService.GetByIdAsync(Set.LoomianId);
-        _displayTitle = $"{Set.Title} {Set.Loomian.Name}";
-
-        // Truncate the explanation to X characters
-        if (Set.Explanation != null)
-        {
-            var allowedLength = 70;
-
-            // If the explanation is longer than the allowed length, truncate it
-            if (Set.Explanation.Length > allowedLength)
-            {
-                _displayExplanation = Set.Explanation.Substring(0, allowedLength) + "...";
-            }
-            // Else, just display the explanation
-            else
-            {
-                _displayExplanation = Set.Explanation;
-            }
-        }
-    }
-}

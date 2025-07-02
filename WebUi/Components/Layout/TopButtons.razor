@@ -1,9 +1,15 @@
 @inject IUserService UserService
 @inject UserTokenService UserTokenService
 
+@inject NavigationManager NavigationManager
+
 <a class="btn btn-outline-dark" href="https://github.com/je-sendra/Charwiki">
     <i class="bi bi-github"></i>
-    <span>GitHub</span>
+</a>
+
+<a class="btn btn-outline-primary" href="https://discord.gg/4wBJxPtCyJ">
+    <i class="bi bi-discord"></i>
+    <span>Join</span>
 </a>
 
 @if (_isAuthenticated)
@@ -59,6 +65,6 @@ else
     {
         await UserTokenService.RemoveAuthTokenAsync();
         _isAuthenticated = false;
-        StateHasChanged();
+        NavigationManager.NavigateTo("/", forceLoad: true);
     }
 }

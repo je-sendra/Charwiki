@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Charwiki.WebApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Charwiki.WebApi.Migrations
 {
     [DbContext(typeof(CharwikiDbContext))]
-    partial class CharwikiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250629093224_AddUserToLoomianSetStarRating")]
+    partial class AddUserToLoomianSetStarRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,13 +180,6 @@ namespace Charwiki.WebApi.Migrations
                     b.Property<string>("OtherOptions")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("PersonalityModifiersId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Strategy")
                         .HasColumnType("text");
 
@@ -193,12 +189,6 @@ namespace Charwiki.WebApi.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("TrainingPointsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("UniquePointsId")
-                        .HasColumnType("uuid");
 
                     b.Property<List<string>>("Weaknesses")
                         .HasColumnType("text[]");
@@ -225,45 +215,7 @@ namespace Charwiki.WebApi.Migrations
 
                     b.HasIndex("Move4Id");
 
-                    b.HasIndex("PersonalityModifiersId");
-
-                    b.HasIndex("TrainingPointsId");
-
-                    b.HasIndex("UniquePointsId");
-
                     b.ToTable("LoomianSets");
-                });
-
-            modelBuilder.Entity("Charwiki.ClassLib.Models.StatsSet", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Energy")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Health")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MeleeAttack")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MeleeDefense")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RangedAttack")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RangedDefense")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Speed")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StatsSets");
                 });
 
             modelBuilder.Entity("Charwiki.ClassLib.Models.User", b =>
@@ -281,7 +233,7 @@ namespace Charwiki.WebApi.Migrations
                     b.Property<string>("PasswordSalt")
                         .HasColumnType("text");
 
-                    b.Property<int>("Roles")
+                    b.Property<int>("Role")
                         .HasColumnType("integer");
 
                     b.Property<string>("Username")
@@ -311,7 +263,39 @@ namespace Charwiki.WebApi.Migrations
 
                     b.HasIndex("LoomianSetId");
 
-                    b.ToTable("UserToLoomianSetStarRatings");
+                    b.ToTable("UserToLoomianSetStarRating");
+                });
+
+            modelBuilder.Entity("Charwiki.ClassLib.Models.ValueToStatAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LoomianSetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LoomianSetId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LoomianSetId2")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Stat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoomianSetId");
+
+                    b.HasIndex("LoomianSetId1");
+
+                    b.HasIndex("LoomianSetId2");
+
+                    b.ToTable("ValueToStatAssignments");
                 });
 
             modelBuilder.Entity("Charwiki.ClassLib.Models.LoomianSet", b =>
@@ -364,18 +348,6 @@ namespace Charwiki.WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("Move4Id");
 
-                    b.HasOne("Charwiki.ClassLib.Models.StatsSet", "PersonalityModifiers")
-                        .WithMany()
-                        .HasForeignKey("PersonalityModifiersId");
-
-                    b.HasOne("Charwiki.ClassLib.Models.StatsSet", "TrainingPoints")
-                        .WithMany()
-                        .HasForeignKey("TrainingPointsId");
-
-                    b.HasOne("Charwiki.ClassLib.Models.StatsSet", "UniquePoints")
-                        .WithMany()
-                        .HasForeignKey("UniquePointsId");
-
                     b.Navigation("Ability");
 
                     b.Navigation("Approver");
@@ -395,37 +367,49 @@ namespace Charwiki.WebApi.Migrations
                     b.Navigation("Move3");
 
                     b.Navigation("Move4");
+                });
 
+            modelBuilder.Entity("Charwiki.ClassLib.Models.UserToLoomianSetStarRating", b =>
+                {
+                    b.HasOne("Charwiki.ClassLib.Models.LoomianSet", "LoomianSet")
+                        .WithMany()
+                        .HasForeignKey("LoomianSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Charwiki.ClassLib.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LoomianSet");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Charwiki.ClassLib.Models.ValueToStatAssignment", b =>
+                {
+                    b.HasOne("Charwiki.ClassLib.Models.LoomianSet", null)
+                        .WithMany("PersonalityModifiers")
+                        .HasForeignKey("LoomianSetId");
+
+                    b.HasOne("Charwiki.ClassLib.Models.LoomianSet", null)
+                        .WithMany("TrainingPoints")
+                        .HasForeignKey("LoomianSetId1");
+
+                    b.HasOne("Charwiki.ClassLib.Models.LoomianSet", null)
+                        .WithMany("UniquePoints")
+                        .HasForeignKey("LoomianSetId2");
+                });
+
+            modelBuilder.Entity("Charwiki.ClassLib.Models.LoomianSet", b =>
+                {
                     b.Navigation("PersonalityModifiers");
 
                     b.Navigation("TrainingPoints");
 
                     b.Navigation("UniquePoints");
-                });
-
-            modelBuilder.Entity("Charwiki.ClassLib.Models.UserToLoomianSetStarRating", b =>
-                {
-                    b.HasOne("Charwiki.ClassLib.Models.LoomianSet", null)
-                        .WithMany("UserToLoomianSetStarRatings")
-                        .HasForeignKey("LoomianSetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Charwiki.ClassLib.Models.User", null)
-                        .WithMany("LoomianSetStarRatings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Charwiki.ClassLib.Models.LoomianSet", b =>
-                {
-                    b.Navigation("UserToLoomianSetStarRatings");
-                });
-
-            modelBuilder.Entity("Charwiki.ClassLib.Models.User", b =>
-                {
-                    b.Navigation("LoomianSetStarRatings");
                 });
 #pragma warning restore 612, 618
         }

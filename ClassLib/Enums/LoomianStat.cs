@@ -6,6 +6,13 @@ namespace Charwiki.ClassLib.Enums;
 public enum LoomianStat
 {
     /// <summary>
+    /// Represents an unknown Loomian stat.
+    /// This is used when the stat is not specified or recognized.
+    /// It is typically used as a default value or when the stat is not applicable.
+    /// </summary>
+    Unknown,
+
+    /// <summary>
     /// The health stat.
     /// </summary>
     Health,
@@ -18,12 +25,12 @@ public enum LoomianStat
     /// <summary>
     /// The meelee attack stat.
     /// </summary>
-    MeeleeAttack,
+    MeleeAttack,
 
     /// <summary>
-    /// The meelee defense stat.
+    /// The melee defense stat.
     /// </summary>
-    MeeleeDefense,
+    MeleeDefense,
 
     /// <summary>
     /// The ranged attack stat.
