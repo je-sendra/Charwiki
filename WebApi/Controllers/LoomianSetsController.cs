@@ -303,12 +303,59 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
                 .ThenInclude(tls => tls.Tag);
         }
 
+        // Order by average rating if the query parameter is set.
+        if (queryParams.IncludeAverageRating)
+        {
+            loomianSets = loomianSets
+                .OrderByDescending(ls => ls.UserToLoomianSetStarRatings!
+                    .Average(rating => rating.StarRating));
+        }
+
+        if (queryParams.LoomianId.HasValue)
+        {
+            // Filter by Loomian ID if specified.
+            loomianSets = loomianSets
+                .Where(ls => ls.LoomianId == queryParams.LoomianId.Value);
+        }
+
+        if (queryParams.AbilityId.HasValue)
+        {
+            // Filter by Ability ID if specified.
+            loomianSets = loomianSets
+                .Where(ls => ls.LoomianAbilityId == queryParams.AbilityId.Value);
+        }
+
+        if (queryParams.ItemId.HasValue)
+        {
+            // Filter by Item ID if specified.
+            loomianSets = loomianSets
+                .Where(ls => ls.ItemId == queryParams.ItemId.Value);
+        }
+
+        if (queryParams.MoveId.HasValue)
+        {
+            // Filter by Move ID if specified.
+            loomianSets = loomianSets
+                .Where(ls => ls.Move1Id == queryParams.MoveId.Value ||
+                             ls.Move2Id == queryParams.MoveId.Value ||
+                             ls.Move3Id == queryParams.MoveId.Value ||
+                             ls.Move4Id == queryParams.MoveId.Value);
+        }
+
+        if (queryParams.TagsIds != null && queryParams.TagsIds.Any() && queryParams.IncludeTags)
+        {
+            // Filter by Tags IDs if specified.
+            loomianSets = loomianSets
+                .Where(ls => ls.Tags != null)
+                .Where(ls => ls.Tags!.Any(t => queryParams.TagsIds.Contains(t.TagId)));
+        }
+
         // Apply pagination if the query parameters specify it.
         int maximumPageSize = 30;
         if (queryParams.PageSize > 0 && queryParams.PageSize < maximumPageSize)
         {
             loomianSets = loomianSets
-                .Skip(queryParams.Page * queryParams.PageSize)
+                .Skip(queryParams.PageNumber * queryParams.PageSize)
                 .Take(queryParams.PageSize);
         }
         else
