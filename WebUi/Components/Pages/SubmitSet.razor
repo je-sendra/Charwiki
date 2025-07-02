@@ -357,19 +357,19 @@ else
             <h2>Descriptive Fields</h2>
 
             <label for="shortDescription" class="form-label">Short Description</label>
-            <InputText class="form-control mb-3" id="shortDescription" @bind-value="LoomianSetDto.ShortDescription"
+            <InputText class="form-control mb-3" id="shortDescription" @bind-Value="LoomianSetDto.ShortDescription"
                 placeholder="Enter a short description for your Loomian set" maxlength="50" />
 
             <label for="explanation" class="form-label">Explanation (optional)</label>
-            <InputTextArea class="form-control mb-3" id="explanation" @bind-value="LoomianSetDto.Explanation"
+            <InputTextArea class="form-control mb-3" id="explanation" @bind-Value="LoomianSetDto.Explanation"
                 placeholder="Enter an explanation for your Loomian set (optional)" rows="4" maxlength="500" />
 
             <label for="strategy" class="form-label">Strategy (optional)</label>
-            <InputTextArea class="form-control mb-3" id="strategy" @bind-value="LoomianSetDto.Strategy"
+            <InputTextArea class="form-control mb-3" id="strategy" @bind-Value="LoomianSetDto.Strategy"
                 placeholder="Enter a strategy for your Loomian set (optional)" rows="4" maxlength="500" />
 
             <label for="otherOptions" class="form-label">Other Options (optional)</label>
-            <InputTextArea class="form-control mb-3" id="otherOptions" @bind-value="LoomianSetDto.OtherOptions"
+            <InputTextArea class="form-control mb-3" id="otherOptions" @bind-Value="LoomianSetDto.OtherOptions"
                 placeholder="Enter other options for your Loomian set (optional)" rows="4" maxlength="500" />
 
             <p class="text-danger">@ErrorMessage</p>
