@@ -8,7 +8,7 @@ public class PaginatedQueryParams
     /// <summary>
     /// The page number to retrieve.
     /// </summary>
-    public int Page { get; set; }
+    public int PageNumber { get; set; }
 
     /// <summary>
     /// The number of items per page.
