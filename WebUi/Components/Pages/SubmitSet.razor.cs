@@ -101,9 +101,13 @@ public partial class SubmitSet
     protected async override Task OnInitializedAsync()
     {
         Loomians = await LoomianService.GetAllAsync();
+        Loomians = Loomians.OrderBy(l => l.Name);
         Abilities = await LoomianAbilityService.GetAllAsync();
+        Abilities = Abilities.OrderBy(a => a.Name);
         Items = await LoomianItemService.GetAllAsync();
+        Items = Items.OrderBy(i => i.Name);
         Moves = await LoomianMoveService.GetAllAsync();
+        Moves = Moves.OrderBy(m => m.Name);
         GameVersions = await GameVersionInfosService.GetAllAsync();
     }
 
