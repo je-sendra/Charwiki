@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Dto.Request;
@@ -10,17 +11,19 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The unique identifier of the Loomian the set is for.
     /// </summary>
-    public required Guid LoomianId { get; set; }
+    [Required(ErrorMessage = "Loomian is required.")]
+    public Guid? LoomianId { get; set; }
 
     /// <summary>
     /// The personality modifiers of the Loomian in the set.
     /// </summary>
-    public required List<ValueToStatAssignment> PersonalityModifiers { get; set; }
+    public StatsSet? PersonalityModifiers { get; set; }
 
     /// <summary>
     /// The unique identifier of the ability of the Loomian in the set.
     /// </summary>
-    public required Guid AbilityId { get; set; }
+    [Required(ErrorMessage = "Ability is required.")]
+    public Guid? AbilityId { get; set; }
 
     /// <summary>
     /// The unique identifier of the item the Loomian is holding.
@@ -63,16 +66,27 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The title of the set.
     /// </summary>
-    public required string Title { get; set; }
+    [Required(ErrorMessage = "Title is required.")]
+    [StringLength(15, ErrorMessage = "Title cannot exceed 15 characters.")]
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>
+    /// A short description of the set.
+    /// </summary>
+    [Required(ErrorMessage = "Short description is required.")]
+    [StringLength(50, ErrorMessage = "Short description cannot exceed 50 characters.")]
+    public string ShortDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// The explanation of the set.
     /// </summary>
+    [StringLength(500, ErrorMessage = "Explanation cannot exceed 500 characters.")]
     public string? Explanation { get; set; }
 
     /// <summary>
     /// The strategy of the set.
     /// </summary>
+    [StringLength(500, ErrorMessage = "Strategy cannot exceed 500 characters.")]
     public string? Strategy { get; set; }
 
     /// <summary>
@@ -88,6 +102,7 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The other options of the set.
     /// </summary>
+    [StringLength(500, ErrorMessage = "Other options cannot exceed 500 characters.")]
     public string? OtherOptions { get; set; }
     #endregion
 
@@ -95,7 +110,8 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The unique identifier of the game version info of the set.
     /// </summary>
-    public required Guid GameVersionInfoId { get; set; }
+    [Required(ErrorMessage = "Game version is required.")]
+    public Guid? GameVersionInfoId { get; set; }
     #endregion
 
     #region Conversion Methods
@@ -108,9 +124,9 @@ public class SubmitLoomianSetRequestDto
     {
         return new LoomianSet
         {
-            LoomianId = LoomianId,
+            LoomianId = LoomianId ?? Guid.Empty,
             PersonalityModifiers = PersonalityModifiers,
-            LoomianAbilityId = AbilityId,
+            LoomianAbilityId = AbilityId ?? Guid.Empty,
             ItemId = ItemId,
             TrainingPoints = TrainingPoints,
             UniquePoints = UniquePoints,
@@ -119,12 +135,13 @@ public class SubmitLoomianSetRequestDto
             Move3Id = Move3Id,
             Move4Id = Move4Id,
             Title = Title,
+            ShortDescription = ShortDescription,
             Explanation = Explanation,
             Strategy = Strategy,
             Strengths = Strengths,
             Weaknesses = Weaknesses,
             OtherOptions = OtherOptions,
-            GameVersionInfoId = GameVersionInfoId,
+            GameVersionInfoId = GameVersionInfoId ?? Guid.Empty,
             CreatorId = creatorId
         };
     }

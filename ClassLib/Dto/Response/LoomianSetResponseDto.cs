@@ -29,6 +29,23 @@ public class LoomianSetResponseDto
     public LoomianItemResponseDto? Item { get; set; } = null!;
     #endregion
 
+    #region Stat Assignments
+    /// <summary>
+    /// The Training Points assigned to the Loomian in the set.
+    /// </summary>
+    public StatsSetResponseDto? TrainingPoints { get; set; }
+
+    /// <summary>
+    /// The Unique Points of the Loomian in the set.
+    /// </summary>
+    public StatsSetResponseDto? UniquePoints { get; set; }
+
+    /// <summary>
+    /// The Personality of the Loomian in the set.
+    /// </summary>
+    public StatsSetResponseDto? PersonalityModifiers { get; set; }
+    #endregion
+
     #region Moveset
     /// <summary>
     /// The first move in the Loomian's moveset.
@@ -56,6 +73,12 @@ public class LoomianSetResponseDto
     /// The title of the Loomian set.
     /// </summary>
     public string Title { get; set; } = string.Empty;
+
+    /// <summary>
+    /// A short description of the Loomian set.
+    /// This is typically a brief summary or tagline that captures the essence of the set.
+    /// </summary>
+    public string ShortDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// The explanation of the set.
@@ -94,18 +117,45 @@ public class LoomianSetResponseDto
     /// This is used to indicate if the set has been reviewed and accepted for public use.
     /// </summary>
     public bool IsApproved { get; set; } = false;
-    
+
     /// <summary>
     /// The average rating of the Loomian set.
     /// This is calculated based on user ratings and reflects the overall quality of the set.
     /// </summary>
     public double AverageRating { get; set; }
+
+    /// <summary>
+    /// The number of ratings this Loomian set has received.
+    /// This is used to provide context for the average rating, indicating how many users have rated the set.
+    /// </summary>
+    public int RatingsCount { get; set; }
+
+    /// <summary>
+    /// The user who created this Loomian set.
+    /// </summary>
+    public UserResponseDto? Author { get; set; } = null!;
+
+    /// <summary>
+    /// The date and time when this Loomian set was created.
+    /// </summary>
+    public DateTime? CreatedAt { get; set; }
+
+    /// <summary>
+    /// The user who approved this Loomian set.
+    /// This is typically a member of the Charwiki team who has reviewed and accepted the set
+    /// </summary>
+    public UserResponseDto? Approver { get; set; } = null!;
+
+    /// <summary>
+    /// The date and time when this Loomian set was approved.
+    /// </summary>
+    public DateTime? ApprovedAt { get; set; }
     #endregion
 
     #region Constructors
 
     /// <summary>
-    /// Default constructor with empty properties.
+    /// Default constructor with empty properties for serialization purposes.
     /// </summary>
     public LoomianSetResponseDto()
     {
@@ -129,6 +179,7 @@ public class LoomianSetResponseDto
         Move4 = loomianSet.Move4 != null ? new LoomianMoveResponseDto(loomianSet.Move4) : null;
 
         Title = loomianSet.Title;
+        ShortDescription = loomianSet.ShortDescription;
         Explanation = loomianSet.Explanation;
         Strategy = loomianSet.Strategy;
         Strengths = loomianSet.Strengths;
@@ -138,10 +189,28 @@ public class LoomianSetResponseDto
         GameVersionInfo = loomianSet.GameVersionInfo != null ? new GameVersionInfoResponseDto(loomianSet.GameVersionInfo) : null;
         IsApproved = loomianSet.Approved;
 
+        TrainingPoints = loomianSet.TrainingPoints != null ? new StatsSetResponseDto(loomianSet.TrainingPoints) : null;
+        UniquePoints = loomianSet.UniquePoints != null ? new StatsSetResponseDto(loomianSet.UniquePoints) : null;
+        PersonalityModifiers = loomianSet.PersonalityModifiers != null ? new StatsSetResponseDto(loomianSet.PersonalityModifiers) : null;
+
+        if (loomianSet.Creator != null)
+        {
+            Author = new UserResponseDto(loomianSet.Creator);
+            CreatedAt = loomianSet.CreationTimestamp;
+        }
+
+        if (loomianSet.Approver != null)
+        {
+            Approver = new UserResponseDto(loomianSet.Approver);
+            ApprovedAt = loomianSet.ApprovalTimestamp;
+        }
+
         if (loomianSet.UserToLoomianSetStarRatings != null && loomianSet.UserToLoomianSetStarRatings.Any())
         {
             AverageRating = loomianSet.UserToLoomianSetStarRatings
                 .Average(rating => rating.StarRating);
+
+            RatingsCount = loomianSet.UserToLoomianSetStarRatings.Count;
         }
     }
     #endregion

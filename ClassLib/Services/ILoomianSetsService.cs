@@ -1,4 +1,6 @@
+using Charwiki.ClassLib.Dto.QueryParams;
 using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Models;
 using Charwiki.ClassLib.Services.Templates;
 
@@ -7,17 +9,24 @@ namespace Charwiki.ClassLib.Services;
 /// <summary>
 /// Represents a service for Loomian set-related operations.
 /// </summary>
-public interface ILoomianSetsService : ICrudControllerServiceTemplate<LoomianSet>
+public interface ILoomianSetsService
 {
+    /// <summary>
+    /// Get all Loomian sets based on the provided query parameters.
+    /// This method allows filtering and pagination of Loomian sets.
+    /// </summary>
+    /// <param name="queryParams"></param>
+    /// <returns></returns>
+    Task<IEnumerable<LoomianSetResponseDto>?> GetAllAsync(LoomianSetQueryParams? queryParams = null);
+
     /// <summary>
     /// Get a specific Loomian set by its id.
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="includeValueToStatAssignments"></param>
-    /// <param name="includeRatings"></param>
+    /// <param name="queryParams"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    Task<LoomianSet> GetByIdAsync(Guid id, bool includeValueToStatAssignments = false, bool includeRatings = false);
+    Task<LoomianSetResponseDto?> GetByIdAsync(Guid id, LoomianSetQueryParams? queryParams = null);
 
     /// <summary>
     /// Submits a Loomian set to the server.
@@ -40,4 +49,13 @@ public interface ILoomianSetsService : ICrudControllerServiceTemplate<LoomianSet
     /// <param name="authToken"></param>
     /// <returns></returns>
     Task RateLoomianSetAsync(Guid loomianSetId, int starRating, string authToken);
+
+    /// <summary>
+    /// Retrieves the star rating of a Loomian set by the current user.
+    /// This method allows users to check their own rating for a specific Loomian set.
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <param name="authToken"></param>
+    /// <returns></returns>
+    Task<StarRatingResponseDto?> GetMyRatingAsync(Guid loomianSetId, string authToken);
 }

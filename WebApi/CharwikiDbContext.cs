@@ -88,11 +88,6 @@ public class CharwikiDbContext : DbContext
     public DbSet<User> Users { get; set; }
 
     /// <summary>
-    /// The database table containing all value to stat assignments.
-    /// </summary>
-    public DbSet<ValueToStatAssignment> ValueToStatAssignments { get; set; }
-
-    /// <summary>
     /// The database table containing the star ratings given by users to Loomian sets.
     /// </summary>
     public DbSet<UserToLoomianSetStarRating> UserToLoomianSetStarRatings { get; set; }
