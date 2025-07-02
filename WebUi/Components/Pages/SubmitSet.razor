@@ -29,7 +29,7 @@ else
                     <label for="loomian" class="form-label">Loomian</label>
                     <InputSelect class="form-select mb-3" id="loomian" @bind-Value="LoomianSetDto.LoomianId">
                         <option value="" selected>Select a Loomian</option>
-                        @foreach (Loomian currentLoomian in Loomians)
+                        @foreach (LoomianResponseDto currentLoomian in Loomians)
                         {
                             <option value="@currentLoomian.Id">@currentLoomian.Name</option>
                         }
@@ -40,7 +40,7 @@ else
                     <label for="ability">Ability</label>
                     <InputSelect class="form-select mb-3" id="ability" @bind-Value="LoomianSetDto.AbilityId">
                         <option value="" selected>Select an Ability</option>
-                        @foreach (LoomianAbility currentAbility in Abilities)
+                        @foreach (LoomianAbilityResponseDto currentAbility in Abilities)
                         {
                             <option value="@currentAbility.Id">@currentAbility.Name</option>
                         }
@@ -53,7 +53,7 @@ else
                     <label for="item">Item</label>
                     <InputSelect class="form-select mb-3" id="item" @bind-Value="LoomianSetDto.ItemId">
                         <option value="" selected>Select an Item (optional)</option>
-                        @foreach (LoomianItem currentItem in Items)
+                        @foreach (LoomianItemResponseDto currentItem in Items)
                         {
                             <option value="@currentItem.Id">@currentItem.Name</option>
                         }
@@ -64,7 +64,7 @@ else
                     <label for="gameVersion">Game Version</label>
                     <InputSelect class="form-select mb-3" id="gameVersion" @bind-Value="LoomianSetDto.GameVersionInfoId">
                         <option value="" selected>Select a Game Version</option>
-                        @foreach (GameVersionInfo currentGameVersion in GameVersions)
+                        @foreach (GameVersionInfoResponseDto currentGameVersion in GameVersions)
                         {
                             <option value="@currentGameVersion.Id">@currentGameVersion.VersionCode -
                                 @currentGameVersion.VersionTitle
@@ -82,7 +82,7 @@ else
                         <label for="move1" class="form-label">Move 1</label>
                         <InputSelect class="form-select mb-3" id="move1" @bind-Value="LoomianSetDto.Move1Id">
                             <option value="" selected>Select Move 1 (optional)</option>
-                            @foreach (LoomianMove currentMove in Moves)
+                            @foreach (LoomianMoveResponseDto currentMove in Moves)
                             {
                                 <option value="@currentMove.Id">@currentMove.Name</option>
                             }
@@ -93,7 +93,7 @@ else
                         <label for="move2" class="form-label">Move 2</label>
                         <InputSelect class="form-select mb-3" id="move2" @bind-Value="LoomianSetDto.Move2Id">
                             <option value="" selected>Select Move 2 (optional)</option>
-                            @foreach (LoomianMove currentMove in Moves)
+                            @foreach (LoomianMoveResponseDto currentMove in Moves)
                             {
                                 <option value="@currentMove.Id">@currentMove.Name</option>
                             }
@@ -105,7 +105,7 @@ else
                         <label for="move3" class="form-label">Move 3</label>
                         <InputSelect class="form-select mb-3" id="move3" @bind-Value="LoomianSetDto.Move3Id">
                             <option value="" selected>Select Move 3 (optional)</option>
-                            @foreach (LoomianMove currentMove in Moves)
+                            @foreach (LoomianMoveResponseDto currentMove in Moves)
                             {
                                 <option value="@currentMove.Id">@currentMove.Name</option>
                             }
@@ -116,7 +116,7 @@ else
                         <label for="move4" class="form-label">Move 4</label>
                         <InputSelect class="form-select mb-3" id="move4" @bind-Value="LoomianSetDto.Move4Id">
                             <option value="" selected>Select Move 4 (optional)</option>
-                            @foreach (LoomianMove currentMove in Moves)
+                            @foreach (LoomianMoveResponseDto currentMove in Moves)
                             {
                                 <option value="@currentMove.Id">@currentMove.Name</option>
                             }

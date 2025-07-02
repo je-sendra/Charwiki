@@ -59,6 +59,8 @@ public static class Program
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
 
+        UpdateCachedDataLists(builder.Services).GetAwaiter().GetResult();
+
         app.Run();
     }
 
@@ -76,8 +78,26 @@ public static class Program
 
     private static void RegisterCharwikiMockServices(IServiceCollection services)
     {
-        services.AddScoped<ILoomiansService, MockLoomiansService>();
-        services.AddScoped<ILoomianSetsService, MockLoomianSetsService>();
-        services.AddScoped<ILoomianMovesService, MockLoomianMovesService>();
+    }
+
+    internal static async Task UpdateCachedDataLists(IServiceCollection services)
+    {
+        ILoomiansService loomiansService = services.BuildServiceProvider().GetRequiredService<ILoomiansService>();
+        CachedDataLists.Loomians = await loomiansService.GetAllAsync() ?? [];
+
+        ILoomianAbilitiesService loomianAbilitiesService = services.BuildServiceProvider().GetRequiredService<ILoomianAbilitiesService>();
+        CachedDataLists.Abilities = await loomianAbilitiesService.GetAllAsync() ?? [];
+
+        ILoomianItemsService loomianItemsService = services.BuildServiceProvider().GetRequiredService<ILoomianItemsService>();
+        CachedDataLists.Items = await loomianItemsService.GetAllAsync() ?? [];
+
+        ILoomianMovesService loomianMovesService = services.BuildServiceProvider().GetRequiredService<ILoomianMovesService>();
+        CachedDataLists.Moves = await loomianMovesService.GetAllAsync() ?? [];
+
+        IGameVersionInfosService gameVersionInfosService = services.BuildServiceProvider().GetRequiredService<IGameVersionInfosService>();
+        CachedDataLists.GameVersionInfos = await gameVersionInfosService.GetAllAsync() ?? [];
+
+        ITagsService tagsService = services.BuildServiceProvider().GetRequiredService<ITagsService>();
+        CachedDataLists.Tags = await tagsService.GetAllAsync() ?? [];
     }
 }
