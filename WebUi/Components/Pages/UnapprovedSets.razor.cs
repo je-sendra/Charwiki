@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Components;
 namespace Charwiki.WebUi.Components.Pages;
 
 /// <summary>
-/// Represents the home page component that displays Loomian sets.
+/// Represents the page that displays unapproved Loomian sets.
 /// </summary>
-public partial class Home
+public partial class UnapprovedSets
 {
     /// <summary>
     /// Represents the service for Loomian set-related operations.
@@ -78,7 +78,7 @@ public partial class Home
     {
         LoomianSetQueryParams queryParams = new()
         {
-            HideNonApprovedSets = true,
+            HideNonApprovedSets = false,
             IncludeMetadata = true,
             IncludeLoomian = true,
             IncludeAverageRating = true,
