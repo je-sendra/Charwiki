@@ -35,6 +35,7 @@ public partial class LoomianSetDisplayPage
             IncludeMoves = true,
             IncludeDetailedExplanation = true,
             IncludeMetadata = true,
+            IncludeTags = true
         };
         _loomianSet = await LoomianSetsService.GetByIdAsync(SetId, queryParams);
     }

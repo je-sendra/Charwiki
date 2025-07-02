@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
@@ -37,6 +38,9 @@ public partial class SubmitSet
     private ILoomianSetsService LoomianSetsService { get; set; } = default!;
 
     [Inject]
+    private ITagsService TagsService { get; set; } = default!;
+
+    [Inject]
     private UserTokenService UserTokenService { get; set; } = default!;
 
     [Inject]
@@ -49,6 +53,7 @@ public partial class SubmitSet
     private IEnumerable<LoomianItem> Items { get; set; } = [];
     private IEnumerable<LoomianMove> Moves { get; set; } = [];
     private IEnumerable<GameVersionInfo> GameVersions { get; set; } = [];
+    private IEnumerable<TagResponseDto>? Tags { get; set; } = [];
 
     private IEnumerable<int> AllowedPersonalityModifiers { get; set; } = new[]
     {
@@ -58,6 +63,8 @@ public partial class SubmitSet
 
     [SupplyParameterFromForm]
     private SubmitLoomianSetRequestDto? LoomianSetDto { get; set; }
+
+    private IEnumerable<TagResponseDto> SelectedTags { get; set; } = [];
 
     #region Methods
     /// <inheritdoc/>
@@ -72,6 +79,13 @@ public partial class SubmitSet
         Moves = await LoomianMoveService.GetAllAsync();
         Moves = Moves.OrderBy(m => m.Name);
         GameVersions = await GameVersionInfosService.GetAllAsync();
+        Tags = await TagsService.GetAllAsync();
+        if (Tags != null && Tags.Any())
+        {
+            Tags = Tags.OrderBy(t => t.Name);
+        }
+
+        SelectedTags = [];
 
         LoomianSetDto = new()
         {
@@ -96,6 +110,7 @@ public partial class SubmitSet
         {
             return;
         }
+        LoomianSetDto.TagsIds = SelectedTags.Select(t => t.Id).ToList();
 
         string? userToken = await UserTokenService.GetAuthTokenAsync();
         if (userToken is null)
@@ -124,6 +139,36 @@ public partial class SubmitSet
         {
             ErrorMessage = $"{ex.Message}";
         }
+    }
+
+    string newTag = string.Empty;
+    private void OnTagSelected()
+    {
+        Guid tagId = Guid.Parse(newTag);
+        if (Tags is null || !Tags.Any())
+        {
+            return;
+        }
+        TagResponseDto? tag = Tags.FirstOrDefault(t => t.Id == tagId);
+        if (tag == null)
+        {
+            return;
+        }
+        // If the tag is already selected, do not add it again.
+        if (SelectedTags.Any(t => t.Id == tag.Id))
+        {
+            return;
+        }
+        SelectedTags = SelectedTags.Append(tag);
+        newTag = string.Empty;
+        StateHasChanged();
+    }
+    
+
+    private void RemoveTag(TagResponseDto tagToRemove)
+    {
+        SelectedTags = SelectedTags.Where(t => t.Id != tagToRemove.Id);
+        StateHasChanged();
     }
     #endregion
 }

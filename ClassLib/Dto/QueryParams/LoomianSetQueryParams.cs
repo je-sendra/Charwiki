@@ -104,6 +104,10 @@ public class LoomianSetQueryParams : PaginatedQueryParams
         {
             queryParams.Add("includeMetadata=true");
         }
+        if (IncludeTags)
+        {
+            queryParams.Add("includeTags=true");
+        }
 
         // Add pagination parameters
         if (Page > 0)

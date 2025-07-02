@@ -147,16 +147,15 @@ else
                         <tr>
                             <td>Health</td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Health"
-                                    min="0" max="200" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Health" min="0"
+                                    max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Health"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Health" min="0"
+                                    max="40" />
                             </td>
                             <td>
-                                <InputSelect class="form-select"
-                                    @bind-Value="LoomianSetDto.PersonalityModifiers.Health">
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.Health">
                                     <option value="0" selected>-</option>
                                     @foreach (int currentModifier in AllowedPersonalityModifiers)
                                     {
@@ -178,12 +177,12 @@ else
                             <td>Energy</td>
 
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Energy"
-                                    min="0" max="200" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Energy" min="0"
+                                    max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Energy"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Energy" min="0"
+                                    max="40" />
                             </td>
                             <td>
                                 <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.Energy">
@@ -196,7 +195,7 @@ else
                                         }
                                         else if (currentModifier < 0)
                                         {
-                                            <option value="@currentModifier">@currentModifier%</option> 
+                                            <option value="@currentModifier">@currentModifier%</option>
                                         }
                                     }
                                 </InputSelect>
@@ -207,16 +206,15 @@ else
                         <tr>
                             <td>Melee Attack</td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.MeleeAttack"
-                                    min="0" max="200" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.MeleeAttack" min="0"
+                                    max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.MeleeAttack"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.MeleeAttack" min="0"
+                                    max="40" />
                             </td>
                             <td>
-                                <InputSelect class="form-select"
-                                    @bind-Value="LoomianSetDto.PersonalityModifiers.MeleeAttack">
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.MeleeAttack">
                                     <option value="0" selected>-</option>
                                     @foreach (int currentModifier in AllowedPersonalityModifiers)
                                     {
@@ -240,12 +238,11 @@ else
                                     min="0" max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.MeleeDefense"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.MeleeDefense" min="0"
+                                    max="40" />
                             </td>
                             <td>
-                                <InputSelect class="form-select"
-                                    @bind-Value="LoomianSetDto.PersonalityModifiers.MeleeDefense">
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.MeleeDefense">
                                     <option value="0" selected>-</option>
                                     @foreach (int currentModifier in AllowedPersonalityModifiers)
                                     {
@@ -269,12 +266,11 @@ else
                                     min="0" max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.RangedAttack"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.RangedAttack" min="0"
+                                    max="40" />
                             </td>
                             <td>
-                                <InputSelect class="form-select"
-                                    @bind-Value="LoomianSetDto.PersonalityModifiers.RangedAttack">
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.RangedAttack">
                                     <option value="0" selected>-</option>
                                     @foreach (int currentModifier in AllowedPersonalityModifiers)
                                     {
@@ -298,12 +294,11 @@ else
                                     min="0" max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.RangedDefense"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.RangedDefense" min="0"
+                                    max="40" />
                             </td>
                             <td>
-                                <InputSelect class="form-select"
-                                    @bind-Value="LoomianSetDto.PersonalityModifiers.RangedDefense">
+                                <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.RangedDefense">
                                     <option value="0" selected>-</option>
                                     @foreach (int currentModifier in AllowedPersonalityModifiers)
                                     {
@@ -323,12 +318,12 @@ else
                         <tr>
                             <td>Speed</td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Speed"
-                                    min="0" max="200" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.TrainingPoints.Speed" min="0"
+                                    max="200" />
                             </td>
                             <td>
-                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Speed"
-                                    min="0" max="40" />
+                                <InputNumber class="form-control" @bind-Value="LoomianSetDto.UniquePoints.Speed" min="0"
+                                    max="40" />
                             </td>
                             <td>
                                 <InputSelect class="form-select" @bind-Value="LoomianSetDto.PersonalityModifiers.Speed">
@@ -371,6 +366,28 @@ else
             <label for="otherOptions" class="form-label">Other Options (optional)</label>
             <InputTextArea class="form-control mb-3" id="otherOptions" @bind-Value="LoomianSetDto.OtherOptions"
                 placeholder="Enter other options for your Loomian set (optional)" rows="4" maxlength="500" />
+
+            @if (Tags != null)
+            {
+                <h2>Tags</h2>
+
+                <div>
+                    @foreach (TagResponseDto tag in SelectedTags)
+                    {
+                        <span class="badge bg-secondary me-1 mb-1">
+                            @tag.Name
+                            <i type="button" class="bi bi-x-circle-fill text-white" @onclick="() => RemoveTag(tag)"></i>
+                        </span>
+                    }
+
+                    <InputSelect class="form-select mb-3 mt-2" @bind-Value="newTag" @bind-Value:after="OnTagSelected">
+                        @foreach (TagResponseDto currentTag in Tags)
+                        {
+                            <option value="@currentTag.Id">@currentTag.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+            }
 
             <p class="text-danger">@ErrorMessage</p>
 
