@@ -23,6 +23,12 @@ public class LoomianSetQueryParams : PaginatedQueryParams
     public bool IncludeAverageRating { get; set; }
 
     /// <summary>
+    /// If true, the response will include the Loomian's basic information.
+    /// This includes the Loomian's name, type, and other essential details.
+    /// </summary>
+    public bool IncludeLoomian { get; set; }
+
+    /// <summary>
     /// If true, the response will include the Loomian's ability.
     /// </summary>
     public bool IncludeAbility { get; set; }
@@ -42,4 +48,68 @@ public class LoomianSetQueryParams : PaginatedQueryParams
     /// This may include strategy, strengths, weaknesses, and other descriptive information.
     /// </summary>
     public bool IncludeDetailedExplanation { get; set; }
+
+    /// <summary>
+    /// If true, the response will include metadata about the Loomian set.
+    /// Metadata may include creation timestamp, creator information, and approval status.
+    /// </summary>
+    public bool IncludeMetadata { get; set; } 
+
+    /// <summary>
+    /// Converts the query parameters to a query string format.
+    /// </summary>
+    /// <returns></returns>
+    public string ToQueryString()
+    {
+        List<string> queryParams = [];
+
+        if (HideNonApprovedSets)
+        {
+            queryParams.Add("hideNonApprovedSets=true");
+        }
+        if (IncludeValueToStatAssignments)
+        {
+            queryParams.Add("includeValueToStatAssignments=true");
+        }
+        if (IncludeAverageRating)
+        {
+            queryParams.Add("includeAverageRating=true");
+        }
+        if (IncludeLoomian)
+        {
+            queryParams.Add("includeLoomian=true");
+        }
+        if (IncludeAbility)
+        {
+            queryParams.Add("includeAbility=true");
+        }
+        if (IncludeItem)
+        {
+            queryParams.Add("includeItem=true");
+        }
+        if (IncludeMoves)
+        {
+            queryParams.Add("includeMoves=true");
+        }
+        if (IncludeDetailedExplanation)
+        {
+            queryParams.Add("includeDetailedExplanation=true");
+        }
+        if (IncludeMetadata)
+        {
+            queryParams.Add("includeMetadata=true");
+        }
+
+        // Add pagination parameters
+        if (Page > 0)
+        {
+            queryParams.Add($"pageNumber={Page}");
+        }
+        if (PageSize > 0)
+        {
+            queryParams.Add($"pageSize={PageSize}");
+        }
+
+        return queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : string.Empty;
+    }
 }

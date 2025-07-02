@@ -18,6 +18,15 @@ public class LoomianAbilityResponseDto
     public string Name { get; set; }
 
     /// <summary>
+    /// Default constructor with empty properties for serialization purposes.
+    /// </summary>
+    public LoomianAbilityResponseDto()
+    {
+        Id = Guid.Empty;
+        Name = string.Empty;
+    }
+
+    /// <summary>
     /// Constructor to create a LoomianAbilityResponseDto from a LoomianAbility model.
     /// </summary>
     /// <param name="loomianAbility"></param>

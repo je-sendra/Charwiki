@@ -82,7 +82,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         }
 
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if(userId == null) return Unauthorized("User ID not found in claims.");
+        if (userId == null) return Unauthorized("User ID not found in claims.");
         Guid userGuid = Guid.Parse(userId);
 
         LoomianSet loomianSet = loomianSetDto.ToLoomianSet(userGuid);
@@ -128,7 +128,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         }
 
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if(userId == null) return Unauthorized("User ID not found in claims.");
+        if (userId == null) return Unauthorized("User ID not found in claims.");
 
         loomianSet.ApproverId = Guid.Parse(userId);
         loomianSet.Approved = true;
@@ -171,7 +171,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         }
 
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if(userId == null) return Unauthorized("User ID not found in claims.");
+        if (userId == null) return Unauthorized("User ID not found in claims.");
         Guid userGuid = Guid.Parse(userId);
 
         UserToLoomianSetStarRating? existingRating = await charwikiDbContext.UserToLoomianSetStarRatings
@@ -208,7 +208,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
     private async Task<IEnumerable<LoomianSet>> InternalGetLoomianSetsAsync(LoomianSetQueryParams queryParams, Guid setId = default)
     {
         IQueryable<LoomianSet> loomianSets = charwikiDbContext.LoomianSets;
-        
+
         // If a specific Loomian set ID is provided, only retrieve that set.
         // This allows for more efficient queries when looking for a single set.
         if (setId != Guid.Empty)
@@ -238,6 +238,13 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
                 .Include(ls => ls.UserToLoomianSetStarRatings);
         }
 
+        // Include Loomian basic information if the query parameter is set.
+        if (queryParams.IncludeLoomian)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Loomian);
+        }
+
         // Include ability if the query parameter is set.
         if (queryParams.IncludeAbility)
         {
@@ -260,6 +267,14 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
                 .Include(ls => ls.Move2)
                 .Include(ls => ls.Move3)
                 .Include(ls => ls.Move4);
+        }
+
+        if (queryParams.IncludeMetadata)
+        {
+            loomianSets = loomianSets
+                .Include(ls => ls.Creator)
+                .Include(ls => ls.Approver)
+                .Include(ls => ls.GameVersionInfo);
         }
 
         // Apply pagination if the query parameters specify it.
@@ -294,5 +309,34 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// Endpoint to get the rating of a Loomian set by the current user.
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <returns></returns>
+    [HttpGet("{loomianSetId}/myRating")]
+    [Authorize]
+    public async Task<IActionResult> GetMyRating(Guid loomianSetId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return Unauthorized();
+        Guid userGuid = Guid.Parse(userId);
+
+        UserToLoomianSetStarRating? rating = await charwikiDbContext.UserToLoomianSetStarRatings
+            .FirstOrDefaultAsync(r => r.UserId == userGuid && r.LoomianSetId == loomianSetId);
+
+        if (rating == null)
+        {
+            return NotFound("You have not rated this Loomian set.");
+        }
+
+        return Ok(new StarRatingResponseDto(rating));
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Charwiki.WebApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Charwiki.WebApi.Migrations
 {
     [DbContext(typeof(CharwikiDbContext))]
-    partial class CharwikiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250701125406_UseStatsSetForPersonality")]
+    partial class UseStatsSetForPersonality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,10 +182,6 @@ namespace Charwiki.WebApi.Migrations
 
                     b.Property<Guid?>("PersonalityModifiersId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Strategy")
                         .HasColumnType("text");
