@@ -123,6 +123,12 @@ public class LoomianSet : IDatabaseSaveable
     public required string Title { get; set; }
 
     /// <summary>
+    /// A short description of the Loomian set.
+    /// This is typically a brief summary or tagline that captures the essence of the set.
+    /// </summary>
+    public string ShortDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// The explanation of the set.
     /// </summary>
     public string? Explanation { get; set; }
