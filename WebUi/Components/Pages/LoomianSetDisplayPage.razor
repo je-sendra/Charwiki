@@ -1,7 +1,5 @@
 @page "/loomianSet/{SetId:guid}"
 
-@inject ILoomianSetsService LoomianSetsService;
-
 @if (_loomianSet != null)
 {
     <SetDisplay LoomianSet="@_loomianSet" />
@@ -9,16 +7,4 @@
 else
 {
     <p>Loading...</p>
-}
-
-@code{
-    [Parameter]
-    public required Guid SetId { get; set; }
-
-    private LoomianSet? _loomianSet { get; set; }
-
-    override protected async Task OnParametersSetAsync()
-    {
-        _loomianSet = await LoomianSetsService.GetByIdAsync(SetId, includeValueToStatAssignments: true, includeRatings: true);
-    }
 }

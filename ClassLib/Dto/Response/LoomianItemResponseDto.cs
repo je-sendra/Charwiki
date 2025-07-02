@@ -18,6 +18,16 @@ public class LoomianItemResponseDto
     public string Name { get; set; }
 
     /// <summary>
+    /// Default constructor for LoomianItemResponseDto.
+    /// Initializes the Id to Guid.Empty and Name to an empty string.
+    /// </summary>
+    public LoomianItemResponseDto()
+    {
+        Id = Guid.Empty;
+        Name = string.Empty;
+    }
+
+    /// <summary>
     /// Constructor to create a LoomianItemResponseDto from a LoomianItem model.
     /// </summary>
     /// <param name="loomianItem"></param>

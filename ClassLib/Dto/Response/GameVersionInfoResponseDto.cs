@@ -29,6 +29,17 @@ public class GameVersionInfoResponseDto
     public GameEdition GameEdition { get; set; }
 
     /// <summary>
+    /// Empty constructor for serialization purposes.
+    /// </summary>
+    public GameVersionInfoResponseDto()
+    {
+        Id = Guid.Empty;
+        VersionTitle = string.Empty;
+        VersionCode = string.Empty;
+        GameEdition = GameEdition.Unknown;
+    }
+
+    /// <summary>
     /// Constructor to create a GameVersionInfoResponseDto from a GameVersionInfo model.
     /// </summary>
     /// <param name="gameVersionInfo"></param>

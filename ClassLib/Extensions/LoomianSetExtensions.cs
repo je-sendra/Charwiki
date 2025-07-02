@@ -364,6 +364,18 @@ public static class LoomianSetExtensions
             };
         }
 
+        // If there are 3 personality traits, there must be 1 very negative or 1 very positive personality trait
+        if (totalNegativePersonalityTraits + totalPositivePersonalityTraits == 3 && !hasVeryNegativePersonalityTrait && !hasVeryPositivePersonalityTrait)
+        {
+            string threeTraitsMessage = "If there are 3 personality traits, there must be 1 very negative or 1 very positive personality trait.";
+            return new OperationResult
+            {
+                HasFailed = true,
+                InternalMessage = threeTraitsMessage,
+                UserMessage = threeTraitsMessage
+            };
+        }
+
         // If all checks pass, return a success message
         string successMessage = "Personality logic checks passed.";
         return new OperationResult
