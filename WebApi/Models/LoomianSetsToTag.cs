@@ -1,4 +1,4 @@
-namespace Charwiki.ClassLib.Models;
+namespace Charwiki.WebApi.Models;
 
 /// <summary>
 /// Represents a tag associated with a Loomian set.

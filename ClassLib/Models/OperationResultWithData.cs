@@ -1,4 +1,4 @@
-namespace Charwiki.ClassLib.Models.OperationResult;
+namespace Charwiki.ClassLib.Models;
 
 /// <summary>
 /// Represents the result of an operation with additional data.

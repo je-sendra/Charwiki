@@ -1,6 +1,6 @@
-using Charwiki.ClassLib.Interfaces;
+using Charwiki.WebApi.Interfaces;
 
-namespace Charwiki.ClassLib.Models;
+namespace Charwiki.WebApi.Models;
 
 /// <summary>
 /// Represents an item a Loomian can hold.
