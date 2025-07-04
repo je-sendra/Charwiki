@@ -1,4 +1,6 @@
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -8,8 +10,9 @@ namespace Charwiki.ClassLib.Services;
 public interface IGameVersionInfosService
 {
     /// <summary>
-    /// Gets all game version infos.
+    /// Retrieves all game version information.
     /// </summary>
-    /// <returns>A task that represents the asynchronous operation, containing a collection of game version infos.</returns>
-    Task<IEnumerable<GameVersionInfoResponseDto>> GetAllAsync();
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<OperationResultWithReturnData<GameVersionInfoResponseDto>> CreateAsync(CreateGameVersionInfoRequestDto request);
 }
