@@ -1,14 +1,11 @@
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using Charwiki.ClassLib.Dto;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Models.OperationResult;
 using Charwiki.WebApi.Configuration;
-using Microsoft.AspNetCore.Identity;
+using Charwiki.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
