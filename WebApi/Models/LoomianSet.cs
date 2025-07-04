@@ -1,7 +1,6 @@
-using Charwiki.ClassLib.Enums;
-using Charwiki.ClassLib.Interfaces;
+using Charwiki.WebApi.Interfaces;
 
-namespace Charwiki.ClassLib.Models;
+namespace Charwiki.WebApi.Models;
 
 /// <summary>
 /// Represents a set a Loomian can use in battle.

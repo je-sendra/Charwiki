@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Charwiki.WebApi;
