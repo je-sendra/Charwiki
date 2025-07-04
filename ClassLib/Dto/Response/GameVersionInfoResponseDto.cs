@@ -38,16 +38,4 @@ public class GameVersionInfoResponseDto
         VersionCode = string.Empty;
         GameEdition = GameEdition.Unknown;
     }
-
-    /// <summary>
-    /// Constructor to create a GameVersionInfoResponseDto from a GameVersionInfo model.
-    /// </summary>
-    /// <param name="gameVersionInfo"></param>
-    public GameVersionInfoResponseDto(GameVersionInfo gameVersionInfo)
-    {
-        Id = gameVersionInfo.Id;
-        VersionTitle = gameVersionInfo.VersionTitle;
-        VersionCode = gameVersionInfo.VersionCode;
-        GameEdition = gameVersionInfo.GameEdition;
-    }
 }

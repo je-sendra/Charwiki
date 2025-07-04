@@ -1,9 +1,9 @@
-using Charwiki.ClassLib.Models;
-using Charwiki.WebApi.Controllers.Templates;
-using Charwiki.WebApi.Interfaces;
+using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
+using Charwiki.WebApi.Extensions;
+using Charwiki.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -12,15 +12,31 @@ namespace Charwiki.WebApi.Controllers;
 /// </summary>
 /// <param name="charwikiDbContext"></param>
 [Route("[controller]")]
-public class GameVersionInfosController(CharwikiDbContext charwikiDbContext) : CrudControllerTemplate<GameVersionInfo>(charwikiDbContext, charwikiDbContext.GameVersionInfos)
+public class GameVersionInfosController(CharwikiDbContext charwikiDbContext) : ControllerBase
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Endpoint to create a new game version info.
+    /// This endpoint allows admins to create a new game version info entry in the database.
+    /// </summary>
+    /// <param name="createGameVersionInfoRequestDto"></param>
+    /// <returns></returns>
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    #pragma warning disable S6967
-    public override async Task<IActionResult> CreateNewAsync([FromBody] GameVersionInfo gameVersionInfo)
+    public async Task<IActionResult> CreateNewAsync([FromBody] CreateGameVersionInfoRequestDto createGameVersionInfoRequestDto)
     {
-        return await base.CreateNewAsync(gameVersionInfo);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Convert the request DTO to a GameVersionInfo entity
+        GameVersionInfo gameVersionInfo = createGameVersionInfoRequestDto.FromCreationDto();
+        charwikiDbContext.GameVersionInfos.Add(gameVersionInfo);
+        await charwikiDbContext.SaveChangesAsync();
+
+        // Convert the GameVersionInfo entity to a response DTO
+        GameVersionInfoResponseDto responseDto = gameVersionInfo.ToResponseDto();
+
+        return Created($"/gameVersionInfos/{responseDto.Id}", responseDto);
     }
-    #pragma warning restore S6967
 }
