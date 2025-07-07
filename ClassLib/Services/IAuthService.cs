@@ -1,4 +1,4 @@
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Models;
 
@@ -15,7 +15,7 @@ public interface IAuthService
     /// </summary>
     /// <param name="userRegisterDto"></param>
     /// <returns></returns>
-    OperationResult RegisterAsync(UserRegisterDto userRegisterDto);
+    Task<OperationResult> RegisterAsync(UserRegisterRequestDto userRegisterDto);
 
     /// <summary>
     /// Validates the user login credentials.
@@ -23,5 +23,5 @@ public interface IAuthService
     /// </summary>
     /// <param name="userLoginDto"></param>
     /// <returns></returns>
-    OperationResultWithReturnData<UserLoginResponseDto?> LoginAsync(UserLoginDto userLoginDto);
+    Task<OperationResultWithReturnData<UserLoginResponseDto>> LoginAsync(UserLoginRequestDto userLoginDto);
 }

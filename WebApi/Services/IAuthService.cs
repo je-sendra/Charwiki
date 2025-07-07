@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Models;
 using Charwiki.WebApi.Models;
 
@@ -14,7 +15,7 @@ public interface IAuthService
     /// </summary>
     /// <param name="userRegisterDto"></param>
     /// <returns></returns>
-    Task<OperationResult> RegisterUserAsync(UserRegisterDto userRegisterDto);
+    Task<OperationResult> RegisterUserAsync(UserRegisterRequestDto userRegisterDto);
 
     /// <summary>
     /// Ensures that the specified login is valid.
@@ -23,7 +24,7 @@ public interface IAuthService
     /// Will return the user if the login is valid, or an error if it is not.
     /// </remarks>
     /// <param name="userLoginDto"></param>
-    Task<OperationResultWithReturnData<User?>> ValidateLogin(UserLoginDto userLoginDto);
+    Task<OperationResultWithReturnData<User?>> ValidateLogin(UserLoginRequestDto userLoginDto);
 
     /// <summary>
     /// Generates a JWT token for the specified user.
