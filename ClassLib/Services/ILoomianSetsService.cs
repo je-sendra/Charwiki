@@ -1,8 +1,6 @@
 using Charwiki.ClassLib.Dto.QueryParams;
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
-using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Services.Templates;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -35,7 +33,7 @@ public interface ILoomianSetsService
     /// <param name="loomianSet"></param>
     /// <param name="authToken"></param>
     /// <returns></returns>
-    Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken);
+    Task<LoomianSetResponseDto> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken);
 
     /// <summary>
     /// Rates a Loomian set with a star rating.

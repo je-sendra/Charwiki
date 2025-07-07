@@ -49,7 +49,7 @@ public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> apiSet
             };
         }
 
-        HttpResponseMessage response = httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomians/{id}").Result;
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomians/{id}");
         if (!response.IsSuccessStatusCode)
         {
             return new OperationResultWithReturnData<LoomianResponseDto>
@@ -59,7 +59,7 @@ public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> apiSet
                 UserMessage = "Failed to retrieve Loomian."
             };
         }
-        LoomianResponseDto? loomian = response.Content.ReadFromJsonAsync<LoomianResponseDto>().Result;
+        LoomianResponseDto? loomian = await response.Content.ReadFromJsonAsync<LoomianResponseDto>();
         
         return new OperationResultWithReturnData<LoomianResponseDto>
         {

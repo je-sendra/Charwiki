@@ -1,5 +1,3 @@
-using Charwiki.ClassLib.Models;
-
 namespace Charwiki.ClassLib.Dto.Response;
 
 /// <summary>
@@ -46,25 +44,4 @@ public class StatsSetResponseDto
     /// The speed stat of a Loomian.
     /// </summary>
     public int Speed { get; set; }
-
-    /// <summary>
-    /// Default constructor with empty properties for serialization purposes.
-    /// </summary>
-    public StatsSetResponseDto() { }
-
-    /// <summary>
-    /// Constructor to create a StatsSetResponseDto from a StatsSet model.
-    /// </summary>
-    /// <param name="statsSet">The StatsSet model to convert.</param>
-    public StatsSetResponseDto(StatsSet statsSet)
-    {
-        Id = statsSet.Id;
-        Health = statsSet.Health;
-        Energy = statsSet.Energy;
-        MeleeAttack = statsSet.MeleeAttack;
-        RangedAttack = statsSet.RangedAttack;
-        MeleeDefense = statsSet.MeleeDefense;
-        RangedDefense = statsSet.RangedDefense;
-        Speed = statsSet.Speed;
-    }
 }

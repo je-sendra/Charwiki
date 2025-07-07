@@ -16,27 +16,11 @@ namespace Charwiki.ClassLib.Dto.Response
         /// <summary>
         /// The name of the tag.
         /// </summary>
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The description of the tag.
         /// </summary>
-        public string Description { get; set; } = null!;
-
-        /// <summary>
-        /// Default constructor for serialization purposes.
-        /// </summary>
-        public TagResponseDto() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TagResponseDto"/> class from a <see cref="Tag"/> model.
-        /// </summary>
-        /// <param name="tag"></param>
-        public TagResponseDto(Tag tag)
-        {
-            Id = tag.Id;
-            Name = tag.Name;
-            Description = tag.Description;
-        }
+        public string Description { get; set; } = string.Empty;
     }
 }
