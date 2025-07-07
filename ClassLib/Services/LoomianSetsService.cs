@@ -4,8 +4,6 @@ using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto.QueryParams;
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
-using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Services.Templates;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -13,22 +11,8 @@ namespace Charwiki.ClassLib.Services;
 /// <summary>
 /// Service for Loomian set-related operations against an API.
 /// </summary>
-public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILoomianSetsService
+public class LoomianSetsService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : ILoomianSetsService
 {
-    private readonly HttpClient _httpClient;
-    private readonly IOptions<ApiSettings> _apiSettings;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="httpClient"></param>
-    /// <param name="apiSettings"></param>
-    public LoomianSetsService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : base(httpClient, apiSettings, "loomianSets")
-    {
-        _httpClient = httpClient;
-        _apiSettings = apiSettings;
-    }
-
     /// <inheritdoc />
     public async Task<IEnumerable<LoomianSetResponseDto>?> GetAllAsync(LoomianSetQueryParams? queryParams = null)
     {
@@ -38,7 +22,7 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
         {
             queryString = queryParams.ToQueryString();
         }
-        HttpResponseMessage response = await _httpClient.GetAsync($"{_apiSettings.Value.BaseUrl}/loomianSets{queryString}");
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomianSets{queryString}");
         response.EnsureSuccessStatusCode();
         IEnumerable<LoomianSetResponseDto>? items = await response.Content.ReadFromJsonAsync<IEnumerable<LoomianSetResponseDto>>();
         return items;
@@ -53,19 +37,19 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
         {
             queryString = queryParams.ToQueryString();
         }
-        HttpResponseMessage response = await _httpClient.GetAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{id}{queryString}");
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomianSets/{id}{queryString}");
         response.EnsureSuccessStatusCode();
         LoomianSetResponseDto? item = await response.Content.ReadFromJsonAsync<LoomianSetResponseDto>();
         return item;
     }
 
     /// <inheritdoc />
-    public async Task<LoomianSet> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken)
+    public async Task<LoomianSetResponseDto> SubmitSetAsync(SubmitLoomianSetRequestDto loomianSet, string authToken)
     {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/submit", loomianSet);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/loomianSets/submit", loomianSet);
         response.EnsureSuccessStatusCode();
-        LoomianSet? item = await response.Content.ReadFromJsonAsync<LoomianSet>();
+        LoomianSetResponseDto? item = await response.Content.ReadFromJsonAsync<LoomianSetResponseDto>();
         if (item is null)
         {
             throw new InvalidOperationException("Failed to deserialize the LoomianSet.");
@@ -76,16 +60,16 @@ public class LoomianSetsService : CrudControllerServiceTemplate<LoomianSet>, ILo
     /// <inheritdoc />
     public async Task RateLoomianSetAsync(Guid loomianSetId, int starRating, string authToken)
     {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{loomianSetId}/rate", starRating);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{apiSettings.Value.BaseUrl}/loomianSets/{loomianSetId}/rate", starRating);
         response.EnsureSuccessStatusCode();
     }
 
     /// <inheritdoc />
     public async Task<StarRatingResponseDto?> GetMyRatingAsync(Guid loomianSetId, string authToken)
     {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-        HttpResponseMessage response = await _httpClient.GetAsync($"{_apiSettings.Value.BaseUrl}/loomianSets/{loomianSetId}/myRating");
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomianSets/{loomianSetId}/myRating");
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
             return null; // No rating found for the user.

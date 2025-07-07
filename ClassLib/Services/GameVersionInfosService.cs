@@ -3,7 +3,6 @@ using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Services.Templates;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;

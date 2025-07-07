@@ -1,5 +1,3 @@
-using Charwiki.ClassLib.Models;
-
 namespace Charwiki.ClassLib.Dto.Response;
 
 /// <summary>
@@ -156,76 +154,5 @@ public class LoomianSetResponseDto
     /// Tags can be used to categorize or label Loomian sets for easier identification and organization.
     /// </summary>
     public IEnumerable<TagResponseDto>? Tags { get; set; } = null!;
-    #endregion
-
-    #region Constructors
-
-    /// <summary>
-    /// Default constructor with empty properties for serialization purposes.
-    /// </summary>
-    public LoomianSetResponseDto()
-    {
-
-    }
-
-    /// <summary>
-    /// Constructor to create a LoomianSetResponseDto from a LoomianSet model.
-    /// </summary>
-    /// <param name="loomianSet"></param>
-    public LoomianSetResponseDto(LoomianSet loomianSet)
-    {
-        Id = loomianSet.Id;
-        Loomian = loomianSet.Loomian != null ? new LoomianResponseDto(loomianSet.Loomian) : null;
-        Ability = loomianSet.Ability != null ? new LoomianAbilityResponseDto(loomianSet.Ability) : null;
-        Item = loomianSet.Item != null ? new LoomianItemResponseDto(loomianSet.Item) : null;
-
-        Move1 = loomianSet.Move1 != null ? new LoomianMoveResponseDto(loomianSet.Move1) : null;
-        Move2 = loomianSet.Move2 != null ? new LoomianMoveResponseDto(loomianSet.Move2) : null;
-        Move3 = loomianSet.Move3 != null ? new LoomianMoveResponseDto(loomianSet.Move3) : null;
-        Move4 = loomianSet.Move4 != null ? new LoomianMoveResponseDto(loomianSet.Move4) : null;
-
-        Title = loomianSet.Title;
-        ShortDescription = loomianSet.ShortDescription;
-        Explanation = loomianSet.Explanation;
-        Strategy = loomianSet.Strategy;
-        Strengths = loomianSet.Strengths;
-        Weaknesses = loomianSet.Weaknesses;
-        OtherOptions = loomianSet.OtherOptions;
-
-        GameVersionInfo = loomianSet.GameVersionInfo != null ? new GameVersionInfoResponseDto(loomianSet.GameVersionInfo) : null;
-        IsApproved = loomianSet.Approved;
-
-        TrainingPoints = loomianSet.TrainingPoints != null ? new StatsSetResponseDto(loomianSet.TrainingPoints) : null;
-        UniquePoints = loomianSet.UniquePoints != null ? new StatsSetResponseDto(loomianSet.UniquePoints) : null;
-        PersonalityModifiers = loomianSet.PersonalityModifiers != null ? new StatsSetResponseDto(loomianSet.PersonalityModifiers) : null;
-
-        if (loomianSet.Creator != null)
-        {
-            Author = new UserResponseDto(loomianSet.Creator);
-            CreatedAt = loomianSet.CreationTimestamp;
-        }
-
-        if (loomianSet.Approver != null)
-        {
-            Approver = new UserResponseDto(loomianSet.Approver);
-            ApprovedAt = loomianSet.ApprovalTimestamp;
-        }
-
-        if (loomianSet.UserToLoomianSetStarRatings != null && loomianSet.UserToLoomianSetStarRatings.Any())
-        {
-            AverageRating = loomianSet.UserToLoomianSetStarRatings
-                .Average(rating => rating.StarRating);
-
-            RatingsCount = loomianSet.UserToLoomianSetStarRatings.Count;
-        }
-
-        if (loomianSet.Tags != null)
-        {
-            Tags = loomianSet.Tags
-                .Where(t => t.Tag != null)
-                .Select(t => new TagResponseDto(t.Tag!))
-                .OrderBy(t => t.Name);
-        }
-    }
     #endregion
 }
