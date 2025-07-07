@@ -1,5 +1,3 @@
-using Charwiki.ClassLib.Models;
-
 namespace Charwiki.ClassLib.Dto.Response;
 
 /// <summary>
