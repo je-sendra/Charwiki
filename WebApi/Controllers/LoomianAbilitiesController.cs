@@ -1,7 +1,10 @@
-using Charwiki.ClassLib.Models;
-using Charwiki.WebApi.Controllers.Templates;
+using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
+using Charwiki.WebApi.Extensions;
+using Charwiki.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -10,15 +13,37 @@ namespace Charwiki.WebApi.Controllers;
 /// </summary>
 /// <param name="charwikiDbContext"></param>
 [Route("[controller]")]
-public class LoomianAbilitiesController(CharwikiDbContext charwikiDbContext) : CrudControllerTemplate<LoomianAbility>(charwikiDbContext, charwikiDbContext.LoomianAbilities)
-{
+public class LomianAbilitiesController(CharwikiDbContext charwikiDbContext) : ControllerBase
+{ 
+
+    /// <summary>
+    /// Gets all Loomian abilities.
+    /// </summary>
+    /// <returns>A collection of Loomian abilities.</returns>
+    public async Task<IActionResult> GetAllAsync()
+    {
+        IEnumerable<LoomianAbility> loomianAbilities = await charwikiDbContext.LoomianAbilities.ToListAsync();
+        IEnumerable<LoomianAbilityResponseDto> responseDtos = loomianAbilities.Select(loomianAbility => loomianAbility.ToResponseDto());
+        return Ok(responseDtos);
+    }
+
     /// <inheritdoc />
     [HttpPost]
-    [Authorize(Roles="Admin")]
-    #pragma warning disable S6967 // ModelState.IsValid should be checked in controller actions.sonarlint(csharpsquid:S6967). Reason: The model state is checked in the base class.
-    public override async Task<IActionResult> CreateNewAsync([FromBody] LoomianAbility loomianAbility)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateLoomianAbilityRequestDto requestDto)
     {
-        return await base.CreateNewAsync(loomianAbility);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Convert the request DTO to a LoomianAbility entity
+        LoomianAbility loomianAbility = requestDto.ToEntity();
+
+        charwikiDbContext.LoomianAbilities.Add(loomianAbility);
+        await charwikiDbContext.SaveChangesAsync();
+
+        LoomianAbilityResponseDto responseDto = loomianAbility.ToResponseDto();
+        return Created("/loomianAbilities", responseDto);
     }
-    #pragma warning restore S6967
 }
