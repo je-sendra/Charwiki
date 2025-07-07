@@ -1,11 +1,11 @@
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Exceptions;
 using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Models.OperationResult;
 
 namespace Charwiki.ClassLib.Extensions;
 
 /// <summary>
-/// Contains extension methods for <see cref="LoomianSet"/>.
+/// Contains extension methods for Loomian sets.
 /// </summary>
 public static class LoomianSetExtensions
 {
@@ -14,7 +14,7 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static OperationResult ValidateSet(this LoomianSet loomianSet)
+    public static OperationResult ValidateSet(this SubmitLoomianSetRequestDto loomianSet)
     {
         OperationResult tpsValidationResult = ValidateTrainingPoints(loomianSet);
         if (tpsValidationResult.HasFailed) return tpsValidationResult;
@@ -39,7 +39,7 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static OperationResult ValidateTrainingPoints(this LoomianSet loomianSet)
+    public static OperationResult ValidateTrainingPoints(this SubmitLoomianSetRequestDto loomianSet)
     {
         if (loomianSet.TrainingPoints == null)
         {
@@ -51,7 +51,7 @@ public static class LoomianSetExtensions
             };
         }
 
-        StatsSet trainingPoints = loomianSet.TrainingPoints;
+        CreateStatsSetRequestDto trainingPoints = loomianSet.TrainingPoints;
 
         // Check if each stat has valid training points
         OperationResult statsValidation = ValidateAllStatsInRange(trainingPoints, 0, 200, "Training Points");
@@ -90,7 +90,7 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static OperationResult ValidateUniquePoints(this LoomianSet loomianSet)
+    public static OperationResult ValidateUniquePoints(this SubmitLoomianSetRequestDto loomianSet)
     {
         if (loomianSet.UniquePoints == null)
         {
@@ -101,7 +101,7 @@ public static class LoomianSetExtensions
                 UserMessage = "Unique points have not been sent to the server."
             };
         }
-        StatsSet uniquePoints = loomianSet.UniquePoints;
+        CreateStatsSetRequestDto uniquePoints = loomianSet.UniquePoints;
 
         // Check if each stat has valid unique points
         OperationResult statsValidation = ValidateAllStatsInRange(uniquePoints, 0, 200, "Unique Points");
@@ -113,7 +113,7 @@ public static class LoomianSetExtensions
     /// </summary>
     /// <param name="loomianSet"></param>
     /// <exception cref="InvalidSetException"></exception>
-    public static OperationResult ValidatePersonality(this LoomianSet loomianSet)
+    public static OperationResult ValidatePersonality(this SubmitLoomianSetRequestDto loomianSet)
     {
         if (loomianSet.PersonalityModifiers == null)
         {
@@ -125,7 +125,7 @@ public static class LoomianSetExtensions
             };
         }
 
-        StatsSet personalityModifiers = loomianSet.PersonalityModifiers;
+        CreateStatsSetRequestDto personalityModifiers = loomianSet.PersonalityModifiers;
 
         int[] allowedModifiers = [-20, -10, 0, 10, 20];
         if (!allowedModifiers.Contains(personalityModifiers.Health) ||
@@ -173,7 +173,7 @@ public static class LoomianSetExtensions
     /// <param name="personalityModifiers"></param>
     /// <param name="totalNegativePersonalityTraits"></param>
     /// <param name="totalPositivePersonalityTraits"></param>
-    private static void CountPersonalityValues(StatsSet personalityModifiers, ref int totalNegativePersonalityTraits, ref int totalPositivePersonalityTraits)
+    private static void CountPersonalityValues(CreateStatsSetRequestDto personalityModifiers, ref int totalNegativePersonalityTraits, ref int totalPositivePersonalityTraits)
     {
         // Count the number of positive and negative personality traits
         if (personalityModifiers.Health < 0) totalNegativePersonalityTraits++;
@@ -198,7 +198,7 @@ public static class LoomianSetExtensions
     /// <param name="personalityModifiers"></param>
     /// <param name="hasVeryNegativePersonalityTrait"></param>
     /// <param name="hasVeryPositivePersonalityTrait"></param>
-    private static void CheckIfPersonalityHasVery(StatsSet personalityModifiers, ref bool hasVeryNegativePersonalityTrait, ref bool hasVeryPositivePersonalityTrait)
+    private static void CheckIfPersonalityHasVery(CreateStatsSetRequestDto personalityModifiers, ref bool hasVeryNegativePersonalityTrait, ref bool hasVeryPositivePersonalityTrait)
     {
         // Check if there are very negative or very positive personality traits
         if (personalityModifiers.Health == -20 || personalityModifiers.Energy == -20 ||
@@ -225,7 +225,7 @@ public static class LoomianSetExtensions
     /// <param name="maxValue"></param>
     /// <param name="statType"></param>
     /// <returns></returns>
-    private static OperationResult ValidateAllStatsInRange(StatsSet stats, int minValue, int maxValue, string statType)
+    private static OperationResult ValidateAllStatsInRange(CreateStatsSetRequestDto stats, int minValue, int maxValue, string statType)
     {
         OperationResult hpValidation = ValidateStatInRange(stats.Health, "Health", minValue, maxValue, statType);
         if (hpValidation.HasFailed) return hpValidation;

@@ -4,6 +4,7 @@ using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Extensions;
 using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Extensions;
 using Charwiki.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         IEnumerable<LoomianSet> loomianSets = await InternalGetLoomianSetsAsync(queryParams);
 
         IEnumerable<LoomianSetResponseDto> loomianSetResponse = loomianSets
-            .Select(ls => new LoomianSetResponseDto(ls));
+            .Select(ls => ls.ToResponseDto());
 
         return Ok(loomianSetResponse);
     }
@@ -61,7 +62,7 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
             return NotFound();
         }
 
-        LoomianSetResponseDto loomianSetResponse = new(loomianSet);
+        LoomianSetResponseDto loomianSetResponse = loomianSet.ToResponseDto();
 
         return Ok(loomianSetResponse);
     }
@@ -85,10 +86,11 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
         if (userId == null) return Unauthorized("User ID not found in claims.");
         Guid userGuid = Guid.Parse(userId);
 
-        LoomianSet loomianSet = loomianSetDto.ToLoomianSet(userGuid);
+        LoomianSet loomianSet = loomianSetDto.ToLoomianSet();
+        loomianSet.CreatorId = userGuid;
         loomianSet.CreationTimestamp = DateTime.UtcNow;
 
-        OperationResult validationResult = loomianSet.ValidateSet();
+        OperationResult validationResult = loomianSetDto.ValidateSet();
         if (validationResult.HasFailed)
         {
             return BadRequest(validationResult.UserMessage);
@@ -410,6 +412,6 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
             return NotFound("You have not rated this Loomian set.");
         }
 
-        return Ok(new StarRatingResponseDto(rating));
+        return Ok(rating.ToResponseDto());
     }
 }

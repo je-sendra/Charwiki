@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Dto.Request;
 
@@ -17,7 +16,7 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The personality modifiers of the Loomian in the set.
     /// </summary>
-    public StatsSet? PersonalityModifiers { get; set; }
+    public CreateStatsSetRequestDto? PersonalityModifiers { get; set; }
 
     /// <summary>
     /// The unique identifier of the ability of the Loomian in the set.
@@ -33,12 +32,12 @@ public class SubmitLoomianSetRequestDto
     /// <summary>
     /// The training points of the Loomian.
     /// </summary>
-    public StatsSet? TrainingPoints { get; set; }
+    public CreateStatsSetRequestDto? TrainingPoints { get; set; }
 
     /// <summary>
     /// The unique points of the Loomian.
     /// </summary>
-    public StatsSet? UniquePoints { get; set; }
+    public CreateStatsSetRequestDto? UniquePoints { get; set; }
 
     #region Moveset
     /// <summary>
@@ -119,38 +118,5 @@ public class SubmitLoomianSetRequestDto
     /// A list of tags associated with the Loomian set.
     /// </summary>
     public List<Guid>? TagsIds { get; set; } = new();
-    #endregion
-
-    #region Conversion Methods
-    /// <summary>
-    /// Converts the DTO to a Loomian set object.
-    /// </summary>
-    /// <param name="creatorId">The value that will be set to the LoomianSet's CreatorId</param>
-    /// <returns></returns>
-    public LoomianSet ToLoomianSet(Guid creatorId)
-    {
-        return new LoomianSet
-        {
-            LoomianId = LoomianId ?? Guid.Empty,
-            PersonalityModifiers = PersonalityModifiers,
-            LoomianAbilityId = AbilityId ?? Guid.Empty,
-            ItemId = ItemId,
-            TrainingPoints = TrainingPoints,
-            UniquePoints = UniquePoints,
-            Move1Id = Move1Id,
-            Move2Id = Move2Id,
-            Move3Id = Move3Id,
-            Move4Id = Move4Id,
-            Title = Title,
-            ShortDescription = ShortDescription,
-            Explanation = Explanation,
-            Strategy = Strategy,
-            Strengths = Strengths,
-            Weaknesses = Weaknesses,
-            OtherOptions = OtherOptions,
-            GameVersionInfoId = GameVersionInfoId ?? Guid.Empty,
-            CreatorId = creatorId
-        };
-    }
     #endregion
 }

@@ -174,7 +174,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The unique identifier of the user who created the set.
     /// </summary>
-    public required Guid CreatorId { get; set; }
+    public Guid CreatorId { get; set; }
 
     /// <summary>
     /// The user who created the set.
