@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -13,32 +14,59 @@ namespace Charwiki.ClassLib.Services;
 public class LoomiansService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : ILoomiansService
 {
     /// <inheritdoc/>
-    public async Task<IEnumerable<LoomianResponseDto>> GetAllAsync()
+    public async Task<OperationResultWithReturnData<IEnumerable<LoomianResponseDto>>> GetAllAsync()
     {
         HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomians");
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+            return new OperationResultWithReturnData<IEnumerable<LoomianResponseDto>>
+            {
+                HasFailed = true,
+                InternalMessage = response.ReasonPhrase ?? "Failed to retrieve Loomians.",
+                UserMessage = "Failed to retrieve Loomians."
+            };
         }
         IEnumerable<LoomianResponseDto>? loomians = await response.Content.ReadFromJsonAsync<IEnumerable<LoomianResponseDto>>();
-        return loomians ?? [];
+        return new OperationResultWithReturnData<IEnumerable<LoomianResponseDto>>
+        {
+            HasFailed = false,
+            InternalMessage = "Loomians retrieved successfully.",
+            UserMessage = "Loomians retrieved successfully.",
+            ReturnData = loomians ?? []
+        };
     }
 
     /// <inheritdoc/>
-    public async Task<LoomianResponseDto> GetByIdAsync(Guid id)
+    public async Task<OperationResultWithReturnData<LoomianResponseDto>> GetByIdAsync(Guid id)
     {
         if (id == Guid.Empty)
         {
-            throw new ArgumentException("ID cannot be empty.", nameof(id));
+            return new OperationResultWithReturnData<LoomianResponseDto>
+            {
+                HasFailed = true,
+                InternalMessage = "Loomian ID cannot be empty.",
+                UserMessage = "Invalid Loomian ID provided."
+            };
         }
-        
+
         HttpResponseMessage response = httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomians/{id}").Result;
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+            return new OperationResultWithReturnData<LoomianResponseDto>
+            {
+                HasFailed = true,
+                InternalMessage = response.ReasonPhrase ?? "Failed to retrieve Loomian.",
+                UserMessage = "Failed to retrieve Loomian."
+            };
         }
         LoomianResponseDto? loomian = response.Content.ReadFromJsonAsync<LoomianResponseDto>().Result;
-        return loomian ?? throw new KeyNotFoundException($"Loomian with ID {id} not found.");
-    
+        
+        return new OperationResultWithReturnData<LoomianResponseDto>
+        {
+            HasFailed = false,
+            InternalMessage = "Loomian retrieved successfully.",
+            UserMessage = "Loomian retrieved successfully.",
+            ReturnData = loomian
+        };
     }
 }
