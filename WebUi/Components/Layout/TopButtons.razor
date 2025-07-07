@@ -12,29 +12,33 @@
     <span>Join</span>
 </a>
 
-@if (_isAuthenticated)
+@if (_hasInitializedAuth)
 {
-    @if (_user != null)
+    @if (_isAuthenticated)
     {
-        <span class="ms-2">@_user.Username</span>
-    }
+        @if (_user != null)
+        {
+            <span class="ms-2">@_user.Username</span>
+        }
 
-    <a class="btn btn-outline-danger" @onclick="HandleLogoutAsync">
-        <i class="bi bi-box-arrow-right"></i>
-        <span>Logout</span>
-    </a>
-}
-else
-{
-    <a class="btn btn-outline-success" href="login">
-        <i class="bi bi-person"></i>
-        <span>Access</span>
-    </a>
+        <a class="btn btn-outline-danger" @onclick="HandleLogoutAsync">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-outline-success" href="login">
+            <i class="bi bi-person"></i>
+            <span>Access</span>
+        </a>
+    }
 }
 
 @code {
 
     private bool _isAuthenticated;
+    private bool _hasInitializedAuth;
     private User? _user;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -57,6 +61,7 @@ else
                 }
             }
 
+            _hasInitializedAuth = true;
             StateHasChanged();
         }
     }
