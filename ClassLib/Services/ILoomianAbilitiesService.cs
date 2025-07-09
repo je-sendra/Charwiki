@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -11,5 +12,5 @@ public interface ILoomianAbilitiesService
     /// Gets all Loomian abilities.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation, containing a collection of Loomian abilities.</returns>
-    Task<IEnumerable<LoomianAbilityResponseDto>> GetAllAsync();
+    Task<OperationResultWithReturnData<IEnumerable<LoomianAbilityResponseDto>>> GetAllAsync();
 }

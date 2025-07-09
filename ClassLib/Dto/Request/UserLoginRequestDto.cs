@@ -1,9 +1,9 @@
-namespace Charwiki.ClassLib.Dto;
+namespace Charwiki.ClassLib.Dto.Request;
 
 /// <summary>
-/// Represents a user register DTO.
+/// Represents a user login DTO.
 /// </summary>
-public class UserRegisterDto
+public class UserLoginRequestDto
 {
     /// <summary>
     /// The username of the user.

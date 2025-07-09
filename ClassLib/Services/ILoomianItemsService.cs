@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -11,5 +12,5 @@ public interface ILoomianItemsService
     /// Gets all Loomian items.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation, containing a collection of Loomian items.</returns>
-    Task<IEnumerable<LoomianItemResponseDto>> GetAllAsync();
+    Task<OperationResultWithReturnData<IEnumerable<LoomianItemResponseDto>>> GetAllAsync();
 }

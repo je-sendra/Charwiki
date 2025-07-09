@@ -1,6 +1,8 @@
 using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
+using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Models.OperationResult;
+using Charwiki.WebApi.Models;
 using Charwiki.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +21,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     /// <param name="userRegisterDto"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDto userRegisterDto)
+    public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterRequestDto userRegisterDto)
     {
         if (!ModelState.IsValid)
         {
@@ -32,7 +34,7 @@ public class AuthController(IAuthService authService) : ControllerBase
             return BadRequest(registerResult.UserMessage);
         }
 
-        return Ok();
+        return Ok(registerResult.UserMessage);
     }
 
     /// <summary>
@@ -41,7 +43,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     /// <param name="userLoginDto"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAsync([FromBody] UserLoginDto userLoginDto)
+    public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequestDto userLoginDto)
     {
         if (!ModelState.IsValid)
         {
@@ -62,7 +64,16 @@ public class AuthController(IAuthService authService) : ControllerBase
         // Generate JWT token for the user
         string token = authService.GenerateJwtToken(loginResult.ReturnData);
 
+        // Create the response DTO
+        UserLoginResponseDto responseDto = new()
+        {
+            UserId = loginResult.ReturnData.Id,
+            Username = loginResult.ReturnData.Username,
+            Roles = loginResult.ReturnData.Roles,
+            Token = token
+        };
+
         // Return OK with the token
-        return Ok(token);
+        return Ok(responseDto);
     }
 }

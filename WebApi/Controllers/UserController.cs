@@ -1,10 +1,8 @@
-using Charwiki.ClassLib.Models;
-using Charwiki.WebApi.Services;
-using Charwiki.ClassLib.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Charwiki.WebApi.Models;
+using Charwiki.WebApi.Extensions;
 
 namespace Charwiki.WebApi.Controllers;
 
@@ -30,7 +28,7 @@ public class UserController(CharwikiDbContext charwikiDbContext) : ControllerBas
         User? user = await charwikiDbContext.Users.FindAsync(userGuid);
         if (user == null) return NotFound("User not found.");
 
-        return Ok(user.GetCopyWithoutSensitiveInformation());
+        return Ok(user.ToResponseDto());
     }
 
     /// <summary>
@@ -53,6 +51,6 @@ public class UserController(CharwikiDbContext charwikiDbContext) : ControllerBas
             return NotFound();
         }
 
-        return Ok(user.GetCopyWithoutSensitiveInformation());
+        return Ok(user.ToResponseDto());
     }
 }

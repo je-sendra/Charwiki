@@ -2,7 +2,6 @@ using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto.Response;
 using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Services.Templates;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -15,14 +14,25 @@ namespace Charwiki.ClassLib.Services;
 public class LoomianItemsService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : ILoomianItemsService
 {
     /// <inheritdoc/>
-    public async Task<IEnumerable<LoomianItemResponseDto>> GetAllAsync()
+    public async Task<OperationResultWithReturnData<IEnumerable<LoomianItemResponseDto>>> GetAllAsync()
     {
         HttpResponseMessage response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/loomianItems");
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+            return new()
+            {
+                HasFailed = true,
+                UserMessage = "Failed to retrieve Loomian items.",
+                InternalMessage = response.ReasonPhrase ?? "Unknown error",
+            };
         }
         IEnumerable<LoomianItemResponseDto>? items = await response.Content.ReadFromJsonAsync<IEnumerable<LoomianItemResponseDto>>();
-        return items ?? [];
+        return new()
+        {
+            HasFailed = false,
+            ReturnData = items ?? [],
+            UserMessage = "Successfully retrieved Loomian items.",
+            InternalMessage = "Items retrieved successfully.",
+        };
     }
 }

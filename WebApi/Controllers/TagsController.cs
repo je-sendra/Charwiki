@@ -1,6 +1,7 @@
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
-using Charwiki.ClassLib.Models;
+using Charwiki.WebApi.Extensions;
+using Charwiki.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ public class TagsController(CharwikiDbContext charwikiDbContext) : ControllerBas
     public async Task<IActionResult> GetAllTags()
     {
         IEnumerable<Tag> tags = await charwikiDbContext.Tags.ToListAsync();
-        IEnumerable<TagResponseDto> tagDtos = tags.Select(tag => new TagResponseDto(tag));
+        IEnumerable<TagResponseDto> tagDtos = tags.Select(tag => tag.ToResponseDto());
         return Ok(tagDtos);
     }
 
@@ -44,7 +45,7 @@ public class TagsController(CharwikiDbContext charwikiDbContext) : ControllerBas
         {
             return NotFound();
         }
-        TagResponseDto tagDto = new(tag);
+        TagResponseDto tagDto = tag.ToResponseDto();
         return Ok(tagDto);
     }
 
@@ -67,16 +68,11 @@ public class TagsController(CharwikiDbContext charwikiDbContext) : ControllerBas
             return BadRequest("Tag name cannot be empty.");
         }
 
-        Tag tag = new()
-        {
-            Id = Guid.NewGuid(),
-            Name = tagDto.Name,
-            Description = tagDto.Description
-        };
+        Tag tag = tagDto.ToEntity();
 
         charwikiDbContext.Tags.Add(tag);
         await charwikiDbContext.SaveChangesAsync();
-        TagResponseDto tagResponseDto = new(tag);
+        TagResponseDto tagResponseDto = tag.ToResponseDto();
         return Created($"/tags/{tag.Id}", tagResponseDto);
     }
 }

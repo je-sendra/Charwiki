@@ -1,4 +1,4 @@
-namespace Charwiki.ClassLib.Interfaces;
+namespace Charwiki.WebApi.Interfaces;
 
 /// <summary>
 /// Represents an object that can be saved to a database.
