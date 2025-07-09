@@ -1,4 +1,5 @@
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -11,12 +12,12 @@ public interface ILoomiansService
     /// Gets all Loomians.
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<LoomianResponseDto>> GetAllAsync();
+    Task<OperationResultWithReturnData<IEnumerable<LoomianResponseDto>>> GetAllAsync();
 
     /// <summary>
     /// Gets a Loomian by its unique identifier.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<LoomianResponseDto> GetByIdAsync(Guid id);
+    Task<OperationResultWithReturnData<LoomianResponseDto>> GetByIdAsync(Guid id);
 }

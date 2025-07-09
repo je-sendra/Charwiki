@@ -1,6 +1,6 @@
-using Charwiki.ClassLib.Interfaces;
+using Charwiki.WebApi.Interfaces;
 
-namespace Charwiki.ClassLib.Models;
+namespace Charwiki.WebApi.Models;
 
 /// <summary>
 /// Represents a set of stats that can be assigned to Loomians.

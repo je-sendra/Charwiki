@@ -1,14 +1,11 @@
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
-using Charwiki.ClassLib.Dto;
+using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Enums;
 using Charwiki.ClassLib.Models;
-using Charwiki.ClassLib.Models.OperationResult;
 using Charwiki.WebApi.Configuration;
-using Microsoft.AspNetCore.Identity;
+using Charwiki.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -25,7 +22,7 @@ namespace Charwiki.WebApi.Services;
 public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordHashVersionHistoryService passwordHashVersionHistoryService, IPasswordHashingService passwordHashingService, CharwikiDbContext charwikiDbContext) : IAuthService
 {
     /// <inheritdoc/>
-    public async Task<OperationResult> RegisterUserAsync(UserRegisterDto userRegisterDto)
+    public async Task<OperationResult> RegisterUserAsync(UserRegisterRequestDto userRegisterDto)
     {
         // Make the username lowercase
         userRegisterDto.Username = userRegisterDto.Username.ToLower();
@@ -107,7 +104,7 @@ public class AuthService(IOptions<SecuritySettings> securitySettings, IPasswordH
     }
 
     /// <inheritdoc/>
-    public async Task<OperationResultWithReturnData<User?>> ValidateLogin(UserLoginDto userLoginDto)
+    public async Task<OperationResultWithReturnData<User?>> ValidateLogin(UserLoginRequestDto userLoginDto)
     {
         // Make the username lowercase
         userLoginDto.Username = userLoginDto.Username.ToLower();

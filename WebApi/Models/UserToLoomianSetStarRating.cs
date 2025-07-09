@@ -1,4 +1,4 @@
-namespace Charwiki.ClassLib.Models;
+namespace Charwiki.WebApi.Models;
 
 /// <summary>
 /// Represents a star rating given by a user to a Loomian set.

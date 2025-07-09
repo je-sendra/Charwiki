@@ -1,5 +1,4 @@
 using Charwiki.ClassLib.Enums;
-using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Dto.Response;
 
@@ -16,31 +15,10 @@ public class LoomianMoveResponseDto
     /// <summary>
     /// The name of the Loomian move.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// The type of the Loomian move.
     /// </summary>
     public LoomianType Type { get; set; }
-
-    /// <summary>
-    /// Default constructor for LoomianMoveResponseDto.
-    /// </summary>
-    public LoomianMoveResponseDto()
-    {
-        Id = Guid.Empty;
-        Name = string.Empty;
-        Type = LoomianType.Unknown;
-    }
-
-    /// <summary>
-    /// Constructor to create a LoomianMoveResponseDto from a LoomianMove model.
-    /// </summary>
-    /// <param name="loomianMove"></param>
-    public LoomianMoveResponseDto(LoomianMove loomianMove)
-    {
-        Id = loomianMove.Id;
-        Name = loomianMove.Name;
-        Type = loomianMove.Type;
-    }
 }

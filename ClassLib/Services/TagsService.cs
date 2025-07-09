@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -13,31 +14,58 @@ namespace Charwiki.ClassLib.Services;
 public class TagsService(HttpClient httpClient, IOptions<ApiSettings> apiSettings) : ITagsService
 {
     /// <inheritdoc/>
-    public async Task<IEnumerable<TagResponseDto>?> GetAllAsync()
+    public async Task<OperationResultWithReturnData<IEnumerable<TagResponseDto>>> GetAllAsync()
     {
         HttpResponseMessage? response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/tags");
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+            return new OperationResultWithReturnData<IEnumerable<TagResponseDto>>
+            {
+                HasFailed = true,
+                UserMessage = "Failed to retrieve tags.",
+                InternalMessage = response.ReasonPhrase ?? "Unknown error",
+            };
         }
         IEnumerable<TagResponseDto>? tags = await response.Content.ReadFromJsonAsync<IEnumerable<TagResponseDto>>();
-        return tags;
+        return new OperationResultWithReturnData<IEnumerable<TagResponseDto>>
+        {
+            HasFailed = false,
+            ReturnData = tags ?? [],
+            UserMessage = "Successfully retrieved tags.",
+            InternalMessage = "Tags retrieved successfully.",
+        };
     }
 
     /// <inheritdoc/>
-    public async Task<TagResponseDto?> GetByIdAsync(Guid id)
+    public async Task<OperationResultWithReturnData<TagResponseDto>> GetByIdAsync(Guid id)
     {
         if (id == Guid.Empty)
         {
-            throw new ArgumentException("ID cannot be empty.", nameof(id));
+            return new OperationResultWithReturnData<TagResponseDto>
+            {
+                HasFailed = true,
+                UserMessage = "Invalid tag ID.",
+                InternalMessage = "The provided tag ID is empty.",
+            };
         }
 
         HttpResponseMessage? response = await httpClient.GetAsync($"{apiSettings.Value.BaseUrl}/tags/{id}");
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException(await response.Content.ReadAsStringAsync() ?? response.ReasonPhrase);
+            return new OperationResultWithReturnData<TagResponseDto>
+            {
+                HasFailed = true,
+                UserMessage = "Failed to retrieve tag.",
+                InternalMessage = response.ReasonPhrase ?? "Unknown error",
+            };
         }
         TagResponseDto? tag = await response.Content.ReadFromJsonAsync<TagResponseDto>();
-        return tag;
+        return new OperationResultWithReturnData<TagResponseDto>
+        {
+            HasFailed = false,
+            ReturnData = tag,
+            UserMessage = "Successfully retrieved tag.",
+            InternalMessage = "Tag retrieved successfully.",
+        };
     }
 }

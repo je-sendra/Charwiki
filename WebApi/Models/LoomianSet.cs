@@ -1,7 +1,6 @@
-using Charwiki.ClassLib.Enums;
-using Charwiki.ClassLib.Interfaces;
+using Charwiki.WebApi.Interfaces;
 
-namespace Charwiki.ClassLib.Models;
+namespace Charwiki.WebApi.Models;
 
 /// <summary>
 /// Represents a set a Loomian can use in battle.
@@ -175,7 +174,7 @@ public class LoomianSet : IDatabaseSaveable
     /// <summary>
     /// The unique identifier of the user who created the set.
     /// </summary>
-    public required Guid CreatorId { get; set; }
+    public Guid CreatorId { get; set; }
 
     /// <summary>
     /// The user who created the set.
