@@ -4,6 +4,7 @@ using Charwiki.ClassLib.Configuration;
 using Charwiki.ClassLib.Dto.QueryParams;
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 using Microsoft.Extensions.Options;
 
 namespace Charwiki.ClassLib.Services;
@@ -77,5 +78,38 @@ public class LoomianSetsService(HttpClient httpClient, IOptions<ApiSettings> api
         response.EnsureSuccessStatusCode();
         StarRatingResponseDto? rating = await response.Content.ReadFromJsonAsync<StarRatingResponseDto>();
         return rating;
+    }
+
+    /// <inheritdoc />
+    public async Task<OperationResult> ApproveSetAsync(Guid loomianSetId, string authToken)
+    {
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        HttpResponseMessage response = await httpClient.PostAsync($"{apiSettings.Value.BaseUrl}/loomianSets/{loomianSetId}/approve", null);
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return new OperationResult
+            {
+                HasFailed = true,
+                UserMessage = "Loomian set not found.",
+                InternalMessage = "The specified Loomian set ID does not exist.",
+            };
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new OperationResult
+            {
+                HasFailed = true,
+                UserMessage = "Failed to approve Loomian set.",
+                InternalMessage = response.ReasonPhrase ?? "Unknown error",
+            };
+        }
+        response.EnsureSuccessStatusCode();
+        return new OperationResult
+        {
+            HasFailed = false,
+            UserMessage = "Loomian set approved successfully.",
+            InternalMessage = "The Loomian set has been approved.",
+        };
     }
 }
