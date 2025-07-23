@@ -14,4 +14,9 @@ public class LoomianResponseDto
     /// The name of the Loomian.
     /// </summary>
     public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The base stats of the Loomian.
+    /// </summary>
+    public StatsSetResponseDto BaseStats { get; set; } = new StatsSetResponseDto();
 }
