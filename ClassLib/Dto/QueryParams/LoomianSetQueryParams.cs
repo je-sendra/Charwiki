@@ -7,10 +7,17 @@ namespace Charwiki.ClassLib.Dto.QueryParams;
 public class LoomianSetQueryParams : PaginatedQueryParams
 {
     /// <summary>
-    /// If true, only Loomian sets that have been approved will be returned.
+    /// If true, sets that have not been approved will be hidden from the results.
     /// Approved sets are those that have been reviewed and accepted by the community or moderators.
     /// </summary>
     public bool HideNonApprovedSets { get; set; }
+
+    /// <summary>
+    /// If true, sets that have been approved will be hidden from the results.
+    /// Approved sets are those that have been reviewed and accepted by the community or moderators.
+    /// This is useful for viewing only unapproved or pending sets.
+    /// </summary>
+    public bool HideApprovedSets { get; set; }
 
     /// <summary>
     /// If true, the response will include the Loomian's value to stat assignments.
