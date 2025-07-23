@@ -25,4 +25,14 @@ public class Loomian : IDatabaseSaveable
     /// The secondary type of the Loomian.
     /// </summary>
     public LoomianType? Type2 { get; set; }
+
+    /// <summary>
+    /// The unique identifier for the base stats of the Loomian.
+    /// </summary>
+    public Guid BaseStatsId { get; set; }
+
+    /// <summary>
+    /// The base stats of the Loomian.
+    /// </summary>
+    public virtual StatsSet? BaseStats { get; set; } = new StatsSet();
 }

@@ -25,7 +25,9 @@ public class LoomiansController(CharwikiDbContext charwikiDbContext) : Controlle
             return BadRequest(ModelState);
         }
 
-        Loomian? loomian = await charwikiDbContext.Loomians.FirstOrDefaultAsync(e => e.Name == name);
+        Loomian? loomian = await charwikiDbContext.Loomians
+            .Include(l => l.BaseStats)
+            .FirstOrDefaultAsync(e => e.Name == name);
         if (loomian == null)
         {
             return NotFound();

@@ -18,7 +18,10 @@ public static class LoomianExtensions
         return new LoomianResponseDto
         {
             Id = loomian.Id,
-            Name = loomian.Name
+            Name = loomian.Name,
+            Type1 = loomian.Type1,
+            Type2 = loomian.Type2,
+            BaseStats = loomian.BaseStats?.ToResponseDto() ?? new StatsSetResponseDto()
         };
     }
 }
