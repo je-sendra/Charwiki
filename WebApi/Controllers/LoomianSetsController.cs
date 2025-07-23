@@ -243,6 +243,12 @@ public class LoomianSetsController(CharwikiDbContext charwikiDbContext) : Contro
             loomianSets = loomianSets.Where(ls => ls.Approved);
         }
 
+        // Only include Loomian sets that are not approved if the query parameter is set.
+        if (queryParams.HideApprovedSets)
+        {
+            loomianSets = loomianSets.Where(ls => !ls.Approved);
+        }
+
         // Only include related ValueToStatAssignments if the query parameter is set.
         if (queryParams.IncludeValueToStatAssignments)
         {
