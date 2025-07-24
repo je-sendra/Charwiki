@@ -1,6 +1,7 @@
 using Charwiki.ClassLib.Dto.QueryParams;
 using Charwiki.ClassLib.Dto.Request;
 using Charwiki.ClassLib.Dto.Response;
+using Charwiki.ClassLib.Models;
 
 namespace Charwiki.ClassLib.Services;
 
@@ -56,4 +57,13 @@ public interface ILoomianSetsService
     /// <param name="authToken"></param>
     /// <returns></returns>
     Task<StarRatingResponseDto?> GetMyRatingAsync(Guid loomianSetId, string authToken);
+
+    /// <summary>
+    /// Approves a Loomian set.
+    /// This method is intended for use by administrators to approve Loomian sets that have been submitted
+    /// </summary>
+    /// <param name="loomianSetId"></param>
+    /// <param name="authToken"></param>
+    /// <returns></returns>
+    Task<OperationResult> ApproveSetAsync(Guid loomianSetId, string authToken);
 }

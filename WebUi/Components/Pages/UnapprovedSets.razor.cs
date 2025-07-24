@@ -79,6 +79,7 @@ public partial class UnapprovedSets
         LoomianSetQueryParams queryParams = new()
         {
             HideNonApprovedSets = false,
+            HideApprovedSets = true,
             IncludeMetadata = true,
             IncludeLoomian = true,
             IncludeAverageRating = true,
